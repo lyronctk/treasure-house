@@ -6,6 +6,7 @@
   "author": "Lyron Co Ting Keh <lyronctk@stanford.edu>",
   "license": "MIT",
   "devDependencies": {
+    "@types/bn.js": "^5.1.1",
     "@types/elliptic": "^6.4.14",
     "@types/node": "^18.7.18",
     "nodemon": "^2.0.20",
