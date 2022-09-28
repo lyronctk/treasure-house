@@ -1,1 +1,6 @@
+# node
 node_modules/
+
+# hardhat
+cache
+artifacts
