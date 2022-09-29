@@ -766,6 +766,14 @@ b4a@^1.0.1:
   resolved "https://registry.yarnpkg.com/b4a/-/b4a-1.6.0.tgz#5430a9cac1af388910dd1a1c1aa9d3a0a796ed68"
   integrity sha512-fsTxXxj1081Yq5MOQ06gZ5+e2QcSyP2U6NofdOWyq+lrNI4IjkZ+fLVmoQ6uUCiNg1NWePMMVq93vOTdbJmErw==
 
+babyjubjub@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/babyjubjub/-/babyjubjub-1.0.4.tgz#7b5ff0814005ea9c0a8bf63c93c5092232529bb6"
+  integrity sha512-R+EcKjxMSoctFCUtRUBKf3oDrnBrbbHUnt7u4LMGaERCx6/8+qfHZlqpBdsgAar9IvoPbDk0BLIj9lL9gfKCkw==
+  dependencies:
+    bignumber.js "^9.0.0"
+    buffer-reverse "^1.0.1"
+
 balanced-match@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.2.tgz#e83e3a7e3f300b34cb9d87f615fa0cbf357690ee"
@@ -809,6 +817,11 @@ bigint-mod-arith@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/bigint-mod-arith/-/bigint-mod-arith-3.1.1.tgz#127c504faf30d27ba010ac7b7d58708a68e3c20b"
   integrity sha512-SzFqdncZKXq5uh3oLFZXmzaZEMDsA7ml9l53xKaVGO6/+y26xNwAaTQEg2R+D+d07YduLbKi0dni3YPsR51UDQ==
+
+bignumber.js@^9.0.0, bignumber.js@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.1.0.tgz#8d340146107fe3a6cb8d40699643c302e8773b62"
+  integrity sha512-4LwHK4nfDOraBCtst+wOWIHbu1vhvAPJK8g8nROd4iuc3PSEjWif/qwbkh8jwCJz6yDBvtU4KPynETgrfh7y3A==
 
 binary-extensions@^2.0.0:
   version "2.2.0"
@@ -936,6 +949,11 @@ buffer-from@^1.0.0:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/buffer-from/-/buffer-from-1.1.2.tgz#2b146a6fd72e80b4f55d255f35ed59a3a9a41bd5"
   integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
+
+buffer-reverse@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/buffer-reverse/-/buffer-reverse-1.0.1.tgz#49283c8efa6f901bc01fa3304d06027971ae2f60"
+  integrity sha512-M87YIUBsZ6N924W57vDwT/aOu8hw7ZgdByz6ijksLjmHJELBASmYTTlNHRgjE+pTsT9oJXGaDSgqqwfdHotDUg==
 
 buffer-xor@^1.0.3:
   version "1.0.3"
@@ -1107,6 +1125,11 @@ circom_runtime@0.1.20:
   integrity sha512-61AnccA8Ozo5apyDf3hR1JMDDNx1DttKll2bdxVpNjUaTiawDuuYE0VNmRvuoKlcy/WAY+HtD3K994WGrOFhJQ==
   dependencies:
     ffjavascript "0.2.55"
+
+circomlib@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/circomlib/-/circomlib-2.0.5.tgz#183c703e53ed7d011811842dbeeeb9819f4cc1d6"
+  integrity sha512-O7NQ8OS+J4eshBuoy36z/TwQU0YHw8W3zxZcs4hVwpEll3e4hDm3mgkIPqItN8FDeLEKZFK3YeT/+k8TiLF3/A==
 
 classic-level@^1.2.0:
   version "1.2.0"

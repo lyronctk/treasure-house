@@ -5,64 +5,93 @@ const crypto = require("crypto");
 const fs = require("fs");
 const snarkjs = require("snarkjs");
 
+const { PublicKey, PrivateKey, Point } = require("babyjubjub");
+
 const WASM: string = "../circuits/verif-manager.wasm";
 const PROV_KEY: string = "../circuits/verif-manager.zkey";
 const VERIF_KEY: string = "../circuits/verif-manager.vkey.json";
 
 interface Deposit {
     // ρ * G
-    P: any;
+    P: InstanceType<typeof Point>;
 
     // ρ * managerPk
-    Q: InstanceType<typeof BN>;
+    Q: InstanceType<typeof Point>;
 
     // amount of ETH
     v: InstanceType<typeof BN>;
 }
 
-const curve = new EC.ec("curve25519");
+function sampleFlow() {
+    // CREATE TREASURY
+    const managerPriv = new PrivateKey(PrivateKey.getRandObj().field);
+    const managerPub = PublicKey.fromPrivate(managerPriv);
+    console.log("== Manager publishes pk");
+    console.log(managerPub.p.x.n.toString(16), managerPub.p.y.n.toString(16));
+    console.log("==\n");
 
-// CREATE TREASURY
-const manager = curve.genKeyPair();
-const managerPriv = manager.getPrivate();
-const managerPub = manager.getPublic();
-console.log("Manager publishes pk:", managerPub.getX().toString(16));
+    // DEPOSIT
+    const contributorPriv = new PrivateKey(PrivateKey.getRandObj().field);
+    const contributorPub = PublicKey.fromPrivate(contributorPriv);
+    const sharedKey = managerPub.p.mult(contributorPriv.s);
+    const dep: Deposit = {
+        P: contributorPub.p,
+        Q: sharedKey,
+        v: 123,
+    };
+    console.log("== Contributor sends in a deposit");
+    console.log([dep.P.x.n.toString(16), dep.Q.x.n.toString(16), dep.v]);
+    console.log("==\n");
+    
+    // WITHDRAW
+    const recoverShared = dep.P.mult(managerPriv.s);
+    console.log("== Manager recovers Q using P & privKey");
+    console.log(recoverShared.x.n.toString(16));
+    console.log("==\n");
 
-// DEPOSIT
-const contributor = curve.genKeyPair();
-const dep: Deposit = {
-    P: contributor.getPublic(),
-    Q: contributor.derive(managerPub),
-    v: 123,
-};
-console.log("Contributor sends in a deposit:", [
-    dep.P.getX().toString(16),
-    dep.Q.toString(16),
-    dep.v,
-]);
-
-// WITHDRAW
-const recoverShared = manager.derive(dep.P);
-console.log(
-    "Manager recovers Q using P & priv key:",
-    recoverShared.toString(16)
-);
-
-(async () => {
-    const { proof, publicSignals } = await snarkjs.groth16.fullProve(
-        { G: 5, privKey: 3, pubKey: 15 },
-        WASM,
-        PROV_KEY
+    // LOG ALL INFO
+    console.log("== Manager");
+    console.log(" - privKey:", managerPriv.s.n.toString(16));
+    console.log(
+        " - pubKey:",
+        managerPub.p.x.n.toString(16),
+        managerPub.p.y.n.toString(16)
     );
+    console.log("==");
+    console.log("== Contributor");
+    console.log(" - privKey:", contributorPriv.s.n.toString(16));
+    console.log(
+        " - pubKey:",
+        contributorPub.p.x.n.toString(16),
+        contributorPub.p.y.n.toString(16)
+    );
+    console.log("==");
+    console.log("== Shared");
+    console.log(
+        " - value:",
+        sharedKey.x.n.toString(16),
+        sharedKey.y.n.toString(16)
+    );
+    console.log("==");
+}
 
-    console.log("Proof: ");
-    console.log(JSON.stringify(proof, null, 1));
+sampleFlow();
 
-    const vKey = JSON.parse(fs.readFileSync(VERIF_KEY));
-    const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
-    if (res === true) {
-        console.log("Verification OK");
-    } else {
-        console.log("Invalid proof");
-    }
-})().then(() => process.exit(0));
+// (async () => {
+//     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
+//         { G: 5, privKey: 3, pubKey: 15 },
+//         WASM,
+//         PROV_KEY
+//     );
+
+//     console.log("Proof: ");
+//     console.log(JSON.stringify(proof, null, 1));
+
+//     const vKey = JSON.parse(fs.readFileSync(VERIF_KEY));
+//     const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
+//     if (res === true) {
+//         console.log("Verification OK");
+//     } else {
+//         console.log("Invalid proof");
+//     }
+// })().then(() => process.exit(0));

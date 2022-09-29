@@ -14,7 +14,10 @@
         "typescript": "^4.8.3"
     },
     "dependencies": {
+        "babyjubjub": "^1.0.4",
+        "bignumber.js": "^9.1.0",
         "bn.js": "^5.2.1",
+        "circomlib": "^2.0.5",
         "elliptic": "^6.5.4",
         "hardhat": "^2.11.2",
         "hardhat-circom": "^3.3.1"
