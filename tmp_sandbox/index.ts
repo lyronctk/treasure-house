@@ -40,13 +40,20 @@ function sampleFlow() {
         v: 123,
     };
     console.log("== Contributor sends in a deposit");
-    console.log([dep.P.x.n.toString(16), dep.Q.x.n.toString(16), dep.v]);
+    console.log({
+        "P": [dep.P.x.n.toString(16), dep.P.y.n.toString(16)],
+        "Q": [dep.Q.x.n.toString(16), dep.Q.y.n.toString(16)],
+        "V": dep.v
+    })
     console.log("==\n");
     
     // WITHDRAW
     const recoverShared = dep.P.mult(managerPriv.s);
     console.log("== Manager recovers Q using P & privKey");
-    console.log(recoverShared.x.n.toString(16));
+    console.log(
+        recoverShared.x.n.toString(16),
+        recoverShared.y.n.toString(16)
+    );
     console.log("==\n");
 
     // LOG ALL INFO
