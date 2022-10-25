@@ -78,38 +78,6 @@ function sampleFlow() {
     console.log("==");
 }
 
-async function babyAddSanity() {
-    const G = PublicKey.fromPrivate("1");
-    const G2 = PublicKey.fromPrivate("2");
-
-    const { proof, publicSignals } = await snarkjs.groth16.fullProve(
-        {
-            pointX: G.p.x.n.toString(10),
-            pointY: G.p.y.n.toString(10),
-            doubledX: G2.p.x.n.toString(10),
-            doubledY: G2.p.y.n.toString(10),
-        },
-        WASM,
-        PROV_KEY
-    );
-
-    console.log("publicSignals: ");
-    console.log(JSON.stringify(publicSignals));
-    console.log();
-
-    console.log("Proof: ");
-    console.log(JSON.stringify(proof, null, 1));
-    console.log();
-
-    const vKey = JSON.parse(fs.readFileSync(VERIF_KEY));
-    const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
-    if (res === true) {
-        console.log("Verification OK");
-    } else {
-        console.log("Invalid proof");
-    }
-}
-
 async function withdraw() {
     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
         { G: 5, privKey: 3, pubKey: 15 },
@@ -135,5 +103,4 @@ async function withdraw() {
 }
 
 sampleFlow();
-// babyAddSanity().then(() => process.exit(0));
 // withdraw().then(() => process.exit(0));
