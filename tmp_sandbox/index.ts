@@ -22,11 +22,11 @@ interface Deposit {
     v: InstanceType<typeof BN>;
 }
 
-function sampleFlow() {
+async function sampleFlow() {
     // CREATE TREASURY
     const managerPriv = new PrivateKey(PrivateKey.getRandObj().field);
     const managerPub = PublicKey.fromPrivate(managerPriv);
-    console.log("== Manager publishes pk");
+    console.log("== createTreasury(), manager publishes pk");
     console.log(managerPub.p.x.n.toString(10), managerPub.p.y.n.toString(10));
     console.log("==\n");
 
@@ -39,7 +39,7 @@ function sampleFlow() {
         Q: sharedKey,
         v: 123,
     };
-    console.log("== Contributor sends in a deposit");
+    console.log("== deposit(), contributor sends in a deposit");
     console.log({
         P: [dep.P.x.n.toString(10), dep.P.y.n.toString(10)],
         Q: [dep.Q.x.n.toString(10), dep.Q.y.n.toString(10)],
@@ -48,39 +48,13 @@ function sampleFlow() {
     console.log("==\n");
 
     // WITHDRAW
-    const recoverShared = dep.P.mult(managerPriv.s);
-    console.log("== Manager recovers Q using P & privKey");
-    console.log(recoverShared.x.n.toString(10), recoverShared.y.n.toString(10));
-    console.log("==\n");
-
-    // LOG ALL INFO
-    console.log("== Manager");
-    console.log(" - privKey:", managerPriv.s.n.toString(10));
-    console.log(
-        " - pubKey:",
-        managerPub.p.x.n.toString(10),
-        managerPub.p.y.n.toString(10)
-    );
-    console.log("==");
-    console.log("== Contributor");
-    console.log(" - privKey:", contributorPriv.s.n.toString(10));
-    console.log(
-        " - pubKey:",
-        contributorPub.p.x.n.toString(10),
-        contributorPub.p.y.n.toString(10)
-    );
-    console.log("== Shared");
-    console.log(
-        " - value:",
-        sharedKey.x.n.toString(10),
-        sharedKey.y.n.toString(10)
-    );
-    console.log("==");
-}
-
-async function withdraw() {
+    console.log("== withdraw(), manager derives Q from P using privKey");
     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
-        { G: 5, privKey: 3, pubKey: 15 },
+        {
+            P: [dep.P.x.n.toString(10), dep.P.y.n.toString(10)],
+            Q: [dep.Q.x.n.toString(10), dep.Q.y.n.toString(10)],
+            managerPriv: managerPriv.s.n.toString(10),
+        },
         WASM,
         PROV_KEY
     );
@@ -100,7 +74,32 @@ async function withdraw() {
     } else {
         console.log("Invalid proof");
     }
+    console.log("==\n");
+
+    // LOG ALL INFO
+    console.log("== Manager");
+    console.log(" - privKey:", managerPriv.s.n.toString(10));
+    console.log(
+        " - pubKey:",
+        managerPub.p.x.n.toString(10),
+        managerPub.p.y.n.toString(10)
+    );
+    console.log("==");
+    console.log("== Contributor");
+    console.log(" - privKey:", contributorPriv.s.n.toString(10));
+    console.log(
+        " - pubKey:",
+        contributorPub.p.x.n.toString(10),
+        contributorPub.p.y.n.toString(10)
+    );
+    console.log("==");
+    console.log("== Shared");
+    console.log(
+        " - value:",
+        sharedKey.x.n.toString(10),
+        sharedKey.y.n.toString(10)
+    );
+    console.log("==");
 }
 
-sampleFlow();
-// withdraw().then(() => process.exit(0));
+sampleFlow().then(() => process.exit(0));
