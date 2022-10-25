@@ -27,7 +27,7 @@ function sampleFlow() {
     const managerPriv = new PrivateKey(PrivateKey.getRandObj().field);
     const managerPub = PublicKey.fromPrivate(managerPriv);
     console.log("== Manager publishes pk");
-    console.log(managerPub.p.x.n.toString(16), managerPub.p.y.n.toString(16));
+    console.log(managerPub.p.x.n.toString(10), managerPub.p.y.n.toString(10));
     console.log("==\n");
 
     // DEPOSIT
@@ -41,64 +41,99 @@ function sampleFlow() {
     };
     console.log("== Contributor sends in a deposit");
     console.log({
-        "P": [dep.P.x.n.toString(16), dep.P.y.n.toString(16)],
-        "Q": [dep.Q.x.n.toString(16), dep.Q.y.n.toString(16)],
-        "V": dep.v
-    })
+        P: [dep.P.x.n.toString(10), dep.P.y.n.toString(10)],
+        Q: [dep.Q.x.n.toString(10), dep.Q.y.n.toString(10)],
+        V: dep.v,
+    });
     console.log("==\n");
-    
+
     // WITHDRAW
     const recoverShared = dep.P.mult(managerPriv.s);
     console.log("== Manager recovers Q using P & privKey");
-    console.log(
-        recoverShared.x.n.toString(16),
-        recoverShared.y.n.toString(16)
-    );
+    console.log(recoverShared.x.n.toString(10), recoverShared.y.n.toString(10));
     console.log("==\n");
 
     // LOG ALL INFO
     console.log("== Manager");
-    console.log(" - privKey:", managerPriv.s.n.toString(16));
+    console.log(" - privKey:", managerPriv.s.n.toString(10));
     console.log(
         " - pubKey:",
-        managerPub.p.x.n.toString(16),
-        managerPub.p.y.n.toString(16)
+        managerPub.p.x.n.toString(10),
+        managerPub.p.y.n.toString(10)
     );
     console.log("==");
     console.log("== Contributor");
-    console.log(" - privKey:", contributorPriv.s.n.toString(16));
+    console.log(" - privKey:", contributorPriv.s.n.toString(10));
     console.log(
         " - pubKey:",
-        contributorPub.p.x.n.toString(16),
-        contributorPub.p.y.n.toString(16)
+        contributorPub.p.x.n.toString(10),
+        contributorPub.p.y.n.toString(10)
     );
-    console.log("==");
     console.log("== Shared");
     console.log(
         " - value:",
-        sharedKey.x.n.toString(16),
-        sharedKey.y.n.toString(16)
+        sharedKey.x.n.toString(10),
+        sharedKey.y.n.toString(10)
     );
     console.log("==");
 }
 
+async function babyAddSanity() {
+    const G = PublicKey.fromPrivate("1");
+    const G2 = PublicKey.fromPrivate("2");
+
+    const { proof, publicSignals } = await snarkjs.groth16.fullProve(
+        {
+            pointX: G.p.x.n.toString(10),
+            pointY: G.p.y.n.toString(10),
+            doubledX: G2.p.x.n.toString(10),
+            doubledY: G2.p.y.n.toString(10),
+        },
+        WASM,
+        PROV_KEY
+    );
+
+    console.log("publicSignals: ");
+    console.log(JSON.stringify(publicSignals));
+    console.log();
+
+    console.log("Proof: ");
+    console.log(JSON.stringify(proof, null, 1));
+    console.log();
+
+    const vKey = JSON.parse(fs.readFileSync(VERIF_KEY));
+    const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
+    if (res === true) {
+        console.log("Verification OK");
+    } else {
+        console.log("Invalid proof");
+    }
+}
+
+async function withdraw() {
+    const { proof, publicSignals } = await snarkjs.groth16.fullProve(
+        { G: 5, privKey: 3, pubKey: 15 },
+        WASM,
+        PROV_KEY
+    );
+
+    console.log("publicSignals: ");
+    console.log(JSON.stringify(publicSignals));
+    console.log();
+
+    console.log("Proof: ");
+    console.log(JSON.stringify(proof, null, 1));
+    console.log();
+
+    const vKey = JSON.parse(fs.readFileSync(VERIF_KEY));
+    const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
+    if (res === true) {
+        console.log("Verification OK");
+    } else {
+        console.log("Invalid proof");
+    }
+}
+
 sampleFlow();
-
-// (async () => {
-//     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
-//         { G: 5, privKey: 3, pubKey: 15 },
-//         WASM,
-//         PROV_KEY
-//     );
-
-//     console.log("Proof: ");
-//     console.log(JSON.stringify(proof, null, 1));
-
-//     const vKey = JSON.parse(fs.readFileSync(VERIF_KEY));
-//     const res = await snarkjs.groth16.verify(vKey, publicSignals, proof);
-//     if (res === true) {
-//         console.log("Verification OK");
-//     } else {
-//         console.log("Invalid proof");
-//     }
-// })().then(() => process.exit(0));
+// babyAddSanity().then(() => process.exit(0));
+// withdraw().then(() => process.exit(0));
