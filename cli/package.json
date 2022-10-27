@@ -1,0 +1,12 @@
+{
+  "name": "cli",
+  "version": "1.0.0",
+  "main": "create.ts",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "ethers": "^5.7.2",
+    "ethers-typescript-typings": "^0.0.4"
+  }
+}
