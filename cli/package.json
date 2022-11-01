@@ -7,6 +7,7 @@
   "devDependencies": {
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
-    "ethers-typescript-typings": "^0.0.4"
+    "ethers-typescript-typings": "^0.0.4",
+    "soltypes": "^2.0.0"
   }
 }

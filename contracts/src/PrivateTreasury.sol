@@ -26,7 +26,7 @@ contract PrivateTreasury {
         directory.push(Treasury(Point(pkX, pkY), label));
     }
 
-    /// @notice Expose length of directory 
+    /// @notice Access length of directory 
     function getDirectoryLength() external view returns(uint dirLength) {
         return directory.length;
     }
