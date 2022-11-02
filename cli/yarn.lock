@@ -344,18 +344,6 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
-"@types/bn.js@^5.1.1":
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/@types/bn.js/-/bn.js-5.1.1.tgz#b51e1b55920a4ca26e9285ff79936bbdec910682"
-  integrity sha512-qNrYbZqMx0uJAfKnKclPh+dTwK33KfLHYqtyODwd5HnXOjnkhc4qgn3BrK6RWyGZm5+sIFE7Q7Vz6QQtJB7w7g==
-  dependencies:
-    "@types/node" "*"
-
-"@types/node@*":
-  version "18.11.9"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.9.tgz#02d013de7058cea16d36168ef2fc653464cfbad4"
-  integrity sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==
-
 aes-js@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/aes-js/-/aes-js-3.0.0.tgz#e21df10ad6c2053295bcbb8dab40b09dbea87e4d"
