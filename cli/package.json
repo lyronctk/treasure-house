@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "main": "create.ts",
   "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {
+  "dependencies": {
+    "babyjubjub": "^1.0.4",
+    "bn.js": "^5.2.1",
     "dotenv": "^16.0.3",
-    "ethers": "^5.7.2",
+    "ethers": "^5.7.2"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.1",
     "ethers-typescript-typings": "^0.0.4",
     "soltypes": "^2.0.0"
   }

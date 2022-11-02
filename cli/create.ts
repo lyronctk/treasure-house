@@ -17,6 +17,7 @@ const CONTRACT_ADDR: string = "0x5fbdb2315678afecb367f032d93f642f64180aa3";
 const CONTRACT_ABI =
     require("../contracts/out/PrivateTreasury.sol/PrivateTreasury.json").abi;
 const TREASURY_LABEL: string = "test";
+const ADD_NEW_TREASURY: boolean = false;
 
 const signer = new ethers.Wallet(
     <string>process.env.MANAGER_ETH_PRIVKEY,
@@ -85,5 +86,7 @@ async function createTreasury() {
 
 (async () => {
     await enumerateDirectory();
-    await createTreasury();
+    if (ADD_NEW_TREASURY) {
+        await createTreasury();
+    }
 })();

@@ -1,6 +1,12 @@
 # node
-node_modules/
+cli/node_modules
 
 # hardhat
 cache
 artifacts
+
+# env variables
+cli/.env
+
+# log files
+*.log
