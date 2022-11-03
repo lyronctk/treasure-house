@@ -1,5 +1,9 @@
 /*
- * [TODO]
+ * Contributes to a treasury by 1) generating a temporary Babyjubjub keypair for
+ * the contributors, 2) computing P & Q values such that the deposit that can be
+ * redeemed by the treasury's manager, 3) adding the element to the contract's
+ * deposits array. Discrete log protects any observers from identifying which
+ * treasury Q corresponds to.
  */
 import dotenv from "dotenv";
 dotenv.config();
@@ -40,7 +44,9 @@ const treasuryPub: InstanceType<typeof PublicKey> = new PublicKey(
 );
 
 /*
- * [TODO]
+ * A sanity check to ensure that the manager, who holds the treasury's private
+ * key (α), is able to redeem the deposit by satisfying the constraint
+ * P * α = G.
  */
 function verifyQDerivation(dep: Deposit) {
     console.log("== Sanity check");
@@ -57,7 +63,7 @@ function verifyQDerivation(dep: Deposit) {
 }
 
 /*
- * [TODO]
+ * Enumerates all deposit info stored in the contract.
  */
 async function enumerateDeposits() {
     const nDeps = await privateTreasury.getNumDeposits();
@@ -74,7 +80,9 @@ async function enumerateDeposits() {
 }
 
 /*
- * [TODO]
+ * Constructs a deposit (P, Q, v), where P is the contributor's public key,
+ * Q is a "shared secret" that can only be derived by the manager's public key
+ * with P, and v is the amount of Ether to contribute (specified in wei).
  */
 function constructDeposit(
     contributorPriv: InstanceType<typeof PrivateKey>,
@@ -96,7 +104,7 @@ function constructDeposit(
 }
 
 /*
- * [TODO]
+ * Sends the deposit element and accompanying Ether to the contract.
  */
 async function sendDeposit(dep: Deposit) {
     console.log("== Sending tx with the deposit");
@@ -118,7 +126,9 @@ async function sendDeposit(dep: Deposit) {
 }
 
 /*
- * [TODO]
+ * Creates a deposit and sends it to the specified private treasury. Enable
+ * the sanity check with the flag DO_WITHDRAW_SANITY_CHECK to ensure the
+ * deposit is constructed correctly.
  */
 async function depositToTreasury() {
     const [contributorPriv, contributorPub] = Utils.genJubKP();

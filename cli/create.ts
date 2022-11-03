@@ -1,8 +1,9 @@
 /*
  * Creates a new private treasury by 1) generating a babyjubjub keypair for
  * the manager and 2) posting the public key with a label on the contract's
- * directory. Also contains utility func for getting an overview of the
- * directory.
+ * directory. Contributors will use the treasury's public key for deposits. 
+ * Managers will use the treasury's private key to perform balance checks and
+ * withdrawals. 
  */
 
 import dotenv from "dotenv";
@@ -26,7 +27,7 @@ const privateTreasury = new ethers.Contract(
 );
 
 /*
- * Enumerates all treasury info stored in the contract's directory.
+ * Enumerates all treasury info stored in the contract.
  */
 async function enumerateDirectory() {
     const dirLen = await privateTreasury.getDirectoryLength();
