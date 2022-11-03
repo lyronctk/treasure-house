@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 /// @title Private treasuries
 /// @notice Platform for managing treasuries with balance & withdrawal privacy
-/// @dev A POC, not audited
+/// @dev This is a POC that has not undergone any audits. 
 contract PrivateTreasury {
     struct Point {
         bytes32 x;
@@ -34,11 +34,16 @@ contract PrivateTreasury {
         directory.push(Treasury(pk, label));
     }
 
+    /// @notice Contribute to a treasury on the platform 
+    /// @param P Pubkey of contributor (ρ * G, where ρ is contributor's privKey)
+    /// @param Q ρ * treasuryPubKey, a val that can only be derived using 
+    ///          α * P (where α is the treasury's private key)
     function deposit(Point calldata P, Point calldata Q) external payable {
         require(msg.value > 0, "Deposited ether value must be > 0.");
         deposits.push(Deposit(P, Q, msg.value));
     }
 
+    /// @notice Access length of deposits
     function getNumDeposits() external view returns (uint256) {
         return deposits.length;
     }
