@@ -19,6 +19,7 @@ contract PrivateTreasury {
         Point P;
         Point Q;
         uint256 v;
+        bool spent; 
     }
 
     /// @dev Directory of treasuries can be stored off-chain
@@ -40,8 +41,10 @@ contract PrivateTreasury {
     ///          α * P (where α is the treasury's private key)
     function deposit(Point calldata P, Point calldata Q) external payable {
         require(msg.value > 0, "Deposited ether value must be > 0.");
-        deposits.push(Deposit(P, Q, msg.value));
+        deposits.push(Deposit(P, Q, msg.value, false));
     }
+
+    // function withdraw(uint depIdx, )
 
     /// @notice Access length of deposits
     function getNumDeposits() external view returns (uint256) {

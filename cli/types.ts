@@ -13,3 +13,13 @@ export type SolPoint = {
     x: Bytes32;
     y: Bytes32;
 };
+
+export type groth16Proof = {
+    pi_a: [string, string, string],
+    pi_b: [[string, string], [string, string], [string, string]],
+    pi_c: [string, string, string],
+    protocol: string,
+    curve: string
+};
+
+export type withdrawPubSignals = [string, string, string, string];
