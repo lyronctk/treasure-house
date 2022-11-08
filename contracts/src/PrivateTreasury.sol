@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-// import "../../circuits/VerifManagerVerifier.sol";
+import "../../circuits/VerifManagerVerifier.sol";
 
 /// @title Private treasuries
 /// @notice Platform for managing treasuries with balance & withdrawal privacy
 /// @dev This is a POC that has not undergone any audits.
-contract PrivateTreasury {
+contract PrivateTreasury is Verifier {
     struct Point {
         bytes32 x;
         bytes32 y;
@@ -46,6 +46,7 @@ contract PrivateTreasury {
         deposits.push(Deposit(P, Q, msg.value, false));
     }
 
+    /// @notice [TODO]
     function withdraw(
         uint256 depIdx,
         uint256[2] memory a,
@@ -53,7 +54,7 @@ contract PrivateTreasury {
         uint256[2] memory c,
         uint256[4] memory publicSignals
     ) external returns (bool) {
-        return false;
+        verifyProof(a, b, c, publicSignals);
     }
 
     /// @notice Access length of deposits

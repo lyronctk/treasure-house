@@ -1,10 +1,11 @@
-/* Verifies that the manager knows the correct private key to withdraw a deposit
-*/
+/* 
+ * Verifies that the manager knows the correct private key to withdraw a deposit
+ */
 
 pragma circom 2.0.3;
 
-include "../node_modules/circomlib/circuits/babyjub.circom";
-include "../node_modules/circomlib/circuits/bitify.circom";
+include "node_modules/circomlib/circuits/babyjub.circom";
+include "node_modules/circomlib/circuits/bitify.circom";
 
 
 /* Checks whether manager knows private key to derive Q from P
