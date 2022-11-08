@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
+// import "../../circuits/VerifManagerVerifier.sol";
+
 /// @title Private treasuries
 /// @notice Platform for managing treasuries with balance & withdrawal privacy
-/// @dev This is a POC that has not undergone any audits. 
+/// @dev This is a POC that has not undergone any audits.
 contract PrivateTreasury {
     struct Point {
         bytes32 x;
@@ -19,7 +21,7 @@ contract PrivateTreasury {
         Point P;
         Point Q;
         uint256 v;
-        bool spent; 
+        bool spent;
     }
 
     /// @dev Directory of treasuries can be stored off-chain
@@ -35,16 +37,24 @@ contract PrivateTreasury {
         directory.push(Treasury(pk, label));
     }
 
-    /// @notice Contribute to a treasury on the platform 
+    /// @notice Contribute to a treasury on the platform
     /// @param P Pubkey of contributor (ρ * G, where ρ is contributor's privKey)
-    /// @param Q ρ * treasuryPubKey, a val that can only be derived using 
+    /// @param Q ρ * treasuryPubKey, a val that can only be derived using
     ///          α * P (where α is the treasury's private key)
     function deposit(Point calldata P, Point calldata Q) external payable {
         require(msg.value > 0, "Deposited ether value must be > 0.");
         deposits.push(Deposit(P, Q, msg.value, false));
     }
 
-    // function withdraw(uint depIdx, )
+    function withdraw(
+        uint256 depIdx,
+        uint256[2] memory a,
+        uint256[2][2] memory b,
+        uint256[2] memory c,
+        uint256[4] memory publicSignals
+    ) external returns (bool) {
+        return false;
+    }
 
     /// @notice Access length of deposits
     function getNumDeposits() external view returns (uint256) {

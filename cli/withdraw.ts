@@ -34,6 +34,7 @@ const privateTreasury = new ethers.Contract(
 async function getDepInfo(depIdx: Number): Promise<Deposit> {
     console.log("== Retrieving deposit at index", depIdx);
     const solDep = await privateTreasury.deposits(depIdx);
+    console.log(solDep);
     const dep: Deposit = {
         P: Utils.hexStringPairToPoint(Utils.parseGetterPoint(solDep["P"])),
         Q: Utils.hexStringPairToPoint(Utils.parseGetterPoint(solDep["Q"])),
