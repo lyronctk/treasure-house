@@ -49,6 +49,16 @@ async function getDepInfo(depIdx: Number): Promise<Deposit> {
     return dep;
 }
 
+function buildProofArgs(proof: any) {
+    return [
+        proof.pi_a.slice(0, 2), // pi_a
+        // genZKSnarkProof reverses values in the inner arrays of pi_b
+        proof.pi_b[0].slice(0).reverse(), 
+        proof.pi_b[1].slice(0).reverse(),
+        proof.pi_c.slice(0, 2), // pi_c
+    ];
+}
+
 /*
  * [TODO]
  */
@@ -65,7 +75,8 @@ async function genProof(
         WASM,
         PROV_KEY
     );
-    console.log("Proof:", proof);
+    console.log("Proof (circom):", proof);
+    console.log("Proof (for contract call):", buildProofArgs(proof));
     console.log("Public signals:", publicSignals);
     console.log("==");
     return [proof, publicSignals];
@@ -91,19 +102,10 @@ async function proveSanityCheck(
 
 async function sendProofTx(prf: groth16Proof, pubSigs: withdrawPubSignals) {
     console.log("== Sending tx with withdrawal proof");
-    console.log([
-        0,
-        prf["pi_a"].slice(0, 2),
-        prf["pi_b"].slice(0, 2),
-        prf["pi_c"].slice(0, 2),
-        pubSigs,
-    ]);
     const res = await privateTreasury.withdraw(
         0,
-        prf["pi_a"].slice(0, 2),
-        prf["pi_b"].slice(0, 2),
-        prf["pi_c"].slice(0, 2),
-        pubSigs
+        pubSigs,
+        ...buildProofArgs(prf),
     );
     console.log(res);
     console.log("==");
@@ -113,5 +115,5 @@ async function sendProofTx(prf: groth16Proof, pubSigs: withdrawPubSignals) {
     const dep = await getDepInfo(DEP_IDX);
     const [proof, publicSignals] = await genProof(dep);
     if (DO_PROVE_SANITY_CHECK) await proveSanityCheck(proof, publicSignals);
-    await sendProofTx(proof, publicSignals);
+    // await sendProofTx(proof, publicSignals);
 })();

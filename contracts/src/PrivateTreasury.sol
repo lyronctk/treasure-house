@@ -15,7 +15,7 @@ interface IVerifier {
 /// @dev This is a POC that has not undergone any audits.
 contract PrivateTreasury {
     address public constant VERIFIER_ADDR =
-        0xa513E6E4b8f2a923D98304ec87F64353C4D5C853;
+        0x3Aa5ebB10DC797CAC828524e59A333d0A371443c;
     IVerifier verifierContract = IVerifier(VERIFIER_ADDR);
 
     struct Point {
@@ -60,12 +60,16 @@ contract PrivateTreasury {
     /// @notice [TODO]
     function withdraw(
         uint256 depIdx,
+        uint256[4] memory publicSignals,
         uint256[2] memory a,
-        uint256[2][2] memory b,
-        uint256[2] memory c,
-        uint256[4] memory publicSignals
+        uint256[2] memory b_0,
+        uint256[2] memory b_1,
+        uint256[2] memory c
     ) external {
-        verifierContract.verifyProof(a, b, c, publicSignals);
+        require(
+            verifierContract.verifyProof(a, [b_0, b_1], c, publicSignals),
+            "Invalid withdrawal proof"
+        );
     }
 
     /// @notice Access length of deposits
