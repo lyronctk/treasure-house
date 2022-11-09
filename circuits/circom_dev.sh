@@ -16,3 +16,7 @@ yarn run snarkjs zkey export verificationkey verif-manager.zkey verif-manager.vk
 
 # Verify protocol transcript, zkey
 yarn run snarkjs zkey verify verif-manager.r1cs $PTAU verif-manager.zkey
+
+# Export verifier to smart contract for on-chain verification
+yarn run snarkjs zkey export solidityverifier verif-manager.zkey ManagerVerifier.sol
+mv ManagerVerifier.sol ../contracts/src

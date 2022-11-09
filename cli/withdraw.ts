@@ -1,6 +1,7 @@
 /*
  * [TODO]
  */
+
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -34,15 +35,14 @@ const privateTreasury = new ethers.Contract(
 async function getDepInfo(depIdx: Number): Promise<Deposit> {
     console.log("== Retrieving deposit at index", depIdx);
     const solDep = await privateTreasury.deposits(depIdx);
-    console.log(solDep);
     const dep: Deposit = {
         P: Utils.hexStringPairToPoint(Utils.parseGetterPoint(solDep["P"])),
         Q: Utils.hexStringPairToPoint(Utils.parseGetterPoint(solDep["Q"])),
         v: solDep["v"],
     };
     console.log({
-        P: [dep.P.x.n.toString(10), dep.P.y.n.toString(10)],
-        Q: [dep.Q.x.n.toString(10), dep.Q.y.n.toString(10)],
+        P: [dep.P.x.n.toString(16), dep.P.y.n.toString(16)],
+        Q: [dep.Q.x.n.toString(16), dep.Q.y.n.toString(16)],
         V: dep.v.toString(),
     });
     console.log("==");
@@ -89,8 +89,29 @@ async function proveSanityCheck(
     console.log("==");
 }
 
+async function sendProofTx(prf: groth16Proof, pubSigs: withdrawPubSignals) {
+    console.log("== Sending tx with withdrawal proof");
+    console.log([
+        0,
+        prf["pi_a"].slice(0, 2),
+        prf["pi_b"].slice(0, 2),
+        prf["pi_c"].slice(0, 2),
+        pubSigs,
+    ]);
+    const res = await privateTreasury.withdraw(
+        0,
+        prf["pi_a"].slice(0, 2),
+        prf["pi_b"].slice(0, 2),
+        prf["pi_c"].slice(0, 2),
+        pubSigs
+    );
+    console.log(res);
+    console.log("==");
+}
+
 (async () => {
     const dep = await getDepInfo(DEP_IDX);
     const [proof, publicSignals] = await genProof(dep);
-    if (DO_PROVE_SANITY_CHECK) proveSanityCheck(proof, publicSignals);
+    if (DO_PROVE_SANITY_CHECK) await proveSanityCheck(proof, publicSignals);
+    await sendProofTx(proof, publicSignals);
 })();

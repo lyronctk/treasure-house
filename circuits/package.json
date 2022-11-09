@@ -6,5 +6,8 @@
   "dependencies": {
     "circomlib": "^2.0.5",
     "snarkjs": "^0.5.0"
+  },
+  "scripts": {
+    "circom:dev": "bash circom_dev.sh"
   }
 }

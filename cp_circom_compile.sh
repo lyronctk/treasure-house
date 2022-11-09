@@ -1,2 +1,0 @@
-cp /Users/lyronctk/Documents/learning_technical/0xparc_zk/circom-starter/circuits/verif-manager* circuits/
-cp /Users/lyronctk/Documents/learning_technical/0xparc_zk/circom-starter/contracts/VerifManagerVerifier.sol contracts/

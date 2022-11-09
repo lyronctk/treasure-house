@@ -29,7 +29,7 @@ const TREASURY_PUB: SolPoint = {
 const DEPOSIT_AMOUNT_ETH = "0.1";
 
 const DO_WITHDRAW_SANITY_CHECK: boolean = false;
-const ADD_NEW_DEPOSIT: boolean = false;
+const ADD_NEW_DEPOSIT: boolean = true;
 
 const signer = new ethers.Wallet(
     <string>process.env.CONTRIBUTOR1_ETH_PRIVKEY,
@@ -40,6 +40,7 @@ const privateTreasury = new ethers.Contract(
     require(<string>process.env.CONTRACT_ABI_PATH).abi,
     signer
 );
+
 const treasuryPub: InstanceType<typeof PublicKey> = new PublicKey(
     new Point(TREASURY_PUB.x.toUint().val, TREASURY_PUB.y.toUint().val)
 );

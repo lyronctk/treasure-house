@@ -1,12 +1,23 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import "../../circuits/VerifManagerVerifier.sol";
+interface IVerifier {
+    function verifyProof(
+        uint256[2] memory a,
+        uint256[2][2] memory b,
+        uint256[2] memory c,
+        uint256[4] memory input
+    ) external view returns (bool);
+}
 
 /// @title Private treasuries
 /// @notice Platform for managing treasuries with balance & withdrawal privacy
 /// @dev This is a POC that has not undergone any audits.
-contract PrivateTreasury is Verifier {
+contract PrivateTreasury {
+    address public constant VERIFIER_ADDR =
+        0xa513E6E4b8f2a923D98304ec87F64353C4D5C853;
+    IVerifier verifierContract = IVerifier(VERIFIER_ADDR);
+
     struct Point {
         bytes32 x;
         bytes32 y;
@@ -53,8 +64,8 @@ contract PrivateTreasury is Verifier {
         uint256[2][2] memory b,
         uint256[2] memory c,
         uint256[4] memory publicSignals
-    ) external returns (bool) {
-        verifyProof(a, b, c, publicSignals);
+    ) external {
+        verifierContract.verifyProof(a, b, c, publicSignals);
     }
 
     /// @notice Access length of deposits
