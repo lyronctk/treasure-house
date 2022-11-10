@@ -1,28 +1,28 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-interface IVerifier {
-    function verifyProof(
-        uint256[2] memory a,
-        uint256[2][2] memory b,
-        uint256[2] memory c,
-        uint256[4] memory input
-    ) external view returns (bool);
-}
-
 // interface IVerifier {
-//     function verifyProof(bytes memory proof, uint256[] memory pubSignals)
-//         external
-//         view
-//         returns (bool);
+//     function verifyProof(
+//         uint256[2] memory a,
+//         uint256[2][2] memory b,
+//         uint256[2] memory c,
+//         uint256[4] memory input
+//     ) external view returns (bool);
 // }
+
+interface IVerifier {
+    function verifyProof(bytes memory proof, uint256[] memory pubSignals)
+        external
+        view
+        returns (bool);
+}
 
 /// @title Private treasuries
 /// @notice Platform for managing treasuries with balance & withdrawal privacy
 /// @dev This is a POC that has not undergone any audits.
 contract PrivateTreasury {
     address public constant VERIFIER_ADDR =
-        0x59b670e9fA9D0A427751Af201D676719a970857b;
+        0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44;
     IVerifier verifierContract = IVerifier(VERIFIER_ADDR);
 
     struct Point {
@@ -64,16 +64,26 @@ contract PrivateTreasury {
         deposits.push(Deposit(P, Q, msg.value, false));
     }
 
+    // /// @notice [TODO]
+    // function withdraw(
+    //     uint256 depIdx,
+    //     uint256[2] memory a,
+    //     uint256[2][2] memory b,
+    //     uint256[2] memory c,
+    //     uint256[4] memory publicSignals
+    // ) external {
+    //     require(
+    //         verifierContract.verifyProof(a, b, c, publicSignals),
+    //         "Invalid withdrawal proof"
+    //     );
+    // }
+
     /// @notice [TODO]
-    function withdraw(
-        uint256 depIdx,
-        uint256[2] memory a,
-        uint256[2][2] memory b,
-        uint256[2] memory c,
-        uint256[4] memory publicSignals
-    ) external {
+    function withdraw(bytes memory proof, uint256[] memory pubSignals)
+        external
+    {
         require(
-            verifierContract.verifyProof(a, b, c, publicSignals),
+            verifierContract.verifyProof(proof, pubSignals),
             "Invalid withdrawal proof"
         );
     }
