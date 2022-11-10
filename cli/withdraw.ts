@@ -28,11 +28,6 @@ const privateTreasury = new ethers.Contract(
     require(<string>process.env.CONTRACT_ABI_PATH).abi,
     signer
 );
-const managerVerifier = new ethers.Contract(
-    <string>process.env.VERIFIER_CONTRACT_ADDR,
-    require(<string>process.env.VERIFIER_CONTRACT_ABI_PATH).abi,
-    signer
-);
 
 /*
  * [TODO]
@@ -54,41 +49,6 @@ async function getDepInfo(depIdx: Number): Promise<Deposit> {
     return dep;
 }
 
-function buildProofArgs(proof: any) {
-    return [
-        proof.pi_a.slice(0, 2), // pi_a
-        // genZKSnarkProof reverses values in the inner arrays of pi_b
-        [proof.pi_b[0].slice(0).reverse(), proof.pi_b[1].slice(0).reverse()],
-        proof.pi_c.slice(0, 2), // pi_c
-    ];
-}
-
-async function exportCallDataGroth16(_proof: any, _publicSignals: any) {
-    const calldata = await snarkjs.groth16.exportSolidityCallData(
-        _proof,
-        _publicSignals
-    );
-
-    const argv: string[] = calldata
-        .replace(/["[\]\s]/g, "")
-        .split(",")
-        .map((x: any) => BigInt(x).toString());
-
-    const a = [argv[0], argv[1]];
-    const b = [
-        [argv[2], argv[3]],
-        [argv[4], argv[5]],
-    ];
-    const c = [argv[6], argv[7]];
-    const Input: string[] = [];
-
-    for (let i = 8; i < argv.length; i++) {
-        Input.push(argv[i]);
-    }
-
-    return { a, b, c, Input };
-}
-
 /*
  * [TODO]
  */
@@ -103,8 +63,7 @@ async function genProof(dep: Deposit): Promise<[any, withdrawPubSignals]> {
         WASM,
         PROV_KEY
     );
-    console.log("Proof:", proof);
-    console.log("Public signals:", publicSignals);
+    console.log('Success')
     console.log("==");
     return [proof, publicSignals];
 }
@@ -124,24 +83,44 @@ async function proveSanityCheck(prf: any, pubSigs: withdrawPubSignals) {
     console.log("==");
 }
 
+/*
+ * [TODO]
+ */
 async function sendProofTx(prf: groth16Proof, pubSigs: withdrawPubSignals) {
     console.log("== Sending tx with withdrawal proof");
-    const callD: any = await exportCallDataGroth16(
-        prf, pubSigs
-    )
-    console.log(callD);
-    console.log(await snarkjs.groth16.exportSolidityCallData(
+    const formattedProof = await exportCallDataGroth16(prf, pubSigs);
+    console.log("Proof:", formattedProof)
+    const result = await privateTreasury.withdraw(
+        formattedProof.a,
+        formattedProof.b,
+        formattedProof.c,
+        formattedProof.input
+    );
+    console.log(result);
+    console.log("==");
+}
+
+/*
+ * [TODO]. Inspired by https://github.com/vplasencia/zkSudoku/blob/main/contracts/test/utils/utils.js
+ */
+async function exportCallDataGroth16(
+    prf: groth16Proof,
+    pubSigs: withdrawPubSignals
+) {
+    const proofCalldata: string = await snarkjs.groth16.exportSolidityCallData(
         prf,
         pubSigs
-    ));
-    // const res = await managerVerifier.verifyProof(
-    //     callD.a,
-    //     callD.b,
-    //     callD.c,
-    //     callD.Input
-    // );
-    // console.log(res);
-    console.log("==");
+    );
+    const argv: string[] = proofCalldata
+        .replace(/["[\]\s]/g, "")
+        .split(",")
+        .map((x: string) => BigInt(x).toString());
+    return {
+        a: argv.slice(0, 2),
+        b: [argv.slice(2, 4), argv.slice(4, 6)],
+        c: argv.slice(6, 8),
+        input: argv.slice(8),
+    };
 }
 
 (async () => {
