@@ -60,14 +60,13 @@ contract PrivateTreasury {
     /// @notice [TODO]
     function withdraw(
         uint256 depIdx,
-        uint256[4] memory publicSignals,
         uint256[2] memory a,
-        uint256[2] memory b_0,
-        uint256[2] memory b_1,
-        uint256[2] memory c
+        uint256[2][2] memory b,
+        uint256[2] memory c,
+        uint256[4] memory publicSignals
     ) external {
         require(
-            verifierContract.verifyProof(a, [b_0, b_1], c, publicSignals),
+            verifierContract.verifyProof(a, b, c, publicSignals),
             "Invalid withdrawal proof"
         );
     }
