@@ -28,6 +28,11 @@ const privateTreasury = new ethers.Contract(
     require(<string>process.env.CONTRACT_ABI_PATH).abi,
     signer
 );
+const managerVerifier = new ethers.Contract(
+    <string>process.env.VERIFIER_CONTRACT_ADDR,
+    require(<string>process.env.VERIFIER_CONTRACT_ABI_PATH).abi,
+    signer
+);
 
 /*
  * [TODO]
@@ -53,18 +58,41 @@ function buildProofArgs(proof: any) {
     return [
         proof.pi_a.slice(0, 2), // pi_a
         // genZKSnarkProof reverses values in the inner arrays of pi_b
-        [proof.pi_b[0].slice(0).reverse(), 
-        proof.pi_b[1].slice(0).reverse()],
+        [proof.pi_b[0].slice(0).reverse(), proof.pi_b[1].slice(0).reverse()],
         proof.pi_c.slice(0, 2), // pi_c
     ];
+}
+
+async function exportCallDataGroth16(_proof: any, _publicSignals: any) {
+    const calldata = await snarkjs.groth16.exportSolidityCallData(
+        _proof,
+        _publicSignals
+    );
+
+    const argv: string[] = calldata
+        .replace(/["[\]\s]/g, "")
+        .split(",")
+        .map((x: any) => BigInt(x).toString());
+
+    const a = [argv[0], argv[1]];
+    const b = [
+        [argv[2], argv[3]],
+        [argv[4], argv[5]],
+    ];
+    const c = [argv[6], argv[7]];
+    const Input: string[] = [];
+
+    for (let i = 8; i < argv.length; i++) {
+        Input.push(argv[i]);
+    }
+
+    return { a, b, c, Input };
 }
 
 /*
  * [TODO]
  */
-async function genProof(
-    dep: Deposit
-): Promise<[groth16Proof, withdrawPubSignals]> {
+async function genProof(dep: Deposit): Promise<[any, withdrawPubSignals]> {
     console.log("== Generating proof");
     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
         {
@@ -75,8 +103,7 @@ async function genProof(
         WASM,
         PROV_KEY
     );
-    console.log("Proof (circom):", proof);
-    console.log("Proof (for contract call):", buildProofArgs(proof));
+    console.log("Proof:", proof);
     console.log("Public signals:", publicSignals);
     console.log("==");
     return [proof, publicSignals];
@@ -85,10 +112,7 @@ async function genProof(
 /*
  * [TODO]
  */
-async function proveSanityCheck(
-    prf: groth16Proof,
-    pubSigs: withdrawPubSignals
-) {
+async function proveSanityCheck(prf: any, pubSigs: withdrawPubSignals) {
     console.log("== Running sanity check, verifying proof client-side");
     const vKey = JSON.parse(fs.readFileSync(VERIF_KEY, "utf8"));
     const res = await snarkjs.groth16.verify(vKey, pubSigs, prf);
@@ -102,10 +126,14 @@ async function proveSanityCheck(
 
 async function sendProofTx(prf: groth16Proof, pubSigs: withdrawPubSignals) {
     console.log("== Sending tx with withdrawal proof");
-    const res = await privateTreasury.withdraw(
-        0,
-        pubSigs,
-        ...buildProofArgs(prf),
+    const callD: any = await exportCallDataGroth16(
+        prf, pubSigs
+    )
+    const res = await managerVerifier.verifyProof(
+        callD.a,
+        callD.b,
+        callD.c,
+        callD.Input
     );
     console.log(res);
     console.log("==");
@@ -115,5 +143,5 @@ async function sendProofTx(prf: groth16Proof, pubSigs: withdrawPubSignals) {
     const dep = await getDepInfo(DEP_IDX);
     const [proof, publicSignals] = await genProof(dep);
     if (DO_PROVE_SANITY_CHECK) await proveSanityCheck(proof, publicSignals);
-    // await sendProofTx(proof, publicSignals);
+    await sendProofTx(proof, publicSignals);
 })();

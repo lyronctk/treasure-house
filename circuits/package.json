@@ -8,6 +8,7 @@
     "snarkjs": "^0.5.0"
   },
   "scripts": {
-    "circom:dev": "bash circom_dev.sh"
+    "dev": "bash circom_dev.sh",
+    "dev:plonk": "bash circom_dev_plonk.sh"
   }
 }
