@@ -10,12 +10,19 @@ interface IVerifier {
     ) external view returns (bool);
 }
 
+// interface IVerifier {
+//     function verifyProof(bytes memory proof, uint256[] memory pubSignals)
+//         external
+//         view
+//         returns (bool);
+// }
+
 /// @title Private treasuries
 /// @notice Platform for managing treasuries with balance & withdrawal privacy
 /// @dev This is a POC that has not undergone any audits.
 contract PrivateTreasury {
     address public constant VERIFIER_ADDR =
-        0x3Aa5ebB10DC797CAC828524e59A333d0A371443c;
+        0x59b670e9fA9D0A427751Af201D676719a970857b;
     IVerifier verifierContract = IVerifier(VERIFIER_ADDR);
 
     struct Point {

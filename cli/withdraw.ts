@@ -129,13 +129,18 @@ async function sendProofTx(prf: groth16Proof, pubSigs: withdrawPubSignals) {
     const callD: any = await exportCallDataGroth16(
         prf, pubSigs
     )
-    const res = await managerVerifier.verifyProof(
-        callD.a,
-        callD.b,
-        callD.c,
-        callD.Input
-    );
-    console.log(res);
+    console.log(callD);
+    console.log(await snarkjs.groth16.exportSolidityCallData(
+        prf,
+        pubSigs
+    ));
+    // const res = await managerVerifier.verifyProof(
+    //     callD.a,
+    //     callD.b,
+    //     callD.c,
+    //     callD.Input
+    // );
+    // console.log(res);
     console.log("==");
 }
 
