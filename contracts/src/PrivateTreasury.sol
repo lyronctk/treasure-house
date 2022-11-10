@@ -59,15 +59,40 @@ contract PrivateTreasury {
 
     /// @notice [TODO]
     function withdraw(
+        uint256 depIdx,
         uint256[2] memory a,
         uint256[2][2] memory b,
         uint256[2] memory c,
         uint256[4] memory publicSignals
-    ) external {
+    ) external payable {
         require(
             verifierContract.verifyProof(a, b, c, publicSignals),
             "Invalid withdrawal proof"
         );
+        require(depIdx < deposits.length, "Invalid requested deposit index");
+
+        Deposit storage tgtDep = deposits[depIdx];
+        require(!tgtDep.spent, "Deposit already spent");
+
+        require(
+            bytes32(publicSignals[0]) == tgtDep.P.x,
+            "Public signals for proof don't match P for the target deposit"
+        );
+        require(
+            bytes32(publicSignals[1]) == tgtDep.P.y,
+            "Public signals for proof don't match P for the target deposit"
+        );
+        require(
+            bytes32(publicSignals[2]) == tgtDep.Q.x,
+            "Public signals for proof don't match Q for the target deposit"
+        );
+        require(
+            bytes32(publicSignals[3]) == tgtDep.Q.y,
+            "Public signals for proof don't match Q for the target deposit"
+        );
+
+        payable(msg.sender).transfer(tgtDep.v);
+        tgtDep.spent = true;
     }
 
     /// @notice Access length of deposits
