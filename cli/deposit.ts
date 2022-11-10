@@ -26,7 +26,7 @@ const TREASURY_PUB: SolPoint = {
         "0x088b879f3ff87e39d5a59a4e8785fe7d61429afc052b7578a38c6d7a98baebea"
     ),
 };
-const DEPOSIT_AMOUNT_ETH = "0.1";
+const DEPOSIT_AMOUNT_ETH = "12";
 
 const DO_WITHDRAW_SANITY_CHECK: boolean = false;
 const ADD_NEW_DEPOSIT: boolean = true;

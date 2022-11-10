@@ -63,7 +63,7 @@ async function genProof(dep: Deposit): Promise<[any, withdrawPubSignals]> {
         WASM,
         PROV_KEY
     );
-    console.log('Success')
+    console.log("Success");
     console.log("==");
     return [proof, publicSignals];
 }
@@ -88,15 +88,24 @@ async function proveSanityCheck(prf: any, pubSigs: withdrawPubSignals) {
  */
 async function sendProofTx(prf: groth16Proof, pubSigs: withdrawPubSignals) {
     console.log("== Sending tx with withdrawal proof");
+    console.log(
+        "Manager balance BEFORE:",
+        ethers.utils.formatEther(await signer.getBalance())
+    );
     const formattedProof = await exportCallDataGroth16(prf, pubSigs);
-    console.log("Proof:", formattedProof)
+    console.log("Proof:", formattedProof);
     const result = await privateTreasury.withdraw(
+        0,
         formattedProof.a,
         formattedProof.b,
         formattedProof.c,
         formattedProof.input
     );
     console.log(result);
+    console.log(
+        "Manager balance AFTER:",
+        ethers.utils.formatEther(await signer.getBalance())
+    );
     console.log("==");
 }
 
