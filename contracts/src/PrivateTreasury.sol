@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
+/// @title Interface for the solidity verifier produced by verif-manager.circom
 interface IVerifier {
     function verifyProof(
         uint256[2] memory a,
@@ -57,7 +58,12 @@ contract PrivateTreasury {
         deposits.push(Deposit(P, Q, msg.value, false));
     }
 
-    /// @notice [TODO]
+    /// @notice Enable managers to withdraw deposits belonging to their treasury
+    /// @param depIdx Index of target deposit to withdraw in deposits[]
+    /// @param a pi_a in proof
+    /// @param b pi_b in proof
+    /// @param c pi_c in proof
+    /// @param publicSignals Public signals associated with the proof
     function withdraw(
         uint256 depIdx,
         uint256[2] memory a,

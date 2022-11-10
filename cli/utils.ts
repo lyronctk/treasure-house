@@ -1,5 +1,5 @@
 /*
- * [TODO]
+ * Utility functions for cli.
  */
 
 import { BigNumber } from "bignumber.js";
@@ -11,7 +11,7 @@ const { PublicKey, PrivateKey } = require("babyjubjub");
 
 export default class Utils {
     /*
-     * [TODO]
+     * Generates and logs a babyjubjub keypair. 
      */
     static genJubKP(): [
         InstanceType<typeof PrivateKey>,
@@ -46,14 +46,16 @@ export default class Utils {
     }
 
     /*
-     * [TODO]
+     * Point, when retrieved via the contract's getter, comes with extra 
+     * metadata. Only need (x, y).
      */
     static parseGetterPoint(p: any): [string, string] {
         return [p["x"], p["y"]];
     }
 
     /*
-     * [TODO]
+     * Converts a pair of hexstrings that represent a point into the Point 
+     * datatype. 
      */
     static hexStringPairToPoint(
         p: [string, string]

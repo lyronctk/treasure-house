@@ -1,5 +1,7 @@
 /*
- * [TODO]
+ * Withdraws a deposit by posting a ZK proof for knowing a witness α s.t.
+ * P * α = G. The value of the deposit will be sent in ether to the sender's
+ * (manager's) account.
  */
 
 import dotenv from "dotenv";
@@ -10,7 +12,12 @@ import fs from "fs";
 
 const snarkjs = require("snarkjs");
 
-import { Deposit, groth16Proof, withdrawPubSignals } from "./types";
+import {
+    Deposit,
+    Groth16Proof,
+    Groth16ProofCalldata,
+    WithdrawPubSignals,
+} from "./types";
 import Utils from "./utils";
 
 const DEP_IDX: Number = 0;
@@ -19,18 +26,18 @@ const VERIF_KEY: string = "../circuits/verif-manager.vkey.json";
 const WASM: string = "../circuits/verif-manager.wasm";
 const DO_PROVE_SANITY_CHECK: boolean = true;
 
-const signer = new ethers.Wallet(
+const signer: ethers.Wallet = new ethers.Wallet(
     <string>process.env.MANAGER_ETH_PRIVKEY,
     new ethers.providers.JsonRpcProvider(process.env.RPC_URL)
 );
-const privateTreasury = new ethers.Contract(
+const privateTreasury: ethers.Contract = new ethers.Contract(
     <string>process.env.CONTRACT_ADDR,
     require(<string>process.env.CONTRACT_ABI_PATH).abi,
     signer
 );
 
 /*
- * [TODO]
+ * Retrieves the deposit at DEP_IDX.
  */
 async function getDepInfo(depIdx: Number): Promise<Deposit> {
     console.log("== Retrieving deposit at index", depIdx);
@@ -50,9 +57,12 @@ async function getDepInfo(depIdx: Number): Promise<Deposit> {
 }
 
 /*
- * [TODO]
+ * Generates proof w/ public signals P & Q to demonstrate knowledge of the
+ * manager's / treasury's private key.
  */
-async function genProof(dep: Deposit): Promise<[any, withdrawPubSignals]> {
+async function genProof(
+    dep: Deposit
+): Promise<[Groth16Proof, WithdrawPubSignals]> {
     console.log("== Generating proof");
     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
         {
@@ -69,9 +79,12 @@ async function genProof(dep: Deposit): Promise<[any, withdrawPubSignals]> {
 }
 
 /*
- * [TODO]
+ * Ensures proof verifies client-side with snarkjs before posting on-chain.
  */
-async function proveSanityCheck(prf: any, pubSigs: withdrawPubSignals) {
+async function proveSanityCheck(
+    prf: Groth16Proof,
+    pubSigs: WithdrawPubSignals
+) {
     console.log("== Running sanity check, verifying proof client-side");
     const vKey = JSON.parse(fs.readFileSync(VERIF_KEY, "utf8"));
     const res = await snarkjs.groth16.verify(vKey, pubSigs, prf);
@@ -84,9 +97,10 @@ async function proveSanityCheck(prf: any, pubSigs: withdrawPubSignals) {
 }
 
 /*
- * [TODO]
+ * Posts the ZK proof on-chain and logs the increase in the manager's
+ * balance.
  */
-async function sendProofTx(prf: groth16Proof, pubSigs: withdrawPubSignals) {
+async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
     console.log("== Sending tx with withdrawal proof");
     console.log(
         "Manager balance BEFORE:",
@@ -110,12 +124,13 @@ async function sendProofTx(prf: groth16Proof, pubSigs: withdrawPubSignals) {
 }
 
 /*
- * [TODO]. Inspired by https://github.com/vplasencia/zkSudoku/blob/main/contracts/test/utils/utils.js
+ * Formats the proof into what is expected by the solidity verifier.
+ * Inspired by https://github.com/vplasencia/zkSudoku/blob/main/contracts/test/utils/utils.js
  */
 async function exportCallDataGroth16(
-    prf: groth16Proof,
-    pubSigs: withdrawPubSignals
-) {
+    prf: Groth16Proof,
+    pubSigs: WithdrawPubSignals
+): Promise<Groth16ProofCalldata> {
     const proofCalldata: string = await snarkjs.groth16.exportSolidityCallData(
         prf,
         pubSigs
@@ -125,9 +140,12 @@ async function exportCallDataGroth16(
         .split(",")
         .map((x: string) => BigInt(x).toString());
     return {
-        a: argv.slice(0, 2),
-        b: [argv.slice(2, 4), argv.slice(4, 6)],
-        c: argv.slice(6, 8),
+        a: argv.slice(0, 2) as [string, string],
+        b: [
+            argv.slice(2, 4) as [string, string],
+            argv.slice(4, 6) as [string, string],
+        ],
+        c: argv.slice(6, 8) as [string, string],
         input: argv.slice(8),
     };
 }
