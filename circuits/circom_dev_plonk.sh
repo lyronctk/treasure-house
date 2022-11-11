@@ -16,4 +16,5 @@ yarn run snarkjs zkey export verificationkey verif-manager.plonk.zkey verif-mana
 
 # Export verifier to smart contract for on-chain verification
 yarn run snarkjs zkey export solidityverifier verif-manager.plonk.zkey ManagerVerifierPlonk.sol
+sed -i -e 's/0.6.11;/0.8.13;/g' ManagerVerifier.sol
 mv ManagerVerifierPlonk.sol ../contracts/src

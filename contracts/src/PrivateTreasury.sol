@@ -16,7 +16,7 @@ interface IVerifier {
 /// @dev This is a POC that has not undergone any audits.
 contract PrivateTreasury {
     address public constant VERIFIER_ADDR =
-        0x09635F643e140090A9A8Dcd712eD6285858ceBef;
+        0x70F1d626BC30DE8379636b3eAE8981298796e928;
     IVerifier verifierContract = IVerifier(VERIFIER_ADDR);
 
     struct Point {

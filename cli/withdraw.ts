@@ -20,7 +20,7 @@ import {
 } from "./types";
 import Utils from "./utils";
 
-const DEP_IDX: Number = 0;
+const DEP_IDX: Number = 4;
 const PROV_KEY: string = "../circuits/verif-manager.zkey";
 const VERIF_KEY: string = "../circuits/verif-manager.vkey.json";
 const WASM: string = "../circuits/verif-manager.wasm";
@@ -98,7 +98,8 @@ async function proveSanityCheck(
 
 /*
  * Posts the ZK proof on-chain and logs the increase in the manager's
- * balance.
+ * balance. Need the 60s call for non-local blockchains that don't have instant
+ * finality. 
  */
 async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
     console.log("== Sending tx with withdrawal proof");
@@ -109,13 +110,14 @@ async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
     const formattedProof = await exportCallDataGroth16(prf, pubSigs);
     console.log("Proof:", formattedProof);
     const result = await privateTreasury.withdraw(
-        0,
+        DEP_IDX,
         formattedProof.a,
         formattedProof.b,
         formattedProof.c,
         formattedProof.input
     );
     console.log(result);
+    await new Promise(resolve => setTimeout(resolve, 60000));
     console.log(
         "Manager balance AFTER:",
         ethers.utils.formatEther(await signer.getBalance())

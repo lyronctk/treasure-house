@@ -68,15 +68,15 @@ contract PrivateTreasuryTest is Test {
     }
 
     function testDeposit() public {
-        PrivateTreasury.Point memory P = PrivateTreasury.Point(
+        PrivateTreasury.Point memory Pt = PrivateTreasury.Point(
             bytes32("111"),
             bytes32("222")
         );
-        PrivateTreasury.Point memory Q = PrivateTreasury.Point(
+        PrivateTreasury.Point memory Qt = PrivateTreasury.Point(
             bytes32("333"),
             bytes32("444")
         );
-        privTreasury.deposit{value: 555}(P, Q);
+        privTreasury.deposit{value: 555}(Pt, Qt);
         assertEq(privTreasury.getNumDeposits(), 1);
     }
 

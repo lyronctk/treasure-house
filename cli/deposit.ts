@@ -20,15 +20,15 @@ import { Deposit, SolPoint } from "./types";
 
 const TREASURY_PUB: SolPoint = {
     x: new Bytes32(
-        "0x1a3474df0b1783e9e82202a451db4d1ec63bd55f135a7703bf559291e0b4f718"
+        <string>process.env.TREASURY_PUB_X
     ),
     y: new Bytes32(
-        "0x088b879f3ff87e39d5a59a4e8785fe7d61429afc052b7578a38c6d7a98baebea"
+        <string>process.env.TREASURY_PUB_Y
     ),
 };
-const DEPOSIT_AMOUNT_ETH = "12";
+const DEPOSIT_AMOUNT_ETH = "0.123";
 
-const DO_WITHDRAW_SANITY_CHECK: boolean = false;
+const DO_WITHDRAW_SANITY_CHECK: boolean = true;
 const ADD_NEW_DEPOSIT: boolean = true;
 
 const signer = new ethers.Wallet(
@@ -140,6 +140,6 @@ async function depositToTreasury() {
 }
 
 (async () => {
-    await enumerateDeposits();
+    // await enumerateDeposits();
     await depositToTreasury();
 })();
