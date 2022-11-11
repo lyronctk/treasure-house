@@ -99,7 +99,7 @@ async function proveSanityCheck(
 /*
  * Posts the ZK proof on-chain and logs the increase in the manager's
  * balance. Need the 60s call for non-local blockchains that don't have instant
- * finality. 
+ * finality.
  */
 async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
     console.log("== Sending tx with withdrawal proof");

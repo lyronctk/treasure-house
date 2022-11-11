@@ -140,6 +140,6 @@ async function depositToTreasury() {
 }
 
 (async () => {
-    // await enumerateDeposits();
+    await enumerateDeposits();
     await depositToTreasury();
 })();
