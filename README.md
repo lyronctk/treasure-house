@@ -5,4 +5,5 @@ Platform for DAOs with private treasuries. Based on [work done by Griffin Dunaif
 [TODO]
 - store deposits in merkle tree instead of list
 - batch withdrawals
-- UI (?)
+- group of managers instead
+- UI (optional)
