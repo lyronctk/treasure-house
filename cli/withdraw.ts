@@ -36,6 +36,10 @@ const privateTreasury: ethers.Contract = new ethers.Contract(
     signer
 );
 
+async function getDepositHistory() {
+    
+}
+
 /*
  * Retrieves the deposit at DEP_IDX.
  */

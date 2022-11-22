@@ -16,7 +16,7 @@ interface IVerifier {
 /// @dev This is a POC that has not undergone any audits.
 contract PrivateTreasury {
     address public constant VERIFIER_ADDR =
-        0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512;
+        0x5FbDB2315678afecb367f032d93F642f64180aa3;
     IVerifier verifierContract = IVerifier(VERIFIER_ADDR);
 
     struct Point {
@@ -35,6 +35,8 @@ contract PrivateTreasury {
         uint256 v;
         bool spent;
     }
+
+    event NewDeposit(Point P, Point Q, uint256 v);
 
     /// @dev Directory of treasuries can be stored off-chain
     Treasury[] public directory;
@@ -56,6 +58,7 @@ contract PrivateTreasury {
     function deposit(Point calldata P, Point calldata Q) external payable {
         require(msg.value > 0, "Deposited ether value must be > 0.");
         deposits.push(Deposit(P, Q, msg.value, false));
+        emit NewDeposit(P, Q, msg.value);
     }
 
     /// @notice Enable managers to withdraw deposits belonging to their treasury
