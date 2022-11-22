@@ -14,7 +14,7 @@ import { ethers } from "ethers";
 import Utils from './utils';
 
 const TREASURY_LABEL: string = "test";
-const ADD_NEW_TREASURY: boolean = false;
+const ADD_NEW_TREASURY: boolean = false;``
 
 const signer = new ethers.Wallet(
     <string>process.env.MANAGER_ETH_PRIVKEY,

@@ -6,7 +6,7 @@ PTAU=../artifacts/circom/hermezptau.blob.core.windows.net_ptau_powersOfTau28_hez
 # Compile circuit
 circom verif-manager.circom --r1cs --wasm --c
 mv verif-manager_js/verif-manager.wasm .
-rm -r verif-manager_js
+rm -r verif-manager_js ManagerVerifier.sol-e
 export CPATH="$CPATH:/opt/homebrew/opt/nlohmann-json/include:/opt/homebrew/opt/gmp/include"
 
 # Generate zkey
