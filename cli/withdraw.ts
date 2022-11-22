@@ -20,7 +20,7 @@ import {
 } from "./types";
 import Utils from "./utils";
 
-const DEP_IDX: Number = 4;
+const DEP_IDX: Number = 0;
 const PROV_KEY: string = "../circuits/verif-manager.zkey";
 const VERIF_KEY: string = "../circuits/verif-manager.vkey.json";
 const WASM: string = "../circuits/verif-manager.wasm";
@@ -117,7 +117,7 @@ async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
         formattedProof.input
     );
     console.log(result);
-    await new Promise(resolve => setTimeout(resolve, 60000));
+    // await new Promise(resolve => setTimeout(resolve, 60000));
     console.log(
         "Manager balance AFTER:",
         ethers.utils.formatEther(await signer.getBalance())

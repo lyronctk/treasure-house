@@ -48,7 +48,7 @@
   "methodIdentifiers": {
     "verifyProof(uint256[2],uint256[2][2],uint256[2],uint256[4])": "5fe8c13b"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256[2]\",\"name\":\"a\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2][2]\",\"name\":\"b\",\"type\":\"uint256[2][2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"c\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[4]\",\"name\":\"input\",\"type\":\"uint256[4]\"}],\"name\":\"verifyProof\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"Interface for the solidity verifier produced by verif-manager.circom\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/PrivateTreasury.sol\":\"IVerifier\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"src/PrivateTreasury.sol\":{\"keccak256\":\"0x12ae254e7bea03f1f3a576b48cf84ecb8be358510d824079866a5f42d933e8a3\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://006c9fdb44f0fc87cf6b8efc3b3e485ef225cfc1f1948bbab0be148025c1771d\",\"dweb:/ipfs/QmPcE8wc8ix7s6cnsfnekjbtbEx6qZToqs2aJythQe32C4\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256[2]\",\"name\":\"a\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2][2]\",\"name\":\"b\",\"type\":\"uint256[2][2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"c\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[4]\",\"name\":\"input\",\"type\":\"uint256[4]\"}],\"name\":\"verifyProof\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"Interface for the solidity verifier produced by verif-manager.circom\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/PrivateTreasury.sol\":\"IVerifier\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"src/PrivateTreasury.sol\":{\"keccak256\":\"0xa4ea3ed348655cb2e74cf5a97dd2fcea63b717cd21bb2ba82128c11c2522311a\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://e99493bc26f8c27d98e9ed11dbfdfd7d360abcabc498aaa1d5fcd2df4b350360\",\"dweb:/ipfs/QmcGJ74sCAnXfrRFtXnH4a39m1jADsy5KHDMiLwXBfJNpm\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.17+commit.8df45f5f"
@@ -121,10 +121,10 @@
     },
     "sources": {
       "src/PrivateTreasury.sol": {
-        "keccak256": "0x12ae254e7bea03f1f3a576b48cf84ecb8be358510d824079866a5f42d933e8a3",
+        "keccak256": "0xa4ea3ed348655cb2e74cf5a97dd2fcea63b717cd21bb2ba82128c11c2522311a",
         "urls": [
-          "bzz-raw://006c9fdb44f0fc87cf6b8efc3b3e485ef225cfc1f1948bbab0be148025c1771d",
-          "dweb:/ipfs/QmPcE8wc8ix7s6cnsfnekjbtbEx6qZToqs2aJythQe32C4"
+          "bzz-raw://e99493bc26f8c27d98e9ed11dbfdfd7d360abcabc498aaa1d5fcd2df4b350360",
+          "dweb:/ipfs/QmcGJ74sCAnXfrRFtXnH4a39m1jADsy5KHDMiLwXBfJNpm"
         ],
         "license": "MIT"
       }
@@ -507,7 +507,7 @@
               }
             },
             "value": {
-              "hexValue": "307837304631643632364243333044453833373936333662336541453839383132393837393665393238",
+              "hexValue": "307865376631373235453737333443453238384638333637653142623134334539306262334630353132",
               "id": 23256,
               "isConstant": false,
               "isLValue": false,
@@ -520,7 +520,7 @@
                 "typeIdentifier": "t_address",
                 "typeString": "address"
               },
-              "value": "0x70F1d626BC30DE8379636b3eAE8981298796e928"
+              "value": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
             },
             "visibility": "public"
           },
