@@ -36,8 +36,17 @@ const privateTreasury: ethers.Contract = new ethers.Contract(
     signer
 );
 
-async function getDepositHistory() {
-    
+/*
+ * [TODO]
+ */  
+async function getDepositHistory(): Promise<Deposit[]> {
+    const depEvents: ethers.Event[] = await privateTreasury.queryFilter(
+        privateTreasury.filters.NewDeposit()
+    );
+    return depEvents.map((e) => {
+        const dep = e.args?.dep;
+        return Utils.castSolDeposit(dep);
+    });
 }
 
 /*
@@ -46,16 +55,8 @@ async function getDepositHistory() {
 async function getDepInfo(depIdx: Number): Promise<Deposit> {
     console.log("== Retrieving deposit at index", depIdx);
     const solDep = await privateTreasury.deposits(depIdx);
-    const dep: Deposit = {
-        P: Utils.hexStringPairToPoint(Utils.parseGetterPoint(solDep["P"])),
-        Q: Utils.hexStringPairToPoint(Utils.parseGetterPoint(solDep["Q"])),
-        v: solDep["v"],
-    };
-    console.log({
-        P: [dep.P.x.n.toString(16), dep.P.y.n.toString(16)],
-        Q: [dep.Q.x.n.toString(16), dep.Q.y.n.toString(16)],
-        V: dep.v.toString(),
-    });
+    const dep: Deposit = Utils.castSolDeposit(solDep);
+    console.log(Utils.stringifyDeposit(dep));
     console.log("==");
     return dep;
 }
@@ -155,6 +156,11 @@ async function exportCallDataGroth16(
         input: argv.slice(8),
     };
 }
+
+(async () => {
+    const depHistory = await getDepositHistory();
+    console.log(depHistory);
+})();
 
 (async () => {
     const dep = await getDepInfo(DEP_IDX);

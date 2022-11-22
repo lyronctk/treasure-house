@@ -36,7 +36,7 @@ contract PrivateTreasury {
         bool spent;
     }
 
-    event NewDeposit(Point P, Point Q, uint256 v);
+    event NewDeposit(Deposit dep);
 
     /// @dev Directory of treasuries can be stored off-chain
     Treasury[] public directory;
@@ -57,8 +57,9 @@ contract PrivateTreasury {
     ///          α * P (where α is the treasury's private key)
     function deposit(Point calldata P, Point calldata Q) external payable {
         require(msg.value > 0, "Deposited ether value must be > 0.");
-        deposits.push(Deposit(P, Q, msg.value, false));
-        emit NewDeposit(P, Q, msg.value);
+        Deposit memory dep = Deposit(P, Q, msg.value, false);
+        deposits.push(dep);
+        emit NewDeposit(dep);
     }
 
     /// @notice Enable managers to withdraw deposits belonging to their treasury

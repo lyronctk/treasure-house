@@ -6,6 +6,7 @@ import { BigNumber } from "bignumber.js";
 import { Bytes32 } from "soltypes";
 import { ethers } from "ethers";
 
+import { Deposit } from "./types";
 const { Point } = require("./node_modules/babyjubjub/lib/Point.js");
 const { PublicKey, PrivateKey } = require("babyjubjub");
 
@@ -64,5 +65,25 @@ export default class Utils {
             new Bytes32(p[0]).toUint().val,
             new Bytes32(p[1]).toUint().val
         );
+    }
+
+    static stringifyDeposit(dep: Deposit) {
+        return {
+            P: [dep.P.x.n.toString(16), dep.P.y.n.toString(16)],
+            Q: [dep.Q.x.n.toString(16), dep.Q.y.n.toString(16)],
+            V: dep.v.toString(),
+        }
+    }
+
+    /*
+     * [TODO]
+     */  
+    static castSolDeposit(solDep: any): Deposit {
+        if (!solDep) throw new Error("Tried to cast a null Solidity deposit.")
+        return {
+            P: Utils.hexStringPairToPoint(Utils.parseGetterPoint(solDep.P)),
+            Q: Utils.hexStringPairToPoint(Utils.parseGetterPoint(solDep.Q)),
+            v: solDep["v"],
+        };
     }
 }
