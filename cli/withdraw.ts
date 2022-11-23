@@ -1,6 +1,6 @@
 /*
  * Withdraws a deposit by posting a ZK proof for knowing a witness α s.t.
- * P * α = G. The value of the deposit will be sent in ether to the sender's
+ * P * α = G. The value of the leaf will be sent in ether to the sender's
  * (manager's) account.
  */
 
@@ -13,14 +13,13 @@ import fs from "fs";
 const snarkjs = require("snarkjs");
 
 import {
-    Deposit,
     Groth16Proof,
     Groth16ProofCalldata,
     WithdrawPubSignals,
 } from "./types";
-import Utils from "./utils";
+import Leaf from "./Leaf";
 
-const DEP_IDX: Number = 0;
+const LEAF_IDX: Number = 1;
 const PROV_KEY: string = "../circuits/verif-manager.zkey";
 const VERIF_KEY: string = "../circuits/verif-manager.vkey.json";
 const WASM: string = "../circuits/verif-manager.wasm";
@@ -37,28 +36,25 @@ const privateTreasury: ethers.Contract = new ethers.Contract(
 );
 
 /*
- * [TODO]
+ * Queries contract for all leaves ever stored. Uses emitted NewLeaf event. 
  */  
-async function getDepositHistory(): Promise<Deposit[]> {
-    const depEvents: ethers.Event[] = await privateTreasury.queryFilter(
-        privateTreasury.filters.NewDeposit()
+async function getLeafHistory(): Promise<Leaf[]> {
+    const newLeafEvents: ethers.Event[] = await privateTreasury.queryFilter(
+        privateTreasury.filters.NewLeaf()
     );
-    return depEvents.map((e) => {
-        const dep = e.args?.dep;
-        return Utils.castSolDeposit(dep);
-    });
+    return newLeafEvents.map((e) => Leaf.fromSol(e.args?.dep));
 }
 
 /*
- * Retrieves the deposit at DEP_IDX.
+ * Retrieves a leaf from deposits Merkle Tree. 
  */
-async function getDepInfo(depIdx: Number): Promise<Deposit> {
-    console.log("== Retrieving deposit at index", depIdx);
-    const solDep = await privateTreasury.deposits(depIdx);
-    const dep: Deposit = Utils.castSolDeposit(solDep);
-    console.log(Utils.stringifyDeposit(dep));
+async function getLeafInfo(leafIdx: Number): Promise<Leaf> {
+    console.log("== Retrieving leaf at index", leafIdx);
+    const solLeaf = await privateTreasury.deposits(leafIdx);
+    const leaf: Leaf = Leaf.fromSol(solLeaf);
+    console.log(leaf);
     console.log("==");
-    return dep;
+    return leaf;
 }
 
 /*
@@ -66,13 +62,13 @@ async function getDepInfo(depIdx: Number): Promise<Deposit> {
  * manager's / treasury's private key.
  */
 async function genProof(
-    dep: Deposit
+    lf: Leaf
 ): Promise<[Groth16Proof, WithdrawPubSignals]> {
     console.log("== Generating proof");
     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
         {
-            P: [dep.P.x.n.toString(10), dep.P.y.n.toString(10)],
-            Q: [dep.Q.x.n.toString(10), dep.Q.y.n.toString(10)],
+            P: [lf.P.x.n.toString(10), lf.P.y.n.toString(10)],
+            Q: [lf.Q.x.n.toString(10), lf.Q.y.n.toString(10)],
             managerPriv: process.env.TREASURY_PRIVKEY,
         },
         WASM,
