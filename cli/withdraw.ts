@@ -14,16 +14,17 @@ const snarkjs = require("snarkjs");
 
 import {
     Groth16Proof,
-    Groth16ProofCalldata,
     WithdrawPubSignals,
 } from "./types";
 import Leaf from "./Leaf";
+import Utils from "./utils";
 
-const LEAF_IDX: Number = 1;
+const LEAF_IDX: Number = 0;
+const DO_PROVE_SANITY_CHECK: boolean = true;
+
 const PROV_KEY: string = "../circuits/verif-manager.zkey";
 const VERIF_KEY: string = "../circuits/verif-manager.vkey.json";
 const WASM: string = "../circuits/verif-manager.wasm";
-const DO_PROVE_SANITY_CHECK: boolean = true;
 
 const signer: ethers.Wallet = new ethers.Wallet(
     <string>process.env.MANAGER_ETH_PRIVKEY,
@@ -38,11 +39,11 @@ const privateTreasury: ethers.Contract = new ethers.Contract(
 /*
  * Queries contract for all leaves ever stored. Uses emitted NewLeaf event. 
  */  
-async function getLeafHistory(): Promise<Leaf[]> {
+async function getDepositHistory(): Promise<Leaf[]> {
     const newLeafEvents: ethers.Event[] = await privateTreasury.queryFilter(
         privateTreasury.filters.NewLeaf()
     );
-    return newLeafEvents.map((e) => Leaf.fromSol(e.args?.dep));
+    return newLeafEvents.map((e) => Leaf.fromSol(e.args?.lf));
 }
 
 /*
@@ -67,8 +68,8 @@ async function genProof(
     console.log("== Generating proof");
     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
         {
-            P: [lf.P.x.n.toString(10), lf.P.y.n.toString(10)],
-            Q: [lf.Q.x.n.toString(10), lf.Q.y.n.toString(10)],
+            P: lf.getPBase10(),
+            Q: lf.getQBase10(),
             managerPriv: process.env.TREASURY_PRIVKEY,
         },
         WASM,
@@ -108,10 +109,10 @@ async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
         "Manager balance BEFORE:",
         ethers.utils.formatEther(await signer.getBalance())
     );
-    const formattedProof = await exportCallDataGroth16(prf, pubSigs);
+    const formattedProof = await Utils.exportCallDataGroth16(prf, pubSigs);
     console.log("Proof:", formattedProof);
     const result = await privateTreasury.withdraw(
-        DEP_IDX,
+        LEAF_IDX,
         formattedProof.a,
         formattedProof.b,
         formattedProof.c,
@@ -126,41 +127,15 @@ async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
     console.log("==");
 }
 
-/*
- * Formats the proof into what is expected by the solidity verifier.
- * Inspired by https://github.com/vplasencia/zkSudoku/blob/main/contracts/test/utils/utils.js
- */
-async function exportCallDataGroth16(
-    prf: Groth16Proof,
-    pubSigs: WithdrawPubSignals
-): Promise<Groth16ProofCalldata> {
-    const proofCalldata: string = await snarkjs.groth16.exportSolidityCallData(
-        prf,
-        pubSigs
-    );
-    const argv: string[] = proofCalldata
-        .replace(/["[\]\s]/g, "")
-        .split(",")
-        .map((x: string) => BigInt(x).toString());
-    return {
-        a: argv.slice(0, 2) as [string, string],
-        b: [
-            argv.slice(2, 4) as [string, string],
-            argv.slice(4, 6) as [string, string],
-        ],
-        c: argv.slice(6, 8) as [string, string],
-        input: argv.slice(8),
-    };
-}
-
 (async () => {
     const depHistory = await getDepositHistory();
     console.log(depHistory);
 })();
 
 (async () => {
-    const dep = await getDepInfo(DEP_IDX);
-    const [proof, publicSignals] = await genProof(dep);
+    const lf = await getLeafInfo(LEAF_IDX);
+    const [proof, publicSignals] = await genProof(lf);
     if (DO_PROVE_SANITY_CHECK) await proveSanityCheck(proof, publicSignals);
     await sendProofTx(proof, publicSignals);
 })();
+1

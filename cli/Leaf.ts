@@ -28,6 +28,20 @@ export default class Leaf {
     }
 
     /*
+     * Access P with (x, y) as base10 strings.
+     */
+    getPBase10() {
+        return [this.P.x.n.toString(10), this.P.y.n.toString(10)];
+    }
+
+    /*
+     * Access Q with (x, y) as base10 strings.
+     */
+    getQBase10() {
+        return [this.Q.x.n.toString(10), this.Q.y.n.toString(10)];
+    }
+
+    /*
      * Creates a leaf by computing Q from the contributor's keys and the 
      * manager's public key. 
      */

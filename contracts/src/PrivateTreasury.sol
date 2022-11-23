@@ -29,20 +29,20 @@ contract PrivateTreasury {
         string label;
     }
 
-    struct Deposit {
+    struct Leaf {
         Point P;
         Point Q;
         uint256 v;
         bool spent;
     }
 
-    event NewDeposit(Deposit dep);
+    event NewLeaf(Leaf lf);
 
     /// @dev Directory of treasuries can be stored off-chain
     Treasury[] public directory;
 
     /// @dev Should be stored in a Merkle Tree instead of an array
-    Deposit[] public deposits;
+    Leaf[] public deposits;
 
     /// @notice Treasury creation
     /// @param pk Public key generated from Babyjubjub
@@ -57,19 +57,19 @@ contract PrivateTreasury {
     ///          α * P (where α is the treasury's private key)
     function deposit(Point calldata P, Point calldata Q) external payable {
         require(msg.value > 0, "Deposited ether value must be > 0.");
-        Deposit memory dep = Deposit(P, Q, msg.value, false);
-        deposits.push(dep);
-        emit NewDeposit(dep);
+        Leaf memory lf = Leaf(P, Q, msg.value, false);
+        deposits.push(lf);
+        emit NewLeaf(lf);
     }
 
     /// @notice Enable managers to withdraw deposits belonging to their treasury
-    /// @param depIdx Index of target deposit to withdraw in deposits[]
+    /// @param leafIdx Index of target leaf to withdraw in deposits[]
     /// @param a pi_a in proof
     /// @param b pi_b in proof
     /// @param c pi_c in proof
     /// @param publicSignals Public signals associated with the proof
     function withdraw(
-        uint256 depIdx,
+        uint256 leafIdx,
         uint256[2] memory a,
         uint256[2][2] memory b,
         uint256[2] memory c,
@@ -79,9 +79,9 @@ contract PrivateTreasury {
             verifierContract.verifyProof(a, b, c, publicSignals),
             "Invalid withdrawal proof"
         );
-        require(depIdx < deposits.length, "Invalid requested deposit index");
+        require(leafIdx < deposits.length, "Invalid requested deposit index");
 
-        Deposit storage tgtDep = deposits[depIdx];
+        Leaf storage tgtDep = deposits[leafIdx];
         require(!tgtDep.spent, "Deposit already spent");
 
         require(

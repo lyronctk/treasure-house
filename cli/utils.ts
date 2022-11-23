@@ -8,6 +8,13 @@ import { ethers } from "ethers";
 
 const { Point } = require("./node_modules/babyjubjub/lib/Point.js");
 const { PublicKey, PrivateKey } = require("babyjubjub");
+const snarkjs = require("snarkjs");
+
+import {
+    Groth16Proof,
+    Groth16ProofCalldata,
+    WithdrawPubSignals,
+} from "./types";
 
 export default class Utils {
     /*
@@ -64,5 +71,32 @@ export default class Utils {
             new Bytes32(p[0]).toUint().val,
             new Bytes32(p[1]).toUint().val
         );
+    }
+
+    /*
+     * Formats a proof into what is expected by the solidity verifier.
+     * Inspired by https://github.com/vplasencia/zkSudoku/blob/main/contracts/test/utils/utils.js
+     */
+    static async exportCallDataGroth16(
+        prf: Groth16Proof,
+        pubSigs: WithdrawPubSignals
+    ): Promise<Groth16ProofCalldata> {
+        const proofCalldata: string = await snarkjs.groth16.exportSolidityCallData(
+            prf,
+            pubSigs
+        );
+        const argv: string[] = proofCalldata
+            .replace(/["[\]\s]/g, "")
+            .split(",")
+            .map((x: string) => BigInt(x).toString());
+        return {
+            a: argv.slice(0, 2) as [string, string],
+            b: [
+                argv.slice(2, 4) as [string, string],
+                argv.slice(4, 6) as [string, string],
+            ],
+            c: argv.slice(6, 8) as [string, string],
+            input: argv.slice(8),
+        };
     }
 }
