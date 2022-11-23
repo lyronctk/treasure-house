@@ -7,15 +7,15 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+// @ts-ignore
+import { buildPoseidon } from "circomlibjs";
+import { Bytes32 } from "soltypes";
 import { ethers } from "ethers";
 import fs from "fs";
+// @ts-ignore
+import { groth16 } from "snarkjs";
 
-const snarkjs = require("snarkjs");
-
-import {
-    Groth16Proof,
-    WithdrawPubSignals,
-} from "./types";
+import { Groth16Proof, WithdrawPubSignals } from "./types";
 import Leaf from "./Leaf";
 import Utils from "./utils";
 
@@ -36,18 +36,32 @@ const privateTreasury: ethers.Contract = new ethers.Contract(
     signer
 );
 
-/*
- * Queries contract for all leaves ever stored. Uses emitted NewLeaf event. 
- */  
-async function getDepositHistory(): Promise<Leaf[]> {
-    const newLeafEvents: ethers.Event[] = await privateTreasury.queryFilter(
-        privateTreasury.filters.NewLeaf()
-    );
-    return newLeafEvents.map((e) => Leaf.fromSol(e.args?.lf));
+function buf2hex(buffer: any) {
+    // buffer is an ArrayBuffer
+    return [...new Uint8Array(buffer)]
+        .map((x) => x.toString(16).padStart(2, "0"))
+        .join("");
 }
 
 /*
- * Retrieves a leaf from deposits Merkle Tree. 
+ * Queries contract for all leaves ever stored. Uses emitted NewLeaf event.
+ */
+async function getDepositHistory(poseidon: any): Promise<any[]> {
+    const newLeafEvents: ethers.Event[] = await privateTreasury.queryFilter(
+        privateTreasury.filters.NewLeaf()
+    );
+    const leafHistory: Leaf[] = newLeafEvents.map((e) =>
+        Leaf.fromSol(e.args?.lf)
+    );
+    console.log(leafHistory[0]);
+    const leafHashes: any = leafHistory.map(
+        (lf) => "0x" + poseidon.F.toString(poseidon([1, 2]), 16)
+    );
+    return leafHashes;
+}
+
+/*
+ * Retrieves a leaf from deposits Merkle Tree.
  */
 async function getLeafInfo(leafIdx: Number): Promise<Leaf> {
     console.log("== Retrieving leaf at index", leafIdx);
@@ -62,11 +76,9 @@ async function getLeafInfo(leafIdx: Number): Promise<Leaf> {
  * Generates proof w/ public signals P & Q to demonstrate knowledge of the
  * manager's / treasury's private key.
  */
-async function genProof(
-    lf: Leaf
-): Promise<[Groth16Proof, WithdrawPubSignals]> {
+async function genProof(lf: Leaf): Promise<[Groth16Proof, WithdrawPubSignals]> {
     console.log("== Generating proof");
-    const { proof, publicSignals } = await snarkjs.groth16.fullProve(
+    const { proof, publicSignals } = await groth16.fullProve(
         {
             P: lf.getPBase10(),
             Q: lf.getQBase10(),
@@ -89,7 +101,7 @@ async function proveSanityCheck(
 ) {
     console.log("== Running sanity check, verifying proof client-side");
     const vKey = JSON.parse(fs.readFileSync(VERIF_KEY, "utf8"));
-    const res = await snarkjs.groth16.verify(vKey, pubSigs, prf);
+    const res = await groth16.verify(vKey, pubSigs, prf);
     if (res === true) {
         console.log("Verification OK");
     } else {
@@ -100,8 +112,8 @@ async function proveSanityCheck(
 
 /*
  * Posts the ZK proof on-chain and logs the increase in the manager's
- * balance. Need the 60s call for non-local blockchains that don't have instant
- * finality.
+ * balance. Need the 60s timeout call for non-local blockchains that don't have
+ * instant finality.
  */
 async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
     console.log("== Sending tx with withdrawal proof");
@@ -128,14 +140,14 @@ async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
 }
 
 (async () => {
-    const depHistory = await getDepositHistory();
+    const poseidon = await buildPoseidon();
+    const depHistory = await getDepositHistory(poseidon);
     console.log(depHistory);
 })();
 
-(async () => {
-    const lf = await getLeafInfo(LEAF_IDX);
-    const [proof, publicSignals] = await genProof(lf);
-    if (DO_PROVE_SANITY_CHECK) await proveSanityCheck(proof, publicSignals);
-    await sendProofTx(proof, publicSignals);
-})();
-1
+// (async () => {
+//     const lf = await getLeafInfo(LEAF_IDX);
+//     const [proof, publicSignals] = await genProof(lf);
+//     if (DO_PROVE_SANITY_CHECK) await proveSanityCheck(proof, publicSignals);
+//     await sendProofTx(proof, publicSignals);
+// })();

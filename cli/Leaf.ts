@@ -12,9 +12,9 @@ export default class Leaf {
     v: ethers.BigNumber;
 
     /*
-     * Instantiates a leaf (P, Q, v), where P is the contributor's public 
-     * key, Q is a "shared secret" that can only be derived by the manager's 
-     * public key with P, and v is the amount of Ether to contribute (specified 
+     * Instantiates a leaf (P, Q, v), where P is the contributor's public
+     * key, Q is a "shared secret" that can only be derived by the manager's
+     * public key with P, and v is the amount of Ether to contribute (specified
      * in wei).
      */
     constructor(
@@ -42,8 +42,8 @@ export default class Leaf {
     }
 
     /*
-     * Creates a leaf by computing Q from the contributor's keys and the 
-     * manager's public key. 
+     * Creates a leaf by computing Q from the contributor's keys and the
+     * manager's public key.
      */
     static fromKeys(
         treasuryPub: InstanceType<typeof PublicKey>,
@@ -59,14 +59,14 @@ export default class Leaf {
     }
 
     /*
-     * Creates a leaf from the payload stored in the contract's events. 
-     */  
+     * Creates a leaf from the payload stored in the contract's events.
+     */
     static fromSol(solLeaf: any): Leaf {
-        if (!solLeaf) throw new Error("Tried to cast a null Solidity leaf.")
+        if (!solLeaf) throw new Error("Tried to cast a null Solidity leaf.");
         return new Leaf(
             Utils.hexStringPairToPoint(Utils.parseGetterPoint(solLeaf.P)),
             Utils.hexStringPairToPoint(Utils.parseGetterPoint(solLeaf.Q)),
-            solLeaf["v"],
+            solLeaf["v"]
         );
     }
 
@@ -89,18 +89,31 @@ export default class Leaf {
     }
 
     /*
-     * Stringify.
+     * Object with every property as its string representation. 
      */
-    toString(): string {
+    stringify(): { P: string[]; Q: string[]; v: string } {
         return {
-            P: [this.P.x.n.toString(16), this.P.y.n.toString(16)],
-            Q: [this.Q.x.n.toString(16), this.Q.y.n.toString(16)],
+            P: [
+                <string>this.P.x.n.toString(16),
+                <string>this.P.y.n.toString(16),
+            ],
+            Q: [
+                <string>this.Q.x.n.toString(16),
+                <string>this.Q.y.n.toString(16),
+            ],
             v: this.v.toString(),
-        }.toString();
+        };
     }
 
     /*
-     * Exports leaf information in the format expected by deposit() in the 
+     * Wrapper around stringify() to actually return a string.
+     */
+    toString(): string {
+        return JSON.stringify(this.stringify());
+    }
+
+    /*
+     * Exports leaf information in the format expected by deposit() in the
      * contract
      */
     exportCallData(): [SolPointStr, SolPointStr] {
@@ -112,7 +125,7 @@ export default class Leaf {
             {
                 x: Utils.bigNumToBytes32(this.Q.x.n).toString(),
                 y: Utils.bigNumToBytes32(this.Q.y.n).toString(),
-            }
+            },
         ];
     }
 }
