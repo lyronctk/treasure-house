@@ -1,0 +1,11 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "circomlibjs": "^0.1.7",
+    "dotenv": "^16.0.3",
+    "ethers": "^5.7.2"
+  }
+}

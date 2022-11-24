@@ -7,16 +7,15 @@ import { SolPointStr } from "./types";
 import Utils from "./utils";
 
 export default class Leaf {
+    // Contributor's public key
     P: InstanceType<typeof Point>;
+
+    // Shared secret 
     Q: InstanceType<typeof Point>;
+
+    // Amount of Ether to contribute, denominated in wei
     v: ethers.BigNumber;
 
-    /*
-     * Instantiates a leaf (P, Q, v), where P is the contributor's public
-     * key, Q is a "shared secret" that can only be derived by the manager's
-     * public key with P, and v is the amount of Ether to contribute (specified
-     * in wei).
-     */
     constructor(
         P: InstanceType<typeof Point>,
         Q: InstanceType<typeof Point>,
