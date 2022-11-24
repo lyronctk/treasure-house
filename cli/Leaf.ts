@@ -89,27 +89,27 @@ export default class Leaf {
     }
 
     /*
-     * Object with every property as its string representation. 
+     * Object with every property as its hex string representation. 
      */
-    stringify(): { P: string[]; Q: string[]; v: string } {
+    hexify(): { P: string[]; Q: string[]; v: string } {
         return {
             P: [
-                <string>this.P.x.n.toString(16),
-                <string>this.P.y.n.toString(16),
+                "0x" + <string>this.P.x.n.toString(16),
+                "0x" + <string>this.P.y.n.toString(16),
             ],
             Q: [
-                <string>this.Q.x.n.toString(16),
-                <string>this.Q.y.n.toString(16),
+                "0x" + <string>this.Q.x.n.toString(16),
+                "0x" + <string>this.Q.y.n.toString(16),
             ],
-            v: this.v.toString(),
+            v: this.v.toHexString(),
         };
     }
 
     /*
-     * Wrapper around stringify() to actually return a string.
+     * Wrapper around hexify() to actually return a string.
      */
     toString(): string {
-        return JSON.stringify(this.stringify());
+        return JSON.stringify(this.hexify());
     }
 
     /*

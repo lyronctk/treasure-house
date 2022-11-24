@@ -9,7 +9,6 @@ dotenv.config();
 
 // @ts-ignore
 import { buildPoseidon } from "circomlibjs";
-import { Bytes32 } from "soltypes";
 import { ethers } from "ethers";
 import fs from "fs";
 // @ts-ignore
@@ -36,27 +35,27 @@ const privateTreasury: ethers.Contract = new ethers.Contract(
     signer
 );
 
-function buf2hex(buffer: any) {
-    // buffer is an ArrayBuffer
-    return [...new Uint8Array(buffer)]
-        .map((x) => x.toString(16).padStart(2, "0"))
-        .join("");
-}
-
 /*
  * Queries contract for all leaves ever stored. Uses emitted NewLeaf event.
+ * Hashes leaves using poseidon hash.
  */
-async function getDepositHistory(poseidon: any): Promise<any[]> {
+async function getDepositHistory(poseidon: any): Promise<string[]> {
     const newLeafEvents: ethers.Event[] = await privateTreasury.queryFilter(
         privateTreasury.filters.NewLeaf()
     );
     const leafHistory: Leaf[] = newLeafEvents.map((e) =>
         Leaf.fromSol(e.args?.lf)
     );
-    console.log(leafHistory[0]);
-    const leafHashes: any = leafHistory.map(
-        (lf) => "0x" + poseidon.F.toString(poseidon([1, 2]), 16)
-    );
+    const leafHashes: string[] = leafHistory.map((lf) => {
+        const hexified = lf.hexify();
+        return (
+            "0x" +
+            poseidon.F.toString(
+                poseidon([...hexified.P, ...hexified.Q, hexified.v]),
+                16
+            )
+        );
+    });
     return leafHashes;
 }
 
