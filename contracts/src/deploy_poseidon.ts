@@ -27,15 +27,17 @@ const C6: ethers.ContractFactory = new ethers.ContractFactory(
     signer
 );
 
-async function deploy(C: ethers.ContractFactory, lbl: string) {
-    console.log(`== Deploying ${lbl}`);
-    const deployed = await C.deploy();
-    console.log(`- tx hash: ${deployed.hash}`);
+async function logInfo(deployed: ethers.Contract, lbl: string) {
+    console.log(`== Deployed ${lbl}`);
+    console.log(`- tx hash: ${deployed.deployTransaction.hash}`);
     console.log(`- deployed to: ${deployed.address}`);
     console.log('==');
 }
 
 (async () => {
-    deploy(C3, "C3");
-    deploy(C6, "C6");
+    const deployedC3 = await C3.deploy();
+    const deployedC6 = await C6.deploy();
+
+    logInfo(deployedC3, "C3");
+    logInfo(deployedC6, "C6");
 })();

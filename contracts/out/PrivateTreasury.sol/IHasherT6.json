@@ -3,35 +3,20 @@
     {
       "inputs": [
         {
-          "internalType": "uint256[2]",
-          "name": "a",
-          "type": "uint256[2]"
-        },
-        {
-          "internalType": "uint256[2][2]",
-          "name": "b",
-          "type": "uint256[2][2]"
-        },
-        {
-          "internalType": "uint256[2]",
-          "name": "c",
-          "type": "uint256[2]"
-        },
-        {
-          "internalType": "uint256[4]",
-          "name": "input",
-          "type": "uint256[4]"
+          "internalType": "bytes32[5]",
+          "name": "leftRight",
+          "type": "bytes32[5]"
         }
       ],
-      "name": "verifyProof",
+      "name": "poseidon",
       "outputs": [
         {
-          "internalType": "bool",
+          "internalType": "bytes32",
           "name": "",
-          "type": "bool"
+          "type": "bytes32"
         }
       ],
-      "stateMutability": "view",
+      "stateMutability": "pure",
       "type": "function"
     }
   ],
@@ -46,9 +31,9 @@
     "linkReferences": {}
   },
   "methodIdentifiers": {
-    "verifyProof(uint256[2],uint256[2][2],uint256[2],uint256[4])": "5fe8c13b"
+    "poseidon(bytes32[5])": "6d2228d6"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256[2]\",\"name\":\"a\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2][2]\",\"name\":\"b\",\"type\":\"uint256[2][2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"c\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[4]\",\"name\":\"input\",\"type\":\"uint256[4]\"}],\"name\":\"verifyProof\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"Interface for the solidity verifier produced by verif-manager.circom\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/PrivateTreasury.sol\":\"IVerifier\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"src/PrivateTreasury.sol\":{\"keccak256\":\"0x7b8782d76d6b5efe0149ef3b54d9cfd870fe2b2c180dd465479cb9520d1a18c1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6b6376706972fa78c6a8bfbe777d4a77130b93fb8e6281e797667e29b7e1ed47\",\"dweb:/ipfs/QmULhD7KrLipB1BSDjtq5udMYjoBxmc3vGf4SwEUitdKeJ\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"bytes32[5]\",\"name\":\"leftRight\",\"type\":\"bytes32[5]\"}],\"name\":\"poseidon\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"Interface for poseidon hasher where t = 6\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/PrivateTreasury.sol\":\"IHasherT6\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"src/PrivateTreasury.sol\":{\"keccak256\":\"0x7b8782d76d6b5efe0149ef3b54d9cfd870fe2b2c180dd465479cb9520d1a18c1\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://6b6376706972fa78c6a8bfbe777d4a77130b93fb8e6281e797667e29b7e1ed47\",\"dweb:/ipfs/QmULhD7KrLipB1BSDjtq5udMYjoBxmc3vGf4SwEUitdKeJ\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.17+commit.8df45f5f"
@@ -59,34 +44,19 @@
         {
           "inputs": [
             {
-              "internalType": "uint256[2]",
-              "name": "a",
-              "type": "uint256[2]"
-            },
-            {
-              "internalType": "uint256[2][2]",
-              "name": "b",
-              "type": "uint256[2][2]"
-            },
-            {
-              "internalType": "uint256[2]",
-              "name": "c",
-              "type": "uint256[2]"
-            },
-            {
-              "internalType": "uint256[4]",
-              "name": "input",
-              "type": "uint256[4]"
+              "internalType": "bytes32[5]",
+              "name": "leftRight",
+              "type": "bytes32[5]"
             }
           ],
-          "stateMutability": "view",
+          "stateMutability": "pure",
           "type": "function",
-          "name": "verifyProof",
+          "name": "poseidon",
           "outputs": [
             {
-              "internalType": "bool",
+              "internalType": "bytes32",
               "name": "",
-              "type": "bool"
+              "type": "bytes32"
             }
           ]
         }
@@ -115,7 +85,7 @@
         "bytecodeHash": "ipfs"
       },
       "compilationTarget": {
-        "src/PrivateTreasury.sol": "IVerifier"
+        "src/PrivateTreasury.sol": "IHasherT6"
       },
       "libraries": {}
     },

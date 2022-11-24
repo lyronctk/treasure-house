@@ -11,13 +11,36 @@ interface IVerifier {
     ) external view returns (bool);
 }
 
+/// @title Interface for poseidon hasher where t = 3
+interface IHasherT3 {
+    function poseidon(bytes32[2] calldata leftRight)
+        external
+        pure
+        returns (bytes32);
+}
+
+/// @title Interface for poseidon hasher where t = 6
+interface IHasherT6 {
+    function poseidon(bytes32[5] calldata leftRight)
+        external
+        pure
+        returns (bytes32);
+}
+
 /// @title Private treasuries
 /// @notice Platform for managing treasuries with balance & withdrawal privacy
 /// @dev This is a POC that has not undergone any audits.
 contract PrivateTreasury {
     address public constant VERIFIER_ADDR =
         0x5FbDB2315678afecb367f032d93F642f64180aa3;
+    address public constant POSEIDON_T3_ADDR =
+        0x677df0cb865368207999F2862Ece576dC56D8dF6;
+    address public constant POSEIDON_T6_ADDR =
+        0x0Cf17D5DcDA9cF25889cEc9ae5610B0FB9725F65;
+
     IVerifier verifierContract = IVerifier(VERIFIER_ADDR);
+    IHasherT3 hasherT3 = IHasherT3(POSEIDON_T3_ADDR);
+    IHasherT6 hasherT6 = IHasherT6(POSEIDON_T6_ADDR);
 
     struct Point {
         bytes32 x;
