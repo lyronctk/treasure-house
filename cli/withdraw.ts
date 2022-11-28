@@ -49,14 +49,23 @@ async function getDepositHistory(poseidon: any): Promise<string[]> {
     console.log(leafHistory.map((lh) => lh.hexify()));
     const leafHashes: string[] = leafHistory.map((lf) => {
         const hexified = lf.hexify();
-        return (
-            poseidon.F.toString(
-                poseidon([...hexified.P, ...hexified.Q, hexified.v]),
-                10
-            )
+        return poseidon.F.toString(
+            poseidon([...hexified.P, ...hexified.Q, hexified.v]),
+            10
         );
     });
-    console.log("leftright: ", poseidon.F.toString(poseidon([leafHashes[0], leafHashes[1]]), 10))
+    console.log(
+        "leftright: ",
+        poseidon.F.toString(poseidon([leafHashes[0], leafHashes[1]]), 10)
+    );
+
+    console.log(
+        (await privateTreasury._hashLeftRight(
+            leafHashes[0],
+            leafHashes[1]
+        )).toString()
+    );
+
     return leafHashes;
 }
 

@@ -13,7 +13,7 @@ interface IVerifier {
 
 /// @title Interface for poseidon hasher where t = 3
 interface IHasherT3 {
-    function poseidon(uint256[2] calldata leftRight)
+    function poseidon(uint256[2] memory input)
         external
         pure
         returns (uint256);
@@ -21,7 +21,7 @@ interface IHasherT3 {
 
 /// @title Interface for poseidon hasher where t = 6
 interface IHasherT6 {
-    function poseidon(uint256[5] calldata leftRight)
+    function poseidon(uint256[5] calldata input)
         external
         pure
         returns (uint256);
@@ -34,9 +34,9 @@ contract PrivateTreasury {
     address public constant VERIFIER_ADDR =
         0x5FbDB2315678afecb367f032d93F642f64180aa3;
     address public constant POSEIDON_T3_ADDR =
-        0x8464135c8F25Da09e49BC8782676a84730C318bC;
+        0xbCF26943C0197d2eE0E5D05c716Be60cc2761508;
     address public constant POSEIDON_T6_ADDR =
-        0x71C95911E9a5D330f4D621842EC243EE1343292e;
+        0x59F2f1fCfE2474fD5F0b9BA1E73ca90b143Eb8d0;
 
     IVerifier verifierContract = IVerifier(VERIFIER_ADDR);
     IHasherT3 hasherT3 = IHasherT3(POSEIDON_T3_ADDR);
@@ -129,7 +129,7 @@ contract PrivateTreasury {
     }
 
     function _hashLeftRight(uint256 l, uint256 r)
-        internal
+        public
         view
         returns (uint256)
     {
