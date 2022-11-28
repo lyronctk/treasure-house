@@ -33,13 +33,10 @@ async function logInfo(deployed: ethers.Contract, lbl: string) {
     console.log(`- deployed to: ${deployed.address}`);
     console.log('==');
 }
+(async () => {
+    const deployedC3 = await C3.deploy();
+    const deployedC6 = await C6.deploy();
 
-console.log(JSON.stringify(poseidonContract.generateABI(2), null, 4));
-
-// (async () => {
-//     const deployedC3 = await C3.deploy();
-//     const deployedC6 = await C6.deploy();
-
-//     logInfo(deployedC3, "C3");
-//     logInfo(deployedC6, "C6");
-// })();
+    logInfo(deployedC3, "C3");
+    logInfo(deployedC6, "C6");
+})();
