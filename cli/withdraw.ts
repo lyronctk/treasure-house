@@ -46,16 +46,17 @@ async function getDepositHistory(poseidon: any): Promise<string[]> {
     const leafHistory: Leaf[] = newLeafEvents.map((e) =>
         Leaf.fromSol(e.args?.lf)
     );
+    console.log(leafHistory.map((lh) => lh.hexify()));
     const leafHashes: string[] = leafHistory.map((lf) => {
         const hexified = lf.hexify();
         return (
-            "0x" +
             poseidon.F.toString(
                 poseidon([...hexified.P, ...hexified.Q, hexified.v]),
-                16
+                10
             )
         );
     });
+    console.log("leftright: ", poseidon.F.toString(poseidon([leafHashes[0], leafHashes[1]]), 10))
     return leafHashes;
 }
 

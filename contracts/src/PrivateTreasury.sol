@@ -13,18 +13,18 @@ interface IVerifier {
 
 /// @title Interface for poseidon hasher where t = 3
 interface IHasherT3 {
-    function poseidon(bytes32[2] calldata leftRight)
+    function poseidon(uint256[2] calldata leftRight)
         external
         pure
-        returns (bytes32);
+        returns (uint256);
 }
 
 /// @title Interface for poseidon hasher where t = 6
 interface IHasherT6 {
-    function poseidon(bytes32[5] calldata leftRight)
+    function poseidon(uint256[5] calldata leftRight)
         external
         pure
-        returns (bytes32);
+        returns (uint256);
 }
 
 /// @title Private treasuries
@@ -34,9 +34,9 @@ contract PrivateTreasury {
     address public constant VERIFIER_ADDR =
         0x5FbDB2315678afecb367f032d93F642f64180aa3;
     address public constant POSEIDON_T3_ADDR =
-        0x677df0cb865368207999F2862Ece576dC56D8dF6;
+        0x8464135c8F25Da09e49BC8782676a84730C318bC;
     address public constant POSEIDON_T6_ADDR =
-        0x0Cf17D5DcDA9cF25889cEc9ae5610B0FB9725F65;
+        0x71C95911E9a5D330f4D621842EC243EE1343292e;
 
     IVerifier verifierContract = IVerifier(VERIFIER_ADDR);
     IHasherT3 hasherT3 = IHasherT3(POSEIDON_T3_ADDR);
@@ -127,6 +127,19 @@ contract PrivateTreasury {
         payable(msg.sender).transfer(tgtDep.v);
         tgtDep.spent = true;
     }
+
+    function _hashLeftRight(uint256 l, uint256 r)
+        internal
+        view
+        returns (uint256)
+    {
+        return hasherT3.poseidon([l, r]);
+    }
+
+    // function _hashLeaf(Leaf calldata lf) internal view returns (bytes32) {
+    //     return
+    //         hasherT6.poseidon([lf.P.x, lf.P.y, lf.Q.x, lf.Q.y, bytes32(lf.v)]);
+    // }
 
     /// @notice Access length of deposits
     function getNumDeposits() external view returns (uint256) {

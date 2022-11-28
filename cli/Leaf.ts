@@ -88,7 +88,8 @@ export default class Leaf {
     }
 
     /*
-     * Object with every property as its hex string representation. 
+     * Object with every property as its hex string representation, except
+     * for v, which is kept in base10. 
      */
     hexify(): { P: string[]; Q: string[]; v: string } {
         return {
@@ -100,7 +101,7 @@ export default class Leaf {
                 "0x" + <string>this.Q.x.n.toString(16),
                 "0x" + <string>this.Q.y.n.toString(16),
             ],
-            v: this.v.toHexString(),
+            v: this.v.toString(),
         };
     }
 
