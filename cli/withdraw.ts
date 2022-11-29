@@ -54,18 +54,22 @@ async function getDepositHistory(poseidon: any): Promise<string[]> {
             10
         );
     });
-    console.log(
-        "leftright: ",
-        poseidon.F.toString(poseidon([leafHashes[0], leafHashes[1]]), 10)
+    console.log("leaf to be tested:", leafHistory[0].hexify());
+    console.log("calldata: ", leafHistory[0].exportCallData());
+    console.log("ts hash:", leafHashes[0]);
+    console.log("contract hash:",
+        (await privateTreasury._hashLeaf({
+            P: {
+                x: "0x2765e160548d16cc8e4fa53c26258c7c1f4d16a5f996847910bf1b2e1297e366",
+                y: "0x0443d16f66c6830591a42f054b378b9ffbeebd9c70ab9f7bd60eabc69524c805",
+            },
+            Q: {
+                x: "0x146a0c41d5fbb1ffd48ed5d28a9690337af277487783159889c7fd27cddb7938",
+                y: "0x16629868d467acc3a32432165bd225905c3dfc8403fa85ba4265e2a82f59c80f",
+            },
+            v: "123000000000000000",
+        })).toString()
     );
-
-    console.log(
-        (await privateTreasury._hashLeftRight(
-            leafHashes[0],
-            leafHashes[1]
-        )).toString()
-    );
-
     return leafHashes;
 }
 

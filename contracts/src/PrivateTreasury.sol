@@ -13,10 +13,7 @@ interface IVerifier {
 
 /// @title Interface for poseidon hasher where t = 3
 interface IHasherT3 {
-    function poseidon(uint256[2] memory input)
-        external
-        pure
-        returns (uint256);
+    function poseidon(uint256[2] memory input) external pure returns (uint256);
 }
 
 /// @title Interface for poseidon hasher where t = 6
@@ -128,6 +125,8 @@ contract PrivateTreasury {
         tgtDep.spent = true;
     }
 
+    /// @dev Should be internal, but set to public so tests can run from 
+    ///      ethers. Not ideal, but foundry tests are being wonky.
     function _hashLeftRight(uint256 l, uint256 r)
         public
         view
@@ -136,10 +135,20 @@ contract PrivateTreasury {
         return hasherT3.poseidon([l, r]);
     }
 
-    // function _hashLeaf(Leaf calldata lf) internal view returns (bytes32) {
-    //     return
-    //         hasherT6.poseidon([lf.P.x, lf.P.y, lf.Q.x, lf.Q.y, bytes32(lf.v)]);
-    // }
+    /// @dev Should be internal, but set to public so tests can run from 
+    ///      ethers. Not ideal, but foundry tests are being wonky.
+    function _hashLeaf(Leaf calldata lf) public view returns (uint256) {
+        return
+            hasherT6.poseidon(
+                [
+                    uint256(lf.P.x),
+                    uint256(lf.P.y),
+                    uint256(lf.Q.x),
+                    uint256(lf.Q.y),
+                    lf.v
+                ]
+            );
+    }
 
     /// @notice Access length of deposits
     function getNumDeposits() external view returns (uint256) {
