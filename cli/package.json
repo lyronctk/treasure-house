@@ -9,7 +9,9 @@
     "circomlibjs": "^0.1.7",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
-    "snarkjs": "^0.5.0"
+    "git": "^0.1.5",
+    "snarkjs": "^0.5.0",
+    "maci-crypto": "^0.9.1"
   },
   "devDependencies": {
     "ethers-typescript-typings": "^0.0.4",

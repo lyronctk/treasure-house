@@ -13,13 +13,20 @@ import { ethers } from "ethers";
 import fs from "fs";
 // @ts-ignore
 import { groth16 } from "snarkjs";
+import { NOTHING_UP_MY_SLEEVE, IncrementalQuinTree } from "maci-crypto";
 
-import { Groth16Proof, WithdrawPubSignals } from "./types";
+import {
+    Groth16Proof,
+    Groth16ProofCalldata,
+    WithdrawPubSignals,
+} from "./types";
 import Leaf from "./Leaf";
 import Utils from "./utils";
 
 const LEAF_IDX: Number = 0;
 const DO_PROVE_SANITY_CHECK: boolean = true;
+
+const TREE_DEPTH = 32;
 
 const PROV_KEY: string = "../circuits/verif-manager.zkey";
 const VERIF_KEY: string = "../circuits/verif-manager.vkey.json";
@@ -39,38 +46,21 @@ const privateTreasury: ethers.Contract = new ethers.Contract(
  * Queries contract for all leaves ever stored. Uses emitted NewLeaf event.
  * Hashes leaves using poseidon hash.
  */
-async function getDepositHistory(poseidon: any): Promise<string[]> {
+async function getDepositHistory(poseidon: any): Promise<[Leaf[], BigInt[]]> {
     const newLeafEvents: ethers.Event[] = await privateTreasury.queryFilter(
         privateTreasury.filters.NewLeaf()
     );
     const leafHistory: Leaf[] = newLeafEvents.map((e) =>
         Leaf.fromSol(e.args?.lf)
     );
-    console.log(leafHistory.map((lh) => lh.hexify()));
-    const leafHashes: string[] = leafHistory.map((lf) => {
+    const leafHashes: BigInt[] = leafHistory.map((lf) => {
         const hexified = lf.hexify();
-        return poseidon.F.toString(
+        return BigInt(poseidon.F.toString(
             poseidon([...hexified.P, ...hexified.Q, hexified.v]),
             10
-        );
+        ));
     });
-    console.log("leaf to be tested:", leafHistory[0].hexify());
-    console.log("calldata: ", leafHistory[0].exportCallData());
-    console.log("ts hash:", leafHashes[0]);
-    console.log("contract hash:",
-        (await privateTreasury._hashLeaf({
-            P: {
-                x: "0x2765e160548d16cc8e4fa53c26258c7c1f4d16a5f996847910bf1b2e1297e366",
-                y: "0x0443d16f66c6830591a42f054b378b9ffbeebd9c70ab9f7bd60eabc69524c805",
-            },
-            Q: {
-                x: "0x146a0c41d5fbb1ffd48ed5d28a9690337af277487783159889c7fd27cddb7938",
-                y: "0x16629868d467acc3a32432165bd225905c3dfc8403fa85ba4265e2a82f59c80f",
-            },
-            v: "123000000000000000",
-        })).toString()
-    );
-    return leafHashes;
+    return [leafHistory, leafHashes];
 }
 
 /*
@@ -134,7 +124,8 @@ async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
         "Manager balance BEFORE:",
         ethers.utils.formatEther(await signer.getBalance())
     );
-    const formattedProof = await Utils.exportCallDataGroth16(prf, pubSigs);
+    const formattedProof: Groth16ProofCalldata =
+        await Utils.exportCallDataGroth16(prf, pubSigs);
     console.log("Proof:", formattedProof);
     const result = await privateTreasury.withdraw(
         LEAF_IDX,
@@ -152,10 +143,28 @@ async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
     console.log("==");
 }
 
+/*
+ * [TODO]
+ */
+function reconstructMerkleTree(
+    leafHashes: BigInt[]
+): IncrementalQuinTree {
+    let tree: IncrementalQuinTree = new IncrementalQuinTree(
+        TREE_DEPTH,
+        NOTHING_UP_MY_SLEEVE,
+        2
+    );
+    leafHashes.forEach((lh: BigInt) => {
+        tree.insert(lh);
+    })
+    return tree;
+}
+
 (async () => {
     const poseidon = await buildPoseidon();
-    const depHistory = await getDepositHistory(poseidon);
-    console.log(depHistory);
+    const [leafHistory, leafHashes] = await getDepositHistory(poseidon);
+    const tree: IncrementalQuinTree = reconstructMerkleTree(leafHashes);
+    console.log(tree.root);
 })();
 
 // (async () => {
