@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
+import {IncrementalMerkleTree} from "./IncrementalMerkleTree.sol";
+
 /// @title Interface for the solidity verifier produced by verif-manager.circom
 interface IVerifier {
     function verifyProof(
@@ -27,7 +29,7 @@ interface IHasherT6 {
 /// @title Private treasuries
 /// @notice Platform for managing treasuries with balance & withdrawal privacy
 /// @dev This is a POC that has not undergone any audits.
-contract PrivateTreasury {
+contract PrivateTreasury is IncrementalMerkleTree {
     address public constant VERIFIER_ADDR =
         0x5FbDB2315678afecb367f032d93F642f64180aa3;
     address public constant POSEIDON_T3_ADDR =
@@ -125,7 +127,7 @@ contract PrivateTreasury {
         tgtDep.spent = true;
     }
 
-    /// @dev Should be internal, but set to public so tests can run from 
+    /// @dev Should be internal, but set to public so tests can run from
     ///      ethers. Not ideal, but foundry tests are being wonky.
     function _hashLeftRight(uint256 l, uint256 r)
         public
@@ -135,7 +137,7 @@ contract PrivateTreasury {
         return hasherT3.poseidon([l, r]);
     }
 
-    /// @dev Should be internal, but set to public so tests can run from 
+    /// @dev Should be internal, but set to public so tests can run from
     ///      ethers. Not ideal, but foundry tests are being wonky.
     function _hashLeaf(Leaf calldata lf) public view returns (uint256) {
         return
