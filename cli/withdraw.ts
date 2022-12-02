@@ -25,7 +25,7 @@ import {
 import Leaf from "./Leaf";
 import Utils from "./utils";
 
-const LEAF_IDX: number = 0;
+const LEAF_IDX: number = 1;
 const DO_PROVE_SANITY_CHECK: boolean = true;
 
 const TREE_DEPTH = 32;
@@ -196,6 +196,7 @@ async function reconstructMerkleTree(
     const ownedLeaves = checkLeafOwnership(leafHistory);
     const tree = await reconstructMerkleTree(leafHashes);
     const merkleProof = tree.genMerklePath(ownedLeaves[LEAF_IDX]);
+    console.log(merkleProof);
 })();
 
 // (async () => {

@@ -1,6 +1,10 @@
 # node
 node_modules/
 
+# circom build files
+circuits/verif-manager_cpp
+circuits/verif-manager_js
+
 # hardhat
 cache
 artifacts
