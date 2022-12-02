@@ -99,6 +99,23 @@ export default class Leaf {
     }
 
     /*
+     * hexify() but everything is kept in base10
+     */
+    base10(): { P: string[]; Q: string[]; v: string } {
+        return {
+            P: [
+                "0x" + <string>this.P.x.n.toString(10),
+                "0x" + <string>this.P.y.n.toString(10),
+            ],
+            Q: [
+                "0x" + <string>this.Q.x.n.toString(10),
+                "0x" + <string>this.Q.y.n.toString(10),
+            ],
+            v: this.v.toString(),
+        };
+    }
+
+    /*
      * Computes poseidon hash for leaf.
      */
     poseidonHash(poseidon: any): BigInt {

@@ -33,9 +33,9 @@ contract PrivateTreasury is IncrementalMerkleTree {
     address public constant VERIFIER_ADDR =
         0x5FbDB2315678afecb367f032d93F642f64180aa3;
     address public constant POSEIDON_T3_ADDR =
-        0xbCF26943C0197d2eE0E5D05c716Be60cc2761508;
+        0x8464135c8F25Da09e49BC8782676a84730C318bC;
     address public constant POSEIDON_T6_ADDR =
-        0x59F2f1fCfE2474fD5F0b9BA1E73ca90b143Eb8d0;
+        0x71C95911E9a5D330f4D621842EC243EE1343292e;
 
     uint8 internal constant TREE_DEPTH = 32;
     // Keccak256 hash of 'Maci'

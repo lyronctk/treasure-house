@@ -34,7 +34,7 @@ template Main() {
     signal input treasuryPriv;
 
     signal input pathIndex[32];
-    signal input pathElements[32];
+    signal input pathElements[32][1];
 
     // Check P * α = Q
     component treasuryPrivBits = Num2Bits(253);
@@ -56,8 +56,18 @@ template Main() {
     leafIndex === pathIndex[0];
 
     // Check merkle inclusion proof (note: hard-codes tree depth of 32)
-    // component inclusionProof = MerkleTreeInclusionProof(32);
-    // inclusionProof.leaf <== 
+    component hasher = PoseidonHashT6();
+    hasher.inputs[0] <== P[0];
+    hasher.inputs[1] <== P[1];
+    hasher.inputs[2] <== Q[0];
+    hasher.inputs[3] <== Q[1];
+    hasher.inputs[4] <== v;
+
+    component inclusionProof = MerkleTreeInclusionProof(32);
+    inclusionProof.leaf <== hasher.out;
+    inclusionProof.path_index <== pathIndex;
+    inclusionProof.path_elements <== pathElements;
+    root === inclusionProof.root; 
 }
 
 component main { public [ v, root, leafIndex ] } = Main();
