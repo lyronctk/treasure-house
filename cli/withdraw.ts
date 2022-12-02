@@ -47,6 +47,7 @@ const privateTreasury: ethers.Contract = new ethers.Contract(
  * Hashes leaves using poseidon hash.
  */
 async function getDepositHistory(poseidon: any): Promise<[Leaf[], BigInt[]]> {
+    console.log("== Fetching deposit history");
     const newLeafEvents: ethers.Event[] = await privateTreasury.queryFilter(
         privateTreasury.filters.NewLeaf()
     );
@@ -55,11 +56,15 @@ async function getDepositHistory(poseidon: any): Promise<[Leaf[], BigInt[]]> {
     );
     const leafHashes: BigInt[] = leafHistory.map((lf) => {
         const hexified = lf.hexify();
-        return BigInt(poseidon.F.toString(
-            poseidon([...hexified.P, ...hexified.Q, hexified.v]),
-            10
-        ));
+        return BigInt(
+            poseidon.F.toString(
+                poseidon([...hexified.P, ...hexified.Q, hexified.v]),
+                10
+            )
+        );
     });
+    console.log(`- Retrieved ${leafHashes.length} leaves`)
+    console.log("==")
     return [leafHistory, leafHashes];
 }
 
@@ -144,11 +149,13 @@ async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
 }
 
 /*
- * [TODO]
+ * Reconstructs Merkle tree of deposits client side for inclusion proof 
+ * generation. 
  */
-function reconstructMerkleTree(
+async function reconstructMerkleTree(
     leafHashes: BigInt[]
-): IncrementalQuinTree {
+): Promise<IncrementalQuinTree> {
+    console.log("== Reconstructing Merkle tree");
     let tree: IncrementalQuinTree = new IncrementalQuinTree(
         TREE_DEPTH,
         NOTHING_UP_MY_SLEEVE,
@@ -156,16 +163,20 @@ function reconstructMerkleTree(
     );
     leafHashes.forEach((lh: BigInt) => {
         tree.insert(lh);
-    })
+    });
+    console.log("- Root:", tree.root);
+    console.log(
+        "- Same as root stored on contract?",
+        tree.root === BigInt(await privateTreasury.root())
+    );
+    console.log("==");
     return tree;
 }
 
 (async () => {
     const poseidon = await buildPoseidon();
     const [leafHistory, leafHashes] = await getDepositHistory(poseidon);
-    const tree: IncrementalQuinTree = reconstructMerkleTree(leafHashes);
-    console.log(tree.root);
-    console.log(BigInt(await privateTreasury.root()));
+    const tree: IncrementalQuinTree = await reconstructMerkleTree(leafHashes);
 })();
 
 // (async () => {
