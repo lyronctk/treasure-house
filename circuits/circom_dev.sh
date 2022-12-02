@@ -24,3 +24,4 @@ node verif-manager_js/generate_witness.js verif-manager.wasm verif-manager.json 
 yarn run snarkjs zkey export solidityverifier verif-manager.zkey ManagerVerifier.sol
 sed -i -e 's/0.6.11;/0.8.13;/g' ManagerVerifier.sol
 mv ManagerVerifier.sol ../contracts/src
+rm ManagerVerifier.sol-e 
