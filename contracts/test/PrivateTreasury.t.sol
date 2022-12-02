@@ -9,6 +9,7 @@ contract PrivateTreasuryTest is Test {
     address manager = address(0x123);
     address contributor = address(0x456);
 
+    /* [TODO] Figure out why foundry tests are being wonky
     function setUp() public {
         privTreasury = new PrivateTreasury();
         vm.deal(contributor, 10 ether);

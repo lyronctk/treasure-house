@@ -26,9 +26,8 @@ import Leaf from "./Leaf";
 import Utils from "./utils";
 
 const LEAF_IDX: number = 1;
-const DO_PROVE_SANITY_CHECK: boolean = true;
 
-const TREE_DEPTH = 32;
+const TREE_DEPTH: number = 32;
 
 const PROV_KEY: string = "../circuits/verif-manager.zkey";
 const VERIF_KEY: string = "../circuits/verif-manager.vkey.json";
@@ -86,33 +85,27 @@ function checkLeafOwnership(leafHistory: Leaf[]): number[] {
 }
 
 /*
- * Retrieves a leaf from deposits Merkle Tree.
- */
-async function getLeafInfo(leafIdx: Number): Promise<Leaf> {
-    console.log("== Retrieving leaf at index", leafIdx);
-    const solLeaf = await privateTreasury.deposits(leafIdx);
-    const leaf: Leaf = Leaf.fromSol(solLeaf);
-    console.log(leaf);
-    console.log("==");
-    return leaf;
-}
-
-/*
  * Generates proof w/ public signals P & Q to demonstrate knowledge of the
  * manager's / treasury's private key.
  */
-async function genProof(lf: Leaf): Promise<[Groth16Proof, WithdrawPubSignals]> {
+async function genGroth16Proof(lf: Leaf, lfIdx: number, root: BigInt, treasuryPriv: string, inclusionProof: any): Promise<[Groth16Proof, WithdrawPubSignals]> {
     console.log("== Generating proof");
+    const lfBase10 = lf.base10();
     const { proof, publicSignals } = await groth16.fullProve(
         {
-            P: lf.getPBase10(),
-            Q: lf.getQBase10(),
-            managerPriv: process.env.TREASURY_PRIVKEY,
+            v: lfBase10.v,
+            root: root.toString(),
+            leafIndex: lfIdx,
+            P: lfBase10.P,
+            Q: lfBase10.Q,
+            treasuryPriv: treasuryPriv,
+            pathIndex: inclusionProof.indices,
+            pathElements: inclusionProof.pathElements
         },
         WASM,
         PROV_KEY
     );
-    console.log("Success");
+    console.log("- Success");
     console.log("==");
     return [proof, publicSignals];
 }
@@ -125,12 +118,14 @@ async function proveSanityCheck(
     pubSigs: WithdrawPubSignals
 ) {
     console.log("== Running sanity check, verifying proof client-side");
+    console.log("- Proof:", prf);
+    console.log("- Public Signals:", pubSigs);
     const vKey = JSON.parse(fs.readFileSync(VERIF_KEY, "utf8"));
     const res = await groth16.verify(vKey, pubSigs, prf);
     if (res === true) {
-        console.log("Verification OK");
+        console.log("- Verification OK");
     } else {
-        console.log("Invalid proof");
+        console.log("- Invalid proof");
     }
     console.log("==");
 }
@@ -196,14 +191,14 @@ async function reconstructMerkleTree(
     const ownedLeaves = checkLeafOwnership(leafHistory);
     const tree = await reconstructMerkleTree(leafHashes);
     const merkleProof = tree.genMerklePath(ownedLeaves[LEAF_IDX]);
-    console.log(leafHistory[LEAF_IDX].base10());
-    console.log(merkleProof);
-    console.log(merkleProof.pathElements.map((x) => [x.toString()]));
+    const [proof, publicSignals] = await genGroth16Proof(
+        leafHistory[ownedLeaves[LEAF_IDX]],
+        ownedLeaves[LEAF_IDX],
+        tree.root,
+        <string>process.env.TREASURY_PRIVKEY,
+        merkleProof,
+    );
+    await proveSanityCheck(proof, publicSignals);
+    // await sendProofTx(proof, publicSignals);
+    process.exit(0);
 })();
-
-// (async () => {
-//     const lf = await getLeafInfo(LEAF_IDX);
-//     const [proof, publicSignals] = await genProof(lf);
-//     if (DO_PROVE_SANITY_CHECK) await proveSanityCheck(proof, publicSignals);
-//     await sendProofTx(proof, publicSignals);
-// })();

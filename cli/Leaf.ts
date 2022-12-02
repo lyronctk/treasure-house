@@ -29,14 +29,14 @@ export default class Leaf {
     /*
      * Access P with (x, y) as base10 strings.
      */
-    getPBase10() {
+    getPBase10(): [string, string] {
         return [this.P.x.n.toString(10), this.P.y.n.toString(10)];
     }
 
     /*
      * Access Q with (x, y) as base10 strings.
      */
-    getQBase10() {
+    getQBase10(): [string, string] {
         return [this.Q.x.n.toString(10), this.Q.y.n.toString(10)];
     }
 
@@ -103,14 +103,8 @@ export default class Leaf {
      */
     base10(): { P: string[]; Q: string[]; v: string } {
         return {
-            P: [
-                "0x" + <string>this.P.x.n.toString(10),
-                "0x" + <string>this.P.y.n.toString(10),
-            ],
-            Q: [
-                "0x" + <string>this.Q.x.n.toString(10),
-                "0x" + <string>this.Q.y.n.toString(10),
-            ],
+            P: this.getPBase10(),
+            Q: this.getQBase10(),
             v: this.v.toString(),
         };
     }

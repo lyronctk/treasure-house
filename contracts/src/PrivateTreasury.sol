@@ -60,16 +60,12 @@ contract PrivateTreasury is IncrementalMerkleTree {
         Point P;
         Point Q;
         uint256 v;
-        bool spent;
     }
 
     event NewLeaf(Leaf lf);
 
     /// @dev Directory of treasuries can be stored off-chain
     Treasury[] public directory;
-
-    /// @dev Should be stored in a Merkle Tree instead of an array
-    Leaf[] public deposits;
 
     /// @dev [TODO]
     constructor() IncrementalMerkleTree(TREE_DEPTH, NOTHING_UP_MY_SLEEVE) {}
@@ -87,10 +83,19 @@ contract PrivateTreasury is IncrementalMerkleTree {
     ///          α * P (where α is the treasury's private key)
     function deposit(Point calldata P, Point calldata Q) external payable {
         require(msg.value > 0, "Deposited ether value must be > 0.");
-        Leaf memory lf = Leaf(P, Q, msg.value, false);
-        deposits.push(lf);
+        Leaf memory lf = Leaf(P, Q, msg.value);
         emit NewLeaf(lf);
         insertLeaf(_hashLeaf(lf));
+    }
+
+    /// @notice Number of filled leaves in Merkle tree
+    function getNumDeposits() public view returns (uint256) {
+        return nextLeafIndex;
+    }
+
+    /// @notice Access length of directory
+    function getDirectoryLength() external view returns (uint256) {
+        return directory.length;
     }
 
     /// @notice Enable managers to withdraw deposits belonging to their treasury
@@ -110,7 +115,7 @@ contract PrivateTreasury is IncrementalMerkleTree {
             verifierContract.verifyProof(a, b, c, publicSignals),
             "Invalid withdrawal proof"
         );
-        require(leafIdx < deposits.length, "Invalid requested deposit index");
+        require(leafIdx < getNumDeposits(), "Invalid requested deposit index");
 
         Leaf storage tgtDep = deposits[leafIdx];
         require(!tgtDep.spent, "Deposit already spent");
@@ -162,15 +167,5 @@ contract PrivateTreasury is IncrementalMerkleTree {
                     lf.v
                 ]
             );
-    }
-
-    /// @notice Access length of deposits
-    function getNumDeposits() external view returns (uint256) {
-        return deposits.length;
-    }
-
-    /// @notice Access length of directory
-    function getDirectoryLength() external view returns (uint256) {
-        return directory.length;
     }
 }
