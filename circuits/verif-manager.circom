@@ -4,9 +4,10 @@
 
 pragma circom 2.0.3;
 
-include "node_modules/circomlib/circuits/babyjub.circom";
-include "node_modules/circomlib/circuits/bitify.circom";
-include "node_modules/circomlib/circuits/escalarmulany.circom";
+include "node_modules/maci-circuits/node_modules/circomlib/circuits/babyjub.circom";
+include "node_modules/maci-circuits/node_modules/circomlib/circuits/bitify.circom";
+include "node_modules/maci-circuits/node_modules/circomlib/circuits/escalarmulany.circom";
+include "node_modules/maci-circuits/circom/trees/incrementalMerkleTree.circom";
 
 /* Checks whether manager knows private key to derive Q from P
 
@@ -34,6 +35,7 @@ template Main() {
     signal input pathIndex[32];
     signal input pathElements[32];
 
+    // Check P * α = Q
     component treasuryPrivBits = Num2Bits(253);
     treasuryPrivBits.in <== treasuryPriv;
 
@@ -48,6 +50,12 @@ template Main() {
 
     Q[0] === mulResult.out[0];
     Q[1] === mulResult.out[1];
+
+    // Check H(leaf) === leaf hash
+    // [TODO]
+
+    // Check merkle inclusion proof (note: hard-codes tree depth of 32)
+    component inclusionProof = MerkleTreeInclusionProof(32);
 }
 
 component main { public [ v, root, leafIndex ] } = Main();
