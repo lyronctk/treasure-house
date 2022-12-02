@@ -4,6 +4,11 @@ node_modules/
 # circom build files
 circuits/verif-manager_cpp
 circuits/verif-manager_js
+circuits/verif-manager*key*
+circuits/verif-manager.wasm
+circuits/verif-manager.wtns
+circuits/verif-manager.zkey
+circuits/verif-manager.r1cs
 
 # hardhat
 cache
