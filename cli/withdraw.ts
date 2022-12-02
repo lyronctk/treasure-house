@@ -165,6 +165,7 @@ function reconstructMerkleTree(
     const [leafHistory, leafHashes] = await getDepositHistory(poseidon);
     const tree: IncrementalQuinTree = reconstructMerkleTree(leafHashes);
     console.log(tree.root);
+    console.log(BigInt(await privateTreasury.root()));
 })();
 
 // (async () => {

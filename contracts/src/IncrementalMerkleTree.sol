@@ -2,7 +2,7 @@
  * Based on the IncrementalMerkleTree from the MACI project. Modifications:
  *     1) Don't keep track of merkle root history. Gas savings.
  *     2) No onlyOwner modifiers. Instead made leaf insertion internal.
- *     3) Hashing func now absract. 
+ *     3) Hashing func now absract.
  *     4) Removed leaf insertion event. Will be defined in derived class.
  *
  * Original repo: https://github.com/privacy-scaling-explorations/maci
@@ -45,7 +45,7 @@ abstract contract IncrementalMerkleTree {
      *                   say that the deployer knows the preimage of an empty
      *                   leaf.
      */
-    constructor(uint8 _treeLevels, uint256 _zeroValue) public {
+    constructor(uint8 _treeLevels, uint256 _zeroValue) {
         // Limit the Merkle tree to MAX_DEPTH levels
         require(
             _treeLevels > 0 && _treeLevels <= MAX_DEPTH,
@@ -81,11 +81,12 @@ abstract contract IncrementalMerkleTree {
     }
 
     /*
-     * Poseidon hash with t = 3, should be implemented in derived contract. 
+     * Poseidon hash with t = 3, should be implemented in derived contract.
      */
     function _hashLeftRight(uint256 _left, uint256 _right)
         public
-        pure
+        view
+        virtual
         returns (uint256);
 
     /*
@@ -136,8 +137,6 @@ abstract contract IncrementalMerkleTree {
         }
 
         root = currentLevelHash;
-
-        uint256 n = nextLeafIndex;
         nextLeafIndex += 1;
 
         return currentIndex;

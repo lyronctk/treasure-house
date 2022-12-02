@@ -4,25 +4,13 @@ pragma solidity ^0.8.13;
 import "forge-std/Test.sol";
 import "../src/PrivateTreasury.sol";
 
-/// @dev  Inherits from PrivateTreasury to expose private / internal functions
-///       for testing
-contract PrivateTreasuryPublic is PrivateTreasury {
-    function hashLeftRight(uint256 l, uint256 r) public view returns (uint256) {
-        return _hashLeftRight(l, r);
-    }
-
-    // function hashLeaf(Leaf calldata lf) public view returns (bytes32) {
-    //     return _hashLeaf(lf);
-    // }
-}
-
 contract PrivateTreasuryTest is Test {
     PrivateTreasury public privTreasury;
     address manager = address(0x123);
     address contributor = address(0x456);
 
     function setUp() public {
-        privTreasury = new PrivateTreasuryPublic();
+        privTreasury = new PrivateTreasury();
         vm.deal(contributor, 10 ether);
     }
 

@@ -37,6 +37,11 @@ contract PrivateTreasury is IncrementalMerkleTree {
     address public constant POSEIDON_T6_ADDR =
         0x59F2f1fCfE2474fD5F0b9BA1E73ca90b143Eb8d0;
 
+    uint8 internal constant TREE_DEPTH = 32;
+    // Keccak256 hash of 'Maci'
+    uint256 internal constant NOTHING_UP_MY_SLEEVE =
+        8370432830353022751713833565135785980866757267633941821328460903436894336785;
+
     IVerifier verifierContract = IVerifier(VERIFIER_ADDR);
     IHasherT3 hasherT3 = IHasherT3(POSEIDON_T3_ADDR);
     IHasherT6 hasherT6 = IHasherT6(POSEIDON_T6_ADDR);
@@ -66,6 +71,9 @@ contract PrivateTreasury is IncrementalMerkleTree {
     /// @dev Should be stored in a Merkle Tree instead of an array
     Leaf[] public deposits;
 
+    /// @dev [TODO]
+    constructor() IncrementalMerkleTree(TREE_DEPTH, NOTHING_UP_MY_SLEEVE) {}
+
     /// @notice Treasury creation
     /// @param pk Public key generated from Babyjubjub
     /// @param label Name given to treasury, use only as descriptor, not lookup
@@ -82,6 +90,7 @@ contract PrivateTreasury is IncrementalMerkleTree {
         Leaf memory lf = Leaf(P, Q, msg.value, false);
         deposits.push(lf);
         emit NewLeaf(lf);
+        insertLeaf(_hashLeaf(lf));
     }
 
     /// @notice Enable managers to withdraw deposits belonging to their treasury
@@ -127,19 +136,22 @@ contract PrivateTreasury is IncrementalMerkleTree {
         tgtDep.spent = true;
     }
 
+    /// @notice Produces poseidon hash of two children hashes
     /// @dev Should be internal, but set to public so tests can run from
     ///      ethers. Not ideal, but foundry tests are being wonky.
     function _hashLeftRight(uint256 l, uint256 r)
         public
         view
+        override
         returns (uint256)
     {
         return hasherT3.poseidon([l, r]);
     }
 
+    /// @notice Produces poseidon hash of a leaf ()
     /// @dev Should be internal, but set to public so tests can run from
     ///      ethers. Not ideal, but foundry tests are being wonky.
-    function _hashLeaf(Leaf calldata lf) public view returns (uint256) {
+    function _hashLeaf(Leaf memory lf) public view returns (uint256) {
         return
             hasherT6.poseidon(
                 [
