@@ -1,5 +1,7 @@
 /* 
- * Verifies that the manager knows the correct private key to withdraw a deposit
+ * Validates withdrawal request by checking 1) knowledge of the correct private 
+ * key for the given leaf and 2) knowledge of a valid Merkle inclusion proof for 
+ * the given root.  
  */
 
 pragma circom 2.0.3;
@@ -10,18 +12,17 @@ include "node_modules/maci-circuits/node_modules/circomlib/circuits/escalarmulan
 include "node_modules/maci-circuits/circom/poseidon/poseidonHashT6.circom";
 include "node_modules/maci-circuits/circom/trees/incrementalMerkleTree.circom";
 
-/* Checks whether manager knows private key to derive Q from P
-
-   Contributors to the treasury include P & Q when making deposits. P is the 
-   contributor's public key (contribSecret * G). Q is the shared secret created 
-   via Diffie-Hellman key exchange (contribSecret * managerPublic = 
-   contribSecret * managerSecret * G). This template verifies that the manager
-   knows the correct managerSecret to derive Q from P. 
+/* 
 
    Input signals: 
-      P: contributor's public key, base 10
-      Q: shared secret, base 10
-      managerPriv: manager's private key
+      v: Value of deposit, denominated in Wei
+      root: Root of the Merkle tree, saved in contract
+      leafIndex: Index of the leaf that is to be withdrawn
+      P: Contributor's public key, base 10
+      Q: Shared secret, base 10
+      treasuryPriv: Treasury's private key
+      pathIndex: Indices along the path of the Merkle proof
+      pathElements: Paired elements along the path of the Merkle proof 
 
  */
 template Main() {
@@ -36,7 +37,7 @@ template Main() {
     signal input pathIndex[32];
     signal input pathElements[32][1];
 
-    // Check P * α = Q
+    // Check for correct secret key, P * α = Q
     component treasuryPrivBits = Num2Bits(253);
     treasuryPrivBits.in <== treasuryPriv;
 
