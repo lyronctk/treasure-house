@@ -23,12 +23,19 @@ include "node_modules/circomlib/circuits/escalarmulany.circom";
 
  */
 template Main() {
+    signal input v;
+    signal input root;
+    signal input leafIndex;
+
     signal input P[2];
     signal input Q[2];
-    signal input managerPriv;
+    signal input treasuryPriv;
 
-    component managerPrivBits = Num2Bits(253);
-    managerPrivBits.in <== managerPriv;
+    signal input pathIndex[32];
+    signal input pathElements[32];
+
+    component treasuryPrivBits = Num2Bits(253);
+    treasuryPrivBits.in <== treasuryPriv;
 
     component mulResult = EscalarMulAny(253);
     mulResult.p[0] <== P[0];
@@ -36,11 +43,11 @@ template Main() {
 
     var i;
     for (i=0; i<253; i++) {
-        mulResult.e[i] <== managerPrivBits.out[i];
+        mulResult.e[i] <== treasuryPrivBits.out[i];
     }
 
     Q[0] === mulResult.out[0];
     Q[1] === mulResult.out[1];
 }
 
-component main { public [ P, Q ] } = Main();
+component main { public [ v, root, leafIndex ] } = Main();

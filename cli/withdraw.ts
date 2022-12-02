@@ -196,6 +196,7 @@ async function reconstructMerkleTree(
     const ownedLeaves = checkLeafOwnership(leafHistory);
     const tree = await reconstructMerkleTree(leafHashes);
     const merkleProof = tree.genMerklePath(ownedLeaves[LEAF_IDX]);
+    console.log(leafHistory[LEAF_IDX].hexify());
     console.log(merkleProof);
 })();
 
