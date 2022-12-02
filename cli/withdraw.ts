@@ -25,7 +25,7 @@ import {
 import Leaf from "./Leaf";
 import Utils from "./utils";
 
-const LEAF_IDX: Number = 0;
+const LEAF_IDX: number = 0;
 const DO_PROVE_SANITY_CHECK: boolean = true;
 
 const TREE_DEPTH = 32;
@@ -68,13 +68,18 @@ async function getDepositHistory(poseidon: any): Promise<[Leaf[], BigInt[]]> {
  * Finds indices of owned leaves, i.e. the treasury private key at hand
  * satisfies P * α = G
  */
-function checkLeafOwnership(leafHistory: Leaf[]): Number[] {
+function checkLeafOwnership(leafHistory: Leaf[]): number[] {
     console.log("== Checking leaves for ownership");
-    const owned: Number[] = leafHistory.reduce((a: Number[], lf: Leaf, i: Number) => {
-        if (lf.checkQDerivation(new PrivateKey(process.env.TREASURY_PRIVKEY)))
-            a.push(i);
-        return a;
-    }, []);
+    const owned: number[] = leafHistory.reduce(
+        (a: number[], lf: Leaf, i: number) => {
+            const isOwned: boolean = lf.checkQDerivation(
+                new PrivateKey(process.env.TREASURY_PRIVKEY)
+            );
+            if (isOwned) a.push(i);
+            return a;
+        },
+        []
+    );
     console.log(`- Found ${owned.length} leaves recoverable by the privKey.`);
     console.log("==");
     return owned;
@@ -190,7 +195,7 @@ async function reconstructMerkleTree(
     const [leafHistory, leafHashes] = await getDepositHistory(poseidon);
     const ownedLeaves = checkLeafOwnership(leafHistory);
     const tree = await reconstructMerkleTree(leafHashes);
-    
+    const merkleProof = tree.genMerklePath(ownedLeaves[LEAF_IDX]);
 })();
 
 // (async () => {
