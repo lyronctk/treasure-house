@@ -67,8 +67,12 @@ async function depositToTreasury() {
         contributorPub,
         ethers.utils.parseEther(DEPOSIT_AMOUNT_ETH)
     );
-    if (DO_WITHDRAW_SANITY_CHECK)
-        lf.verifyQDerivation(new PrivateKey(process.env.TREASURY_PRIVKEY));
+    if (DO_WITHDRAW_SANITY_CHECK) {
+        console.log(
+            "- Can derive Q?",
+            lf.checkQDerivation(new PrivateKey(process.env.TREASURY_PRIVKEY))
+        );
+    }
     if (ADD_NEW_LEAF) await sendLeaf(lf);
 }
 

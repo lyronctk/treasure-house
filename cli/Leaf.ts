@@ -10,7 +10,7 @@ export default class Leaf {
     // Contributor's public key
     P: InstanceType<typeof Point>;
 
-    // Shared secret 
+    // Shared secret
     Q: InstanceType<typeof Point>;
 
     // Amount of Ether to contribute, denominated in wei
@@ -70,26 +70,19 @@ export default class Leaf {
     }
 
     /*
-     * A sanity check to ensure that the manager, who holds the treasury's private
-     * key (α), is able to redeem the leaf by satisfying the constraint
-     * P * α = G.
+     * Checks whether the manager, who holds the treasury's private key (α), is
+     * able to redeem the leaf by satisfying the constraint P * α = G.
      */
-    verifyQDerivation(treasuryPriv: InstanceType<typeof PrivateKey>) {
-        console.log("== Sanity check");
+    checkQDerivation(treasuryPriv: InstanceType<typeof PrivateKey>): boolean {
         const derivedQ: InstanceType<typeof Point> = this.P.mult(
             treasuryPriv.s
         );
-        console.log("Derived Q via treasury private key:", [
-            derivedQ.x.n.toString(10),
-            derivedQ.y.n.toString(10),
-        ]);
-        console.log("Equal to leaf's Q?", derivedQ.isEqualTo(this.Q));
-        console.log("==");
+        return derivedQ.isEqualTo(this.Q);
     }
 
     /*
      * Object with every property as its hex string representation, except
-     * for v, which is kept in base10. 
+     * for v, which is kept in base10.
      */
     hexify(): { P: string[]; Q: string[]; v: string } {
         return {
@@ -103,6 +96,19 @@ export default class Leaf {
             ],
             v: this.v.toString(),
         };
+    }
+
+    /*
+     * Computes poseidon hash for leaf.
+     */
+    poseidonHash(poseidon: any): BigInt {
+        const hexified = this.hexify();
+        return BigInt(
+            poseidon.F.toString(
+                poseidon([...hexified.P, ...hexified.Q, hexified.v]),
+                10
+            )
+        );
     }
 
     /*

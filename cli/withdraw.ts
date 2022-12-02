@@ -14,6 +14,8 @@ import fs from "fs";
 // @ts-ignore
 import { groth16 } from "snarkjs";
 import { NOTHING_UP_MY_SLEEVE, IncrementalQuinTree } from "maci-crypto";
+// @ts-ignore
+import { PrivateKey } from "babyjubjub";
 
 import {
     Groth16Proof,
@@ -54,18 +56,28 @@ async function getDepositHistory(poseidon: any): Promise<[Leaf[], BigInt[]]> {
     const leafHistory: Leaf[] = newLeafEvents.map((e) =>
         Leaf.fromSol(e.args?.lf)
     );
-    const leafHashes: BigInt[] = leafHistory.map((lf) => {
-        const hexified = lf.hexify();
-        return BigInt(
-            poseidon.F.toString(
-                poseidon([...hexified.P, ...hexified.Q, hexified.v]),
-                10
-            )
-        );
-    });
-    console.log(`- Retrieved ${leafHashes.length} leaves`)
-    console.log("==")
+    const leafHashes: BigInt[] = leafHistory.map((lf) =>
+        lf.poseidonHash(poseidon)
+    );
+    console.log(`- Retrieved ${leafHashes.length} leaves`);
+    console.log("==");
     return [leafHistory, leafHashes];
+}
+
+/*
+ * Finds indices of owned leaves, i.e. the treasury private key at hand
+ * satisfies P * α = G
+ */
+function checkLeafOwnership(leafHistory: Leaf[]): Number[] {
+    console.log("== Checking leaves for ownership");
+    const owned: Number[] = leafHistory.reduce((a: Number[], lf: Leaf, i: Number) => {
+        if (lf.checkQDerivation(new PrivateKey(process.env.TREASURY_PRIVKEY)))
+            a.push(i);
+        return a;
+    }, []);
+    console.log(`- Found ${owned.length} leaves recoverable by the privKey.`);
+    console.log("==");
+    return owned;
 }
 
 /*
@@ -149,8 +161,8 @@ async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
 }
 
 /*
- * Reconstructs Merkle tree of deposits client side for inclusion proof 
- * generation. 
+ * Reconstructs Merkle tree of deposits client side for inclusion proof
+ * generation.
  */
 async function reconstructMerkleTree(
     leafHashes: BigInt[]
@@ -176,7 +188,9 @@ async function reconstructMerkleTree(
 (async () => {
     const poseidon = await buildPoseidon();
     const [leafHistory, leafHashes] = await getDepositHistory(poseidon);
-    const tree: IncrementalQuinTree = await reconstructMerkleTree(leafHashes);
+    const ownedLeaves = checkLeafOwnership(leafHistory);
+    const tree = await reconstructMerkleTree(leafHashes);
+    
 })();
 
 // (async () => {
