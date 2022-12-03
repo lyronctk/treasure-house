@@ -102,7 +102,7 @@ contract PrivateTreasury is IncrementalMerkleTree {
         return directory.length;
     }
 
-    /// @notice Enable managers to withdraw deposits belonging to their treasury
+    /// @notice For managers to withdraw deposits belonging to their treasury
     /// @param a pi_a in proof
     /// @param b pi_b in proof
     /// @param c pi_c in proof

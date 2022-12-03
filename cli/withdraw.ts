@@ -1,7 +1,6 @@
 /*
- * Withdraws a deposit by posting a ZK proof for knowing a witness α s.t.
- * P * α = G. The value of the leaf will be sent in ether to the sender's
- * (manager's) account.
+ * Spends a leaf by posting a withdrawal proof (see verif-manager.circom). The 
+ * value of the leaf will be sent in ether to the sender's (manager's) account.
  */
 
 import dotenv from "dotenv";
@@ -66,7 +65,7 @@ async function getDepositHistory(poseidon: any): Promise<[Leaf[], BigInt[]]> {
 
 /*
  * Finds indices of owned leaves, i.e. the treasury private key at hand
- * satisfies P * α = G
+ * satisfies P * α = G.
  */
 function checkLeafOwnership(leafHistory: Leaf[]): number[] {
     console.log("== Checking leaves for ownership");
@@ -86,8 +85,7 @@ function checkLeafOwnership(leafHistory: Leaf[]): number[] {
 }
 
 /*
- * Generates proof w/ public signals P & Q to demonstrate knowledge of the
- * manager's / treasury's private key.
+ * Generates groth16 proof. 
  */
 async function genGroth16Proof(
     lf: Leaf,
@@ -138,7 +136,7 @@ async function proveSanityCheck(
 }
 
 /*
- * Posts the ZK proof on-chain and logs the increase in the manager's
+ * Posts the zkSNARK proof on-chain and logs the increase in the manager's
  * balance. Need the 60s timeout call for non-local blockchains that don't have
  * instant finality.
  */
