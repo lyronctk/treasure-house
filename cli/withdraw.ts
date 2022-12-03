@@ -1,5 +1,5 @@
 /*
- * Spends a leaf by posting a withdrawal proof (see verif-manager.circom). The 
+ * Spends a leaf by posting a withdrawal proof (see verif-manager.circom). The
  * value of the leaf will be sent in ether to the sender's (manager's) account.
  */
 
@@ -24,9 +24,11 @@ import {
 import Leaf from "./Leaf";
 import Utils from "./utils";
 
-const LEAF_IDX: number = 1;
+// Currently only supports LEAF_INDICES.length < N_WITHDRAW
+const LEAF_INDICES: number[] = [0, 1];
 const WITH_SLEEP: boolean = false;
 
+const N_MAX_WITHDRAW: number = 5;
 const TREE_DEPTH: number = 32;
 
 const PROV_KEY: string = "../circuits/verif-manager.zkey";
@@ -85,27 +87,35 @@ function checkLeafOwnership(leafHistory: Leaf[]): number[] {
 }
 
 /*
- * Generates groth16 proof. 
+ * Generates groth16 proof to batch withdraw deposits. 
  */
 async function genGroth16Proof(
-    lf: Leaf,
-    lfIdx: number,
+    leaves: Leaf[],
+    leafIndices: number[],
     root: BigInt,
     treasuryPriv: string,
-    inclusionProof: any
+    inclusionProofs: any[]
 ): Promise<[Groth16Proof, WithdrawPubSignals]> {
     console.log("== Generating proof");
-    const lfBase10 = lf.base10();
+    const leavesBase10 = leaves.map((lf) => lf.base10());
+    const [paddedLeaves, paddedInclusionProofs, paddedLeafIndices] =
+        Utils.padCircuitInputs(
+            N_MAX_WITHDRAW,
+            TREE_DEPTH,
+            leavesBase10,
+            inclusionProofs,
+            leafIndices
+        );
     const { proof, publicSignals } = await groth16.fullProve(
         {
-            v: lfBase10.v,
+            v: paddedLeaves.map((lfBase10) => lfBase10.v),
             root: root.toString(),
-            leafIndex: lfIdx,
-            P: lfBase10.P,
-            Q: lfBase10.Q,
+            leafIndex: paddedLeafIndices,
+            P: paddedLeaves.map((lfBase10) => lfBase10.P),
+            Q: paddedLeaves.map((lfBase10) => lfBase10.Q),
             treasuryPriv: treasuryPriv,
-            pathIndex: inclusionProof.indices,
-            pathElements: inclusionProof.pathElements,
+            pathIndex: paddedInclusionProofs.map((prf) => prf.indices),
+            pathElements: paddedInclusionProofs.map((prf) => prf.pathElements),
         },
         WASM,
         PROV_KEY
@@ -192,17 +202,24 @@ async function reconstructMerkleTree(
 (async () => {
     const poseidon = await buildPoseidon();
     const [leafHistory, leafHashes] = await getDepositHistory(poseidon);
-    const ownedLeaves = checkLeafOwnership(leafHistory);
+
+    const ownedIndices = checkLeafOwnership(leafHistory);
+    const targetIndices = LEAF_INDICES.map((idx) => ownedIndices[idx]);
+    const targetLeaves = targetIndices.map((ownedIdx) => leafHistory[ownedIdx]);
+
     const tree = await reconstructMerkleTree(leafHashes);
-    const merkleProof = tree.genMerklePath(ownedLeaves[LEAF_IDX]);
+    const merkleProofs = targetIndices.map((ownedIdx) =>
+        tree.genMerklePath(ownedIdx)
+    );
+
     const [proof, publicSignals] = await genGroth16Proof(
-        leafHistory[ownedLeaves[LEAF_IDX]],
-        ownedLeaves[LEAF_IDX],
+        targetLeaves,
+        targetIndices,
         tree.root,
         <string>process.env.TREASURY_PRIVKEY,
-        merkleProof
+        merkleProofs
     );
-    await proveSanityCheck(proof, publicSignals);
-    await sendProofTx(proof, publicSignals);
+    // await proveSanityCheck(proof, publicSignals);
+    // await sendProofTx(proof, publicSignals);
     process.exit(0);
 })();
