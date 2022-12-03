@@ -26,6 +26,7 @@ import Leaf from "./Leaf";
 import Utils from "./utils";
 
 const LEAF_IDX: number = 1;
+const WITH_SLEEP: boolean = false;
 
 const TREE_DEPTH: number = 32;
 
@@ -88,7 +89,13 @@ function checkLeafOwnership(leafHistory: Leaf[]): number[] {
  * Generates proof w/ public signals P & Q to demonstrate knowledge of the
  * manager's / treasury's private key.
  */
-async function genGroth16Proof(lf: Leaf, lfIdx: number, root: BigInt, treasuryPriv: string, inclusionProof: any): Promise<[Groth16Proof, WithdrawPubSignals]> {
+async function genGroth16Proof(
+    lf: Leaf,
+    lfIdx: number,
+    root: BigInt,
+    treasuryPriv: string,
+    inclusionProof: any
+): Promise<[Groth16Proof, WithdrawPubSignals]> {
     console.log("== Generating proof");
     const lfBase10 = lf.base10();
     const { proof, publicSignals } = await groth16.fullProve(
@@ -100,7 +107,7 @@ async function genGroth16Proof(lf: Leaf, lfIdx: number, root: BigInt, treasuryPr
             Q: lfBase10.Q,
             treasuryPriv: treasuryPriv,
             pathIndex: inclusionProof.indices,
-            pathElements: inclusionProof.pathElements
+            pathElements: inclusionProof.pathElements,
         },
         WASM,
         PROV_KEY
@@ -138,23 +145,22 @@ async function proveSanityCheck(
 async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
     console.log("== Sending tx with withdrawal proof");
     console.log(
-        "Manager balance BEFORE:",
+        "- Manager balance BEFORE:",
         ethers.utils.formatEther(await signer.getBalance())
     );
     const formattedProof: Groth16ProofCalldata =
         await Utils.exportCallDataGroth16(prf, pubSigs);
     console.log("Proof:", formattedProof);
     const result = await privateTreasury.withdraw(
-        LEAF_IDX,
         formattedProof.a,
         formattedProof.b,
         formattedProof.c,
         formattedProof.input
     );
-    console.log(result);
-    // await new Promise(resolve => setTimeout(resolve, 60000));
+    console.log("- tx:", result);
+    if (WITH_SLEEP) await new Promise((resolve) => setTimeout(resolve, 60000));
     console.log(
-        "Manager balance AFTER:",
+        "- Manager balance AFTER:",
         ethers.utils.formatEther(await signer.getBalance())
     );
     console.log("==");
@@ -196,9 +202,9 @@ async function reconstructMerkleTree(
         ownedLeaves[LEAF_IDX],
         tree.root,
         <string>process.env.TREASURY_PRIVKEY,
-        merkleProof,
+        merkleProof
     );
     await proveSanityCheck(proof, publicSignals);
-    // await sendProofTx(proof, publicSignals);
+    await sendProofTx(proof, publicSignals);
     process.exit(0);
 })();

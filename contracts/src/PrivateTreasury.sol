@@ -9,7 +9,7 @@ interface IVerifier {
         uint256[2] memory a,
         uint256[2][2] memory b,
         uint256[2] memory c,
-        uint256[4] memory input
+        uint256[3] memory input
     ) external view returns (bool);
 }
 
@@ -28,10 +28,10 @@ interface IHasherT6 {
 
 /// @title Private treasuries
 /// @notice Platform for managing treasuries with balance & withdrawal privacy
-/// @dev This is a POC that has not undergone any audits.
+/// @dev Do not use in prod. This is a POC that has not undergone any audits.
 contract PrivateTreasury is IncrementalMerkleTree {
     address public constant VERIFIER_ADDR =
-        0x5FbDB2315678afecb367f032d93F642f64180aa3;
+        0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0;
     address public constant POSEIDON_T3_ADDR =
         0x8464135c8F25Da09e49BC8782676a84730C318bC;
     address public constant POSEIDON_T6_ADDR =
@@ -62,13 +62,17 @@ contract PrivateTreasury is IncrementalMerkleTree {
         uint256 v;
     }
 
+    /// @notice Emitted whenever a new leaf is added to the tree
     event NewLeaf(Leaf lf);
 
     /// @dev Directory of treasuries can be stored off-chain
     Treasury[] public directory;
 
-    /// @dev [TODO]
+    /// @notice Inherits from Maci's Incremental Merkle Tree
     constructor() IncrementalMerkleTree(TREE_DEPTH, NOTHING_UP_MY_SLEEVE) {}
+
+    /// @notice Keep track of leaves that have been spent
+    mapping(uint256 => bool) spentLeaves;
 
     /// @notice Treasury creation
     /// @param pk Public key generated from Babyjubjub
@@ -99,46 +103,34 @@ contract PrivateTreasury is IncrementalMerkleTree {
     }
 
     /// @notice Enable managers to withdraw deposits belonging to their treasury
-    /// @param leafIdx Index of target leaf to withdraw in deposits[]
     /// @param a pi_a in proof
     /// @param b pi_b in proof
     /// @param c pi_c in proof
     /// @param publicSignals Public signals associated with the proof
     function withdraw(
-        uint256 leafIdx,
         uint256[2] memory a,
         uint256[2][2] memory b,
         uint256[2] memory c,
-        uint256[4] memory publicSignals
+        uint256[3] memory publicSignals
     ) external payable {
         require(
             verifierContract.verifyProof(a, b, c, publicSignals),
             "Invalid withdrawal proof"
         );
-        require(leafIdx < getNumDeposits(), "Invalid requested deposit index");
+        uint256 _v = publicSignals[0];
+        uint256 _root = publicSignals[1];
+        uint256 _leafIdx = publicSignals[2];
 
-        Leaf storage tgtDep = deposits[leafIdx];
-        require(!tgtDep.spent, "Deposit already spent");
-
         require(
-            bytes32(publicSignals[0]) == tgtDep.P.x,
-            "Public signals for proof don't match P for the target deposit"
-        );
-        require(
-            bytes32(publicSignals[1]) == tgtDep.P.y,
-            "Public signals for proof don't match P for the target deposit"
-        );
-        require(
-            bytes32(publicSignals[2]) == tgtDep.Q.x,
-            "Public signals for proof don't match Q for the target deposit"
-        );
-        require(
-            bytes32(publicSignals[3]) == tgtDep.Q.y,
-            "Public signals for proof don't match Q for the target deposit"
+            _root == root,
+            "Merkle root associated w/ proof doesn't match on-chain root."
         );
 
-        payable(msg.sender).transfer(tgtDep.v);
-        tgtDep.spent = true;
+        require(_leafIdx < getNumDeposits(), "Invalid requested deposit index");
+        require(!spentLeaves[_leafIdx], "Deposit already spent");
+        spentLeaves[_leafIdx] = true;
+
+        payable(msg.sender).transfer(_v);
     }
 
     /// @notice Produces poseidon hash of two children hashes

@@ -431,13 +431,13 @@
     }
   ],
   "bytecode": {
-    "object": "0x6080604052600080546201000162ff00ff19909116179055600980546001600160a01b031990811661012317909155600a805490911661045617905534801561004757600080fd5b506102c9806100576000396000f3fe608060405234801561001057600080fd5b50600436106100575760003560e01c80633a7684631461005c578063ba414fa614610094578063cb3984ce146100ac578063f8ccbf47146100bf578063fa7626d4146100d2575b600080fd5b610077737109709ecfa91a80626ff3989d68f67f5b1dd12d81565b6040516001600160a01b0390911681526020015b60405180910390f35b61009c6100df565b604051901515815260200161008b565b600854610077906001600160a01b031681565b60005461009c9062010000900460ff1681565b60005461009c9060ff1681565b60008054610100900460ff16156100ff5750600054610100900460ff1690565b6000737109709ecfa91a80626ff3989d68f67f5b1dd12d3b156102055760408051737109709ecfa91a80626ff3989d68f67f5b1dd12d602082018190526519985a5b195960d21b8284015282518083038401815260608301909352600092909161018d917f667f9d70ca411d70ead50d8d5c22070dafc36ad75f3dcf5e7237b22ade9aecc49160800161023a565b60408051601f19818403018152908290526101a79161025e565b6000604051808303816000865af19150503d80600081146101e4576040519150601f19603f3d011682016040523d82523d6000602084013e6101e9565b606091505b50915050808060200190518101906102019190610271565b9150505b919050565b6000815160005b8181101561022b5760208185018101518683015201610211565b50600093019283525090919050565b6001600160e01b0319831681526000610256600483018461020a565b949350505050565b600061026a828461020a565b9392505050565b60006020828403121561028357600080fd5b8151801515811461026a57600080fdfea26469706673582212206e043486cbb8cc0a5e369f4c0e83f67d257575ef02d3b57008794415abb1efe964736f6c63430008110033",
-    "sourceMap": "125:5520:10:-:0;;;1572:26:0;;;170:28:1;-1:-1:-1;;170:28:1;;;;;;209:32:10;;;-1:-1:-1;;;;;;209:32:10;;;235:5;209:32;;;;247:36;;;;;;277:5;247:36;;;125:5520;;;;;;;;;;;;;;;;",
+    "object": "0x6080604052600080546201000162ff00ff19909116179055600980546001600160a01b031990811661012317909155600a805490911661045617905534801561004757600080fd5b506102c9806100576000396000f3fe608060405234801561001057600080fd5b50600436106100575760003560e01c80633a7684631461005c578063ba414fa614610094578063cb3984ce146100ac578063f8ccbf47146100bf578063fa7626d4146100d2575b600080fd5b610077737109709ecfa91a80626ff3989d68f67f5b1dd12d81565b6040516001600160a01b0390911681526020015b60405180910390f35b61009c6100df565b604051901515815260200161008b565b600854610077906001600160a01b031681565b60005461009c9062010000900460ff1681565b60005461009c9060ff1681565b60008054610100900460ff16156100ff5750600054610100900460ff1690565b6000737109709ecfa91a80626ff3989d68f67f5b1dd12d3b156102055760408051737109709ecfa91a80626ff3989d68f67f5b1dd12d602082018190526519985a5b195960d21b8284015282518083038401815260608301909352600092909161018d917f667f9d70ca411d70ead50d8d5c22070dafc36ad75f3dcf5e7237b22ade9aecc49160800161023a565b60408051601f19818403018152908290526101a79161025e565b6000604051808303816000865af19150503d80600081146101e4576040519150601f19603f3d011682016040523d82523d6000602084013e6101e9565b606091505b50915050808060200190518101906102019190610271565b9150505b919050565b6000815160005b8181101561022b5760208185018101518683015201610211565b50600093019283525090919050565b6001600160e01b0319831681526000610256600483018461020a565b949350505050565b600061026a828461020a565b9392505050565b60006020828403121561028357600080fd5b8151801515811461026a57600080fdfea2646970667358221220e2f416a25812b58e8dd31e51a9226421d0251a44efffad38e46731234e61864d64736f6c63430008110033",
+    "sourceMap": "125:5520:9:-:0;;;1572:26:0;;;170:28:1;-1:-1:-1;;170:28:1;;;;;;209:32:9;;;-1:-1:-1;;;;;;209:32:9;;;235:5;209:32;;;;247:36;;;;;;277:5;247:36;;;125:5520;;;;;;;;;;;;;;;;",
     "linkReferences": {}
   },
   "deployedBytecode": {
-    "object": "0x608060405234801561001057600080fd5b50600436106100575760003560e01c80633a7684631461005c578063ba414fa614610094578063cb3984ce146100ac578063f8ccbf47146100bf578063fa7626d4146100d2575b600080fd5b610077737109709ecfa91a80626ff3989d68f67f5b1dd12d81565b6040516001600160a01b0390911681526020015b60405180910390f35b61009c6100df565b604051901515815260200161008b565b600854610077906001600160a01b031681565b60005461009c9062010000900460ff1681565b60005461009c9060ff1681565b60008054610100900460ff16156100ff5750600054610100900460ff1690565b6000737109709ecfa91a80626ff3989d68f67f5b1dd12d3b156102055760408051737109709ecfa91a80626ff3989d68f67f5b1dd12d602082018190526519985a5b195960d21b8284015282518083038401815260608301909352600092909161018d917f667f9d70ca411d70ead50d8d5c22070dafc36ad75f3dcf5e7237b22ade9aecc49160800161023a565b60408051601f19818403018152908290526101a79161025e565b6000604051808303816000865af19150503d80600081146101e4576040519150601f19603f3d011682016040523d82523d6000602084013e6101e9565b606091505b50915050808060200190518101906102019190610271565b9150505b919050565b6000815160005b8181101561022b5760208185018101518683015201610211565b50600093019283525090919050565b6001600160e01b0319831681526000610256600483018461020a565b949350505050565b600061026a828461020a565b9392505050565b60006020828403121561028357600080fd5b8151801515811461026a57600080fdfea26469706673582212206e043486cbb8cc0a5e369f4c0e83f67d257575ef02d3b57008794415abb1efe964736f6c63430008110033",
-    "sourceMap": "125:5520:10:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;321:38:1;;250:64;321:38;;;;;-1:-1:-1;;;;;189:32:11;;;171:51;;159:2;144:18;321:38:1;;;;;;;;1819:584:0;;;:::i;:::-;;;398:14:11;;391:22;373:41;;361:2;346:18;1819:584:0;233:187:11;168:35:10;;;;;-1:-1:-1;;;;;168:35:10;;;170:28:1;;;;;;;;;;;;1572:26:0;;;;;;;;;1819:584;1853:4;1873:7;;;;;;;1869:528;;;-1:-1:-1;1903:7:0;;;;;;;;1819:584::o;1869:528::-;1941:17;2990:42;2978:55;3059:16;1980:374;;2196:43;;;1671:64;2196:43;;;832:51:11;;;-1:-1:-1;;;899:18:11;;;892:34;2196:43:0;;;;;;;;;805:18:11;;;2196:43:0;;;-1:-1:-1;;1671:64:0;;2086:175;;2135:34;;2086:175;;;:::i;:::-;;;;-1:-1:-1;;2086:175:0;;;;;;;;;;2047:232;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2020:259;;;2323:7;2312:27;;;;;;;;;;;;:::i;:::-;2297:42;;2002:352;1980:374;2374:12;1819:584;-1:-1:-1;1819:584:0:o;937:322:11:-;978:3;1016:5;1010:12;1040:1;1050:128;1064:6;1061:1;1058:13;1050:128;;;1161:4;1146:13;;;1142:24;;1136:31;1123:11;;;1116:52;1079:12;1050:128;;;-1:-1:-1;1233:1:11;1197:16;;1222:13;;;-1:-1:-1;1197:16:11;;937:322;-1:-1:-1;937:322:11:o;1264:278::-;-1:-1:-1;;;;;;1449:33:11;;1437:46;;1419:3;1499:37;1533:1;1524:11;;1516:6;1499:37;:::i;:::-;1492:44;1264:278;-1:-1:-1;;;;1264:278:11:o;1547:189::-;1676:3;1701:29;1726:3;1718:6;1701:29;:::i;:::-;1694:36;1547:189;-1:-1:-1;;;1547:189:11:o;1741:277::-;1808:6;1861:2;1849:9;1840:7;1836:23;1832:32;1829:52;;;1877:1;1874;1867:12;1829:52;1909:9;1903:16;1962:5;1955:13;1948:21;1941:5;1938:32;1928:60;;1984:1;1981;1974:12",
+    "object": "0x608060405234801561001057600080fd5b50600436106100575760003560e01c80633a7684631461005c578063ba414fa614610094578063cb3984ce146100ac578063f8ccbf47146100bf578063fa7626d4146100d2575b600080fd5b610077737109709ecfa91a80626ff3989d68f67f5b1dd12d81565b6040516001600160a01b0390911681526020015b60405180910390f35b61009c6100df565b604051901515815260200161008b565b600854610077906001600160a01b031681565b60005461009c9062010000900460ff1681565b60005461009c9060ff1681565b60008054610100900460ff16156100ff5750600054610100900460ff1690565b6000737109709ecfa91a80626ff3989d68f67f5b1dd12d3b156102055760408051737109709ecfa91a80626ff3989d68f67f5b1dd12d602082018190526519985a5b195960d21b8284015282518083038401815260608301909352600092909161018d917f667f9d70ca411d70ead50d8d5c22070dafc36ad75f3dcf5e7237b22ade9aecc49160800161023a565b60408051601f19818403018152908290526101a79161025e565b6000604051808303816000865af19150503d80600081146101e4576040519150601f19603f3d011682016040523d82523d6000602084013e6101e9565b606091505b50915050808060200190518101906102019190610271565b9150505b919050565b6000815160005b8181101561022b5760208185018101518683015201610211565b50600093019283525090919050565b6001600160e01b0319831681526000610256600483018461020a565b949350505050565b600061026a828461020a565b9392505050565b60006020828403121561028357600080fd5b8151801515811461026a57600080fdfea2646970667358221220e2f416a25812b58e8dd31e51a9226421d0251a44efffad38e46731234e61864d64736f6c63430008110033",
+    "sourceMap": "125:5520:9:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;321:38:1;;250:64;321:38;;;;;-1:-1:-1;;;;;189:32:10;;;171:51;;159:2;144:18;321:38:1;;;;;;;;1819:584:0;;;:::i;:::-;;;398:14:10;;391:22;373:41;;361:2;346:18;1819:584:0;233:187:10;168:35:9;;;;;-1:-1:-1;;;;;168:35:9;;;170:28:1;;;;;;;;;;;;1572:26:0;;;;;;;;;1819:584;1853:4;1873:7;;;;;;;1869:528;;;-1:-1:-1;1903:7:0;;;;;;;;1819:584::o;1869:528::-;1941:17;2990:42;2978:55;3059:16;1980:374;;2196:43;;;1671:64;2196:43;;;832:51:10;;;-1:-1:-1;;;899:18:10;;;892:34;2196:43:0;;;;;;;;;805:18:10;;;2196:43:0;;;-1:-1:-1;;1671:64:0;;2086:175;;2135:34;;2086:175;;;:::i;:::-;;;;-1:-1:-1;;2086:175:0;;;;;;;;;;2047:232;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2020:259;;;2323:7;2312:27;;;;;;;;;;;;:::i;:::-;2297:42;;2002:352;1980:374;2374:12;1819:584;-1:-1:-1;1819:584:0:o;937:322:10:-;978:3;1016:5;1010:12;1040:1;1050:128;1064:6;1061:1;1058:13;1050:128;;;1161:4;1146:13;;;1142:24;;1136:31;1123:11;;;1116:52;1079:12;1050:128;;;-1:-1:-1;1233:1:10;1197:16;;1222:13;;;-1:-1:-1;1197:16:10;;937:322;-1:-1:-1;937:322:10:o;1264:278::-;-1:-1:-1;;;;;;1449:33:10;;1437:46;;1419:3;1499:37;1533:1;1524:11;;1516:6;1499:37;:::i;:::-;1492:44;1264:278;-1:-1:-1;;;;1264:278:10:o;1547:189::-;1676:3;1701:29;1726:3;1718:6;1701:29;:::i;:::-;1694:36;1547:189;-1:-1:-1;;;1547:189:10:o;1741:277::-;1808:6;1861:2;1849:9;1840:7;1836:23;1832:32;1829:52;;;1877:1;1874;1867:12;1829:52;1909:9;1903:16;1962:5;1955:13;1948:21;1941:5;1938:32;1928:60;;1984:1;1981;1974:12",
     "linkReferences": {}
   },
   "methodIdentifiers": {
@@ -447,7 +447,7 @@
     "privTreasury()": "cb3984ce",
     "vm()": "3a768463"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"log\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"log_address\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"val\",\"type\":\"uint256[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"val\",\"type\":\"int256[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"val\",\"type\":\"address[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"log_bytes\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"log_bytes32\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"name\":\"log_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"val\",\"type\":\"address\"}],\"name\":\"log_named_address\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"val\",\"type\":\"uint256[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"val\",\"type\":\"int256[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"val\",\"type\":\"address[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"val\",\"type\":\"bytes\"}],\"name\":\"log_named_bytes\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"val\",\"type\":\"bytes32\"}],\"name\":\"log_named_bytes32\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"val\",\"type\":\"int256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"decimals\",\"type\":\"uint256\"}],\"name\":\"log_named_decimal_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"val\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"decimals\",\"type\":\"uint256\"}],\"name\":\"log_named_decimal_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"val\",\"type\":\"int256\"}],\"name\":\"log_named_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"val\",\"type\":\"string\"}],\"name\":\"log_named_string\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"val\",\"type\":\"uint256\"}],\"name\":\"log_named_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"log_string\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"log_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"logs\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"IS_SCRIPT\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"IS_TEST\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"failed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"privTreasury\",\"outputs\":[{\"internalType\":\"contract PrivateTreasury\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"vm\",\"outputs\":[{\"internalType\":\"contract Vm\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"test/PrivateTreasury.t.sol\":\"PrivateTreasuryTest\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"lib/forge-std/lib/ds-test/src/test.sol\":{\"keccak256\":\"0xb39cd1d5220cb474947b131e15a4538334b7e886af244b440ae5c9c6bba96a54\",\"license\":\"GPL-3.0-or-later\",\"urls\":[\"bzz-raw://3101520221449ac0070bda3881311a71d9aa87e5210765e875246922cb5cb5f5\",\"dweb:/ipfs/Qmbg6kAHNoG7ox9N9Xqd9Ere2H2XixMFWFqvyPwFCzB3Gr\"]},\"lib/forge-std/src/Script.sol\":{\"keccak256\":\"0x9d09c1e55cd508d3376cff9961625d51d73f8ce075ec1e9deed41408a4556e00\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8880c5551daf337ab91665a9ce593df67a9eb11b0bee820f631d324d2fdd3a8b\",\"dweb:/ipfs/QmNpvSBGnS9Jr6Swd6XKsijG59a4yjYemWCFwprjKFkpNC\"]},\"lib/forge-std/src/StdJson.sol\":{\"keccak256\":\"0x1297a1cc393bc8163ccf143e5335536e78cb25ac24a4f6dfdb25f5746dd4827e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://945ccffad9fc09d2aa0ac200a80dcfa2f491dba8680fc9c3d3d450d891284b87\",\"dweb:/ipfs/QmYSfFb1L6LN1ZB9KWzZqxt2iAbpuFDskBcU1Bz4RiyuQ5\"]},\"lib/forge-std/src/Test.sol\":{\"keccak256\":\"0x6c9cbd51234372b66bf7c146870edf0855770c46e960a8fae8f354ddf382876b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fd0ff1f449294dd1447b9d483c52d78e137d8cac518646e76df9fdd4d185d6c2\",\"dweb:/ipfs/QmS3JP4vKgvAWo8Tc7zVrGxbdR7t37ayk1mTHN3seD6UAZ\"]},\"lib/forge-std/src/Vm.sol\":{\"keccak256\":\"0x1a5767028a0c3985e991456fc9650055e28b01b787c56b11f66ac30498a153ab\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f86887212eacca450a15a8a5bf9fe83fd91a2ba623df8e9c32c75a31824c8ea2\",\"dweb:/ipfs/QmTUHBNdZwntgjbFZne7fY9ZJLNGYWaq3uWfGk6FyqdAkB\"]},\"lib/forge-std/src/console.sol\":{\"keccak256\":\"0x91d5413c2434ca58fd278b6e1e79fd98d10c83931cc2596a6038eee4daeb34ba\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://91ccea707361e48b9b7a161fe81f496b9932bc471e9c4e4e1e9c283f2453cc70\",\"dweb:/ipfs/QmcB66sZhQ6Kz7MUHcLE78YXRUZxoZnnxZjN6yATsbB2ec\"]},\"lib/forge-std/src/console2.sol\":{\"keccak256\":\"0xbeb823fcdb356244a83aaccdf828ad019ecc1ffaa3dff18e624fc6d5714ea671\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4cbe9400340e5f9ec55e2aff3bad1c15fa3afbbe37e80800e6f3fed2ad26854f\",\"dweb:/ipfs/QmdJBABsuXkvWxVzEyGXsTE3vyfBPXDdw5xvvtUz3JeoYW\"]},\"src/IncrementalMerkleTree.sol\":{\"keccak256\":\"0x4202b5ae3a74b851b985c91a3050057233d637e43a5793f6e45004bef26190bd\",\"urls\":[\"bzz-raw://943bf76a07ff49beaf0ad8563ff2a5c5daa998ade9768c875e1c0d05015dccd3\",\"dweb:/ipfs/QmatXn3gZGiUxCmpwng1yQK1ZfXir3xnEvV4zfcrgBCGzG\"]},\"src/PrivateTreasury.sol\":{\"keccak256\":\"0x53680756c1b325421ecb93ec886f72619a3072d726b941f0b7aae6f2d5354c79\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://0b7a23371e459444fc14735dd927efcbf014c66ea029b5411066f7bded30f7c3\",\"dweb:/ipfs/QmeyLm7BN2zm71MY2tJUuGGcekZBHKxR4fgbSfrvW2oQLQ\"]},\"test/PrivateTreasury.t.sol\":{\"keccak256\":\"0xb99237d2dc257b7c9cee1631a996eace302adfaa85f5544a5843dd5cb79df241\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://33adbcea90a06dabe36ffa25f441c4f057d75b42b9917735ef2e92802c682ba1\",\"dweb:/ipfs/QmUYKpkSTd62Fgdovh5SX1SJTqkUaFzgjsXQBFQzZ3QrZk\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"log\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"log_address\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"val\",\"type\":\"uint256[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"val\",\"type\":\"int256[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"val\",\"type\":\"address[]\"}],\"name\":\"log_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"log_bytes\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"name\":\"log_bytes32\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"\",\"type\":\"int256\"}],\"name\":\"log_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"val\",\"type\":\"address\"}],\"name\":\"log_named_address\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256[]\",\"name\":\"val\",\"type\":\"uint256[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256[]\",\"name\":\"val\",\"type\":\"int256[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"val\",\"type\":\"address[]\"}],\"name\":\"log_named_array\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"val\",\"type\":\"bytes\"}],\"name\":\"log_named_bytes\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"val\",\"type\":\"bytes32\"}],\"name\":\"log_named_bytes32\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"val\",\"type\":\"int256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"decimals\",\"type\":\"uint256\"}],\"name\":\"log_named_decimal_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"val\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"decimals\",\"type\":\"uint256\"}],\"name\":\"log_named_decimal_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"int256\",\"name\":\"val\",\"type\":\"int256\"}],\"name\":\"log_named_int\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"val\",\"type\":\"string\"}],\"name\":\"log_named_string\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"key\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"val\",\"type\":\"uint256\"}],\"name\":\"log_named_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"name\":\"log_string\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"log_uint\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"logs\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"IS_SCRIPT\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"IS_TEST\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"failed\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"privTreasury\",\"outputs\":[{\"internalType\":\"contract PrivateTreasury\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"vm\",\"outputs\":[{\"internalType\":\"contract Vm\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"test/PrivateTreasury.t.sol\":\"PrivateTreasuryTest\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"lib/forge-std/lib/ds-test/src/test.sol\":{\"keccak256\":\"0xb39cd1d5220cb474947b131e15a4538334b7e886af244b440ae5c9c6bba96a54\",\"license\":\"GPL-3.0-or-later\",\"urls\":[\"bzz-raw://3101520221449ac0070bda3881311a71d9aa87e5210765e875246922cb5cb5f5\",\"dweb:/ipfs/Qmbg6kAHNoG7ox9N9Xqd9Ere2H2XixMFWFqvyPwFCzB3Gr\"]},\"lib/forge-std/src/Script.sol\":{\"keccak256\":\"0x9d09c1e55cd508d3376cff9961625d51d73f8ce075ec1e9deed41408a4556e00\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://8880c5551daf337ab91665a9ce593df67a9eb11b0bee820f631d324d2fdd3a8b\",\"dweb:/ipfs/QmNpvSBGnS9Jr6Swd6XKsijG59a4yjYemWCFwprjKFkpNC\"]},\"lib/forge-std/src/StdJson.sol\":{\"keccak256\":\"0x1297a1cc393bc8163ccf143e5335536e78cb25ac24a4f6dfdb25f5746dd4827e\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://945ccffad9fc09d2aa0ac200a80dcfa2f491dba8680fc9c3d3d450d891284b87\",\"dweb:/ipfs/QmYSfFb1L6LN1ZB9KWzZqxt2iAbpuFDskBcU1Bz4RiyuQ5\"]},\"lib/forge-std/src/Test.sol\":{\"keccak256\":\"0x6c9cbd51234372b66bf7c146870edf0855770c46e960a8fae8f354ddf382876b\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://fd0ff1f449294dd1447b9d483c52d78e137d8cac518646e76df9fdd4d185d6c2\",\"dweb:/ipfs/QmS3JP4vKgvAWo8Tc7zVrGxbdR7t37ayk1mTHN3seD6UAZ\"]},\"lib/forge-std/src/Vm.sol\":{\"keccak256\":\"0x1a5767028a0c3985e991456fc9650055e28b01b787c56b11f66ac30498a153ab\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://f86887212eacca450a15a8a5bf9fe83fd91a2ba623df8e9c32c75a31824c8ea2\",\"dweb:/ipfs/QmTUHBNdZwntgjbFZne7fY9ZJLNGYWaq3uWfGk6FyqdAkB\"]},\"lib/forge-std/src/console.sol\":{\"keccak256\":\"0x91d5413c2434ca58fd278b6e1e79fd98d10c83931cc2596a6038eee4daeb34ba\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://91ccea707361e48b9b7a161fe81f496b9932bc471e9c4e4e1e9c283f2453cc70\",\"dweb:/ipfs/QmcB66sZhQ6Kz7MUHcLE78YXRUZxoZnnxZjN6yATsbB2ec\"]},\"lib/forge-std/src/console2.sol\":{\"keccak256\":\"0xbeb823fcdb356244a83aaccdf828ad019ecc1ffaa3dff18e624fc6d5714ea671\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://4cbe9400340e5f9ec55e2aff3bad1c15fa3afbbe37e80800e6f3fed2ad26854f\",\"dweb:/ipfs/QmdJBABsuXkvWxVzEyGXsTE3vyfBPXDdw5xvvtUz3JeoYW\"]},\"src/IncrementalMerkleTree.sol\":{\"keccak256\":\"0x4202b5ae3a74b851b985c91a3050057233d637e43a5793f6e45004bef26190bd\",\"urls\":[\"bzz-raw://943bf76a07ff49beaf0ad8563ff2a5c5daa998ade9768c875e1c0d05015dccd3\",\"dweb:/ipfs/QmatXn3gZGiUxCmpwng1yQK1ZfXir3xnEvV4zfcrgBCGzG\"]},\"src/PrivateTreasury.sol\":{\"keccak256\":\"0xe33bfd937f50f5c48a9357e91101d3a1ccada1179e7702b3bba064721055115c\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://2922f889a9b6157352cadbadeab0c1a8633e57694bd164f16cedc7de819516ee\",\"dweb:/ipfs/QmVvDeeHVUJk1orSf4en7KsYZrNskokQqQEKwGgPhq516j\"]},\"test/PrivateTreasury.t.sol\":{\"keccak256\":\"0xb99237d2dc257b7c9cee1631a996eace302adfaa85f5544a5843dd5cb79df241\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://33adbcea90a06dabe36ffa25f441c4f057d75b42b9917735ef2e92802c682ba1\",\"dweb:/ipfs/QmUYKpkSTd62Fgdovh5SX1SJTqkUaFzgjsXQBFQzZ3QrZk\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.17+commit.8df45f5f"
@@ -979,10 +979,10 @@
         "license": null
       },
       "src/PrivateTreasury.sol": {
-        "keccak256": "0x53680756c1b325421ecb93ec886f72619a3072d726b941f0b7aae6f2d5354c79",
+        "keccak256": "0xe33bfd937f50f5c48a9357e91101d3a1ccada1179e7702b3bba064721055115c",
         "urls": [
-          "bzz-raw://0b7a23371e459444fc14735dd927efcbf014c66ea029b5411066f7bded30f7c3",
-          "dweb:/ipfs/QmeyLm7BN2zm71MY2tJUuGGcekZBHKxR4fgbSfrvW2oQLQ"
+          "bzz-raw://2922f889a9b6157352cadbadeab0c1a8633e57694bd164f16cedc7de819516ee",
+          "dweb:/ipfs/QmVvDeeHVUJk1orSf4en7KsYZrNskokQqQEKwGgPhq516j"
         ],
         "license": "MIT"
       },
@@ -999,28 +999,28 @@
   },
   "ast": {
     "absolutePath": "test/PrivateTreasury.t.sol",
-    "id": 24918,
+    "id": 23832,
     "exportedSymbols": {
       "DSTest": [
         1786
       ],
       "IHasherT3": [
-        24526
+        23489
       ],
       "IHasherT6": [
-        24537
+        23500
       ],
       "IVerifier": [
-        24515
+        23478
       ],
       "IncrementalMerkleTree": [
         23449
       ],
       "PrivateTreasury": [
-        24895
+        23809
       ],
       "PrivateTreasuryTest": [
-        24917
+        23831
       ],
       "Script": [
         2049
@@ -1054,12 +1054,12 @@
       ]
     },
     "nodeType": "SourceUnit",
-    "src": "32:5614:10",
+    "src": "32:5614:9",
     "nodes": [
       {
-        "id": 24897,
+        "id": 23811,
         "nodeType": "PragmaDirective",
-        "src": "32:24:10",
+        "src": "32:24:9",
         "nodes": [],
         "literals": [
           "solidity",
@@ -1069,85 +1069,85 @@
         ]
       },
       {
-        "id": 24898,
+        "id": 23812,
         "nodeType": "ImportDirective",
-        "src": "58:28:10",
+        "src": "58:28:9",
         "nodes": [],
         "absolutePath": "lib/forge-std/src/Test.sol",
         "file": "forge-std/Test.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 24918,
+        "scope": 23832,
         "sourceUnit": 6319,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 24899,
+        "id": 23813,
         "nodeType": "ImportDirective",
-        "src": "87:36:10",
+        "src": "87:36:9",
         "nodes": [],
         "absolutePath": "src/PrivateTreasury.sol",
         "file": "../src/PrivateTreasury.sol",
         "nameLocation": "-1:-1:-1",
-        "scope": 24918,
-        "sourceUnit": 24896,
+        "scope": 23832,
+        "sourceUnit": 23810,
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
-        "id": 24917,
+        "id": 23831,
         "nodeType": "ContractDefinition",
-        "src": "125:5520:10",
+        "src": "125:5520:9",
         "nodes": [
           {
-            "id": 24904,
+            "id": 23818,
             "nodeType": "VariableDeclaration",
-            "src": "168:35:10",
+            "src": "168:35:9",
             "nodes": [],
             "constant": false,
             "functionSelector": "cb3984ce",
             "mutability": "mutable",
             "name": "privTreasury",
-            "nameLocation": "191:12:10",
-            "scope": 24917,
+            "nameLocation": "191:12:9",
+            "scope": 23831,
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_PrivateTreasury_$24895",
+              "typeIdentifier": "t_contract$_PrivateTreasury_$23809",
               "typeString": "contract PrivateTreasury"
             },
             "typeName": {
-              "id": 24903,
+              "id": 23817,
               "nodeType": "UserDefinedTypeName",
               "pathNode": {
-                "id": 24902,
+                "id": 23816,
                 "name": "PrivateTreasury",
                 "nameLocations": [
-                  "168:15:10"
+                  "168:15:9"
                 ],
                 "nodeType": "IdentifierPath",
-                "referencedDeclaration": 24895,
-                "src": "168:15:10"
+                "referencedDeclaration": 23809,
+                "src": "168:15:9"
               },
-              "referencedDeclaration": 24895,
-              "src": "168:15:10",
+              "referencedDeclaration": 23809,
+              "src": "168:15:9",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_PrivateTreasury_$24895",
+                "typeIdentifier": "t_contract$_PrivateTreasury_$23809",
                 "typeString": "contract PrivateTreasury"
               }
             },
             "visibility": "public"
           },
           {
-            "id": 24910,
+            "id": 23824,
             "nodeType": "VariableDeclaration",
-            "src": "209:32:10",
+            "src": "209:32:9",
             "nodes": [],
             "constant": false,
             "mutability": "mutable",
             "name": "manager",
-            "nameLocation": "217:7:10",
-            "scope": 24917,
+            "nameLocation": "217:7:9",
+            "scope": 23831,
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1155,10 +1155,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 24905,
+              "id": 23819,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "209:7:10",
+              "src": "209:7:9",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1169,14 +1169,14 @@
               "arguments": [
                 {
                   "hexValue": "3078313233",
-                  "id": 24908,
+                  "id": 23822,
                   "isConstant": false,
                   "isLValue": false,
                   "isPure": true,
                   "kind": "number",
                   "lValueRequested": false,
                   "nodeType": "Literal",
-                  "src": "235:5:10",
+                  "src": "235:5:9",
                   "typeDescriptions": {
                     "typeIdentifier": "t_rational_291_by_1",
                     "typeString": "int_const 291"
@@ -1191,26 +1191,26 @@
                     "typeString": "int_const 291"
                   }
                 ],
-                "id": 24907,
+                "id": 23821,
                 "isConstant": false,
                 "isLValue": false,
                 "isPure": true,
                 "lValueRequested": false,
                 "nodeType": "ElementaryTypeNameExpression",
-                "src": "227:7:10",
+                "src": "227:7:9",
                 "typeDescriptions": {
                   "typeIdentifier": "t_type$_t_address_$",
                   "typeString": "type(address)"
                 },
                 "typeName": {
-                  "id": 24906,
+                  "id": 23820,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "227:7:10",
+                  "src": "227:7:9",
                   "typeDescriptions": {}
                 }
               },
-              "id": 24909,
+              "id": 23823,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1219,7 +1219,7 @@
               "nameLocations": [],
               "names": [],
               "nodeType": "FunctionCall",
-              "src": "227:14:10",
+              "src": "227:14:9",
               "tryCall": false,
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1229,15 +1229,15 @@
             "visibility": "internal"
           },
           {
-            "id": 24916,
+            "id": 23830,
             "nodeType": "VariableDeclaration",
-            "src": "247:36:10",
+            "src": "247:36:9",
             "nodes": [],
             "constant": false,
             "mutability": "mutable",
             "name": "contributor",
-            "nameLocation": "255:11:10",
-            "scope": 24917,
+            "nameLocation": "255:11:9",
+            "scope": 23831,
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1245,10 +1245,10 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 24911,
+              "id": 23825,
               "name": "address",
               "nodeType": "ElementaryTypeName",
-              "src": "247:7:10",
+              "src": "247:7:9",
               "stateMutability": "nonpayable",
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1259,14 +1259,14 @@
               "arguments": [
                 {
                   "hexValue": "3078343536",
-                  "id": 24914,
+                  "id": 23828,
                   "isConstant": false,
                   "isLValue": false,
                   "isPure": true,
                   "kind": "number",
                   "lValueRequested": false,
                   "nodeType": "Literal",
-                  "src": "277:5:10",
+                  "src": "277:5:9",
                   "typeDescriptions": {
                     "typeIdentifier": "t_rational_1110_by_1",
                     "typeString": "int_const 1110"
@@ -1281,26 +1281,26 @@
                     "typeString": "int_const 1110"
                   }
                 ],
-                "id": 24913,
+                "id": 23827,
                 "isConstant": false,
                 "isLValue": false,
                 "isPure": true,
                 "lValueRequested": false,
                 "nodeType": "ElementaryTypeNameExpression",
-                "src": "269:7:10",
+                "src": "269:7:9",
                 "typeDescriptions": {
                   "typeIdentifier": "t_type$_t_address_$",
                   "typeString": "type(address)"
                 },
                 "typeName": {
-                  "id": 24912,
+                  "id": 23826,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "269:7:10",
+                  "src": "269:7:9",
                   "typeDescriptions": {}
                 }
               },
-              "id": 24915,
+              "id": 23829,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -1309,7 +1309,7 @@
               "nameLocations": [],
               "names": [],
               "nodeType": "FunctionCall",
-              "src": "269:14:10",
+              "src": "269:14:9",
               "tryCall": false,
               "typeDescriptions": {
                 "typeIdentifier": "t_address",
@@ -1323,18 +1323,18 @@
         "baseContracts": [
           {
             "baseName": {
-              "id": 24900,
+              "id": 23814,
               "name": "Test",
               "nameLocations": [
-                "157:4:10"
+                "157:4:9"
               ],
               "nodeType": "IdentifierPath",
               "referencedDeclaration": 4979,
-              "src": "157:4:10"
+              "src": "157:4:9"
             },
-            "id": 24901,
+            "id": 23815,
             "nodeType": "InheritanceSpecifier",
-            "src": "157:4:10"
+            "src": "157:4:9"
           }
         ],
         "canonicalName": "PrivateTreasuryTest",
@@ -1342,18 +1342,18 @@
         "contractKind": "contract",
         "fullyImplemented": true,
         "linearizedBaseContracts": [
-          24917,
+          23831,
           4979,
           2049,
           1786
         ],
         "name": "PrivateTreasuryTest",
-        "nameLocation": "134:19:10",
-        "scope": 24918,
+        "nameLocation": "134:19:9",
+        "scope": 23832,
         "usedErrors": []
       }
     ],
     "license": "MIT"
   },
-  "id": 10
+  "id": 9
 }
