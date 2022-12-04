@@ -101,7 +101,8 @@ export default class Utils {
     /*
      * Circuits only work with fixed-length inputs, so the arrays must be
      * padded until they are of length MaxWithdraw. Padding for leaves and
-     * merkle proofs have 0 values for every field.
+     * merkle proofs have 0 values for every field. Merkle proof for leaf i is
+     * accepted as long as v_i == 0.
      */
     static padCircuitInputs(
         nMaxWithdraw: number,

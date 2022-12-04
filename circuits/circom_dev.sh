@@ -1,7 +1,7 @@
 ### Boilerplate circuit compilation and vkey/zkey generation for development
 
 # Powers of tau selection for Hermez Rollup
-PTAU=../artifacts/circom/hermezptau.blob.core.windows.net_ptau_powersOfTau28_hez_final_15.ptau
+PTAU=../artifacts/circom/powersOfTau28_hez_final_17.ptau
 
 # Compile circuit
 circom verif-manager.circom --r1cs --wasm

@@ -8,6 +8,7 @@ pragma circom 2.0.3;
 
 include "node_modules/maci-circuits/node_modules/circomlib/circuits/babyjub.circom";
 include "node_modules/maci-circuits/node_modules/circomlib/circuits/bitify.circom";
+include "node_modules/maci-circuits/node_modules/circomlib/circuits/comparators.circom";
 include "node_modules/maci-circuits/node_modules/circomlib/circuits/escalarmulany.circom";
 include "node_modules/maci-circuits/circom/poseidon/poseidonHashT6.circom";
 include "node_modules/maci-circuits/circom/trees/incrementalMerkleTree.circom";
@@ -47,37 +48,36 @@ template Main(MAX_N_WITHDRAW, MERKLE_TREE_DEPTH) {
     component hashers[MAX_N_WITHDRAW];
     component inclusionProofs[MAX_N_WITHDRAW];
     for (var i = 0; i < MAX_N_WITHDRAW; i++) {
-        if (v[i] > 0) {
-            // Check for correct secret key, P * α = Q
-            mulResults[i] = EscalarMulAny(253);
-            mulResults[i].p[0] <== P[i][0];
-            mulResults[i].p[1] <== P[i][1];
+        // Check for correct secret key, P * α = Q
+        mulResults[i] = EscalarMulAny(253);
+        mulResults[i].p[0] <== P[i][0];
+        mulResults[i].p[1] <== P[i][1];
 
-            var j;
-            for (j=0; j<253; j++) {
-                mulResults[i].e[j] <== treasuryPrivBits.out[j];
-            }
-
-            Q[i][0] === mulResults[i].out[0];
-            Q[i][1] === mulResults[i].out[1];
-
-            // Check public leafIndex consistent with the provided proof
-            leafIndex[i] === pathIndex[i][0];
-
-            // Check merkle inclusion proof
-            hashers[i] = PoseidonHashT6();
-            hashers[i].inputs[0] <== P[i][0];
-            hashers[i].inputs[1] <== P[i][1];
-            hashers[i].inputs[2] <== Q[i][0];
-            hashers[i].inputs[3] <== Q[i][1];
-            hashers[i].inputs[4] <== v[i];
-
-            inclusionProofs[i] = MerkleTreeInclusionProof(MERKLE_TREE_DEPTH);
-            inclusionProofs[i].leaf <== hashers[i].out;
-            inclusionProofs[i].path_index <== pathIndex[i];
-            inclusionProofs[i].path_elements <== pathElements[i];
-            root === inclusionProofs[i].root;
+        var j;
+        for (j=0; j<253; j++) {
+            mulResults[i].e[j] <== treasuryPrivBits.out[j];
         }
+
+        Q[i][0] === mulResults[i].out[0];
+        Q[i][1] === mulResults[i].out[1];
+
+        // Check public leafIndex consistent with the provided proof
+        leafIndex[i] === pathIndex[i][0];
+
+        // Check merkle inclusion proof
+        hashers[i] = PoseidonHashT6();
+        hashers[i].inputs[0] <== P[i][0];
+        hashers[i].inputs[1] <== P[i][1];
+        hashers[i].inputs[2] <== Q[i][0];
+        hashers[i].inputs[3] <== Q[i][1];
+        hashers[i].inputs[4] <== v[i];
+
+        inclusionProofs[i] = MerkleTreeInclusionProof(MERKLE_TREE_DEPTH);
+        inclusionProofs[i].leaf <== hashers[i].out;
+        inclusionProofs[i].path_index <== pathIndex[i];
+        inclusionProofs[i].path_elements <== pathElements[i];
+
+        root === inclusionProofs[i].root;
     }
 }
 
