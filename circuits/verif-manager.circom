@@ -14,61 +14,71 @@ include "node_modules/maci-circuits/circom/trees/incrementalMerkleTree.circom";
 
 /* 
 
-   Input signals: 
-      v: Value of deposit, denominated in Wei
-      root: Root of the Merkle tree, saved in contract
-      leafIndex: Index of the leaf that is to be withdrawn
-      P: Contributor's public key, base 10
-      Q: Shared secret, base 10
-      treasuryPriv: Treasury's private key
-      pathIndex: Indices along the path of the Merkle proof
-      pathElements: Paired elements along the path of the Merkle proof 
+    Input signals: 
+        v: Value of deposit, denominated in Wei
+        root: Root of the Merkle tree, saved in contract
+        leafIndex: Index of the leaf that is to be withdrawn
+        P: Contributor's public key, base 10
+        Q: Shared secret, base 10
+        treasuryPriv: Treasury's private key
+        pathIndex: Indices along the path of the Merkle proof
+        pathElements: Paired elements along the path of the Merkle proof 
+
+    @dev:
+        - Skips verification of any leaves with v = 0
 
  */
-template Main() {
-    signal input v;
+template Main(MAX_N_WITHDRAW, MERKLE_TREE_DEPTH) {
+    signal input v[MAX_N_WITHDRAW];
     signal input root;
-    signal input leafIndex;
+    signal input leafIndex[MAX_N_WITHDRAW];
 
-    signal input P[2];
-    signal input Q[2];
+    signal input P[MAX_N_WITHDRAW][2];
+    signal input Q[MAX_N_WITHDRAW][2];
     signal input treasuryPriv;
 
-    signal input pathIndex[32];
-    signal input pathElements[32][1];
+    signal input pathIndex[MAX_N_WITHDRAW][MERKLE_TREE_DEPTH];
+    signal input pathElements[MAX_N_WITHDRAW][MERKLE_TREE_DEPTH][1];
 
-    // Check for correct secret key, P * α = Q
     component treasuryPrivBits = Num2Bits(253);
     treasuryPrivBits.in <== treasuryPriv;
 
-    component mulResult = EscalarMulAny(253);
-    mulResult.p[0] <== P[0];
-    mulResult.p[1] <== P[1];
+    component mulResults[MAX_N_WITHDRAW];
+    component hashers[MAX_N_WITHDRAW];
+    component inclusionProofs[MAX_N_WITHDRAW];
+    for (var i = 0; i < MAX_N_WITHDRAW; i++) {
+        if (v[i] > 0) {
+            // Check for correct secret key, P * α = Q
+            mulResults[i] = EscalarMulAny(253);
+            mulResults[i].p[0] <== P[i][0];
+            mulResults[i].p[1] <== P[i][1];
 
-    var i;
-    for (i=0; i<253; i++) {
-        mulResult.e[i] <== treasuryPrivBits.out[i];
+            var j;
+            for (j=0; j<253; j++) {
+                mulResults[i].e[j] <== treasuryPrivBits.out[j];
+            }
+
+            Q[i][0] === mulResults[i].out[0];
+            Q[i][1] === mulResults[i].out[1];
+
+            // Check public leafIndex consistent with the provided proof
+            leafIndex[i] === pathIndex[i][0];
+
+            // Check merkle inclusion proof
+            hashers[i] = PoseidonHashT6();
+            hashers[i].inputs[0] <== P[i][0];
+            hashers[i].inputs[1] <== P[i][1];
+            hashers[i].inputs[2] <== Q[i][0];
+            hashers[i].inputs[3] <== Q[i][1];
+            hashers[i].inputs[4] <== v[i];
+
+            inclusionProofs[i] = MerkleTreeInclusionProof(MERKLE_TREE_DEPTH);
+            inclusionProofs[i].leaf <== hashers[i].out;
+            inclusionProofs[i].path_index <== pathIndex[i];
+            inclusionProofs[i].path_elements <== pathElements[i];
+            root === inclusionProofs[i].root;
+        }
     }
-
-    Q[0] === mulResult.out[0];
-    Q[1] === mulResult.out[1];
-
-    // Check public leafIndex consistent with the provided proof
-    leafIndex === pathIndex[0];
-
-    // Check merkle inclusion proof (note: hard-codes tree depth of 32)
-    component hasher = PoseidonHashT6();
-    hasher.inputs[0] <== P[0];
-    hasher.inputs[1] <== P[1];
-    hasher.inputs[2] <== Q[0];
-    hasher.inputs[3] <== Q[1];
-    hasher.inputs[4] <== v;
-
-    component inclusionProof = MerkleTreeInclusionProof(32);
-    inclusionProof.leaf <== hasher.out;
-    inclusionProof.path_index <== pathIndex;
-    inclusionProof.path_elements <== pathElements;
-    root === inclusionProof.root; 
 }
 
-component main { public [ v, root, leafIndex ] } = Main();
+component main { public [ v, root, leafIndex ] } = Main(5, 32);

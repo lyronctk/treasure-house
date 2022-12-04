@@ -106,6 +106,16 @@ async function genGroth16Proof(
             inclusionProofs,
             leafIndices
         );
+    console.log({
+        v: paddedLeaves.map((lfBase10) => lfBase10.v),
+        root: root.toString(),
+        leafIndex: paddedLeafIndices,
+        P: paddedLeaves.map((lfBase10) => lfBase10.P),
+        Q: paddedLeaves.map((lfBase10) => lfBase10.Q),
+        treasuryPriv: treasuryPriv,
+        pathIndex: paddedInclusionProofs.map((prf) => prf.indices),
+        pathElements: paddedInclusionProofs.map((prf) => prf.pathElements),
+    });
     const { proof, publicSignals } = await groth16.fullProve(
         {
             v: paddedLeaves.map((lfBase10) => lfBase10.v),

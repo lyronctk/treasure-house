@@ -100,8 +100,8 @@ export default class Utils {
 
     /*
      * Circuits only work with fixed-length inputs, so the arrays must be
-     * padded until they are of length MaxWithdraw. Padding for leaves and 
-     * merkle proofs have 0 values for every field. 
+     * padded until they are of length MaxWithdraw. Padding for leaves and
+     * merkle proofs have 0 values for every field.
      */
     static padCircuitInputs(
         nMaxWithdraw: number,
@@ -115,7 +115,11 @@ export default class Utils {
         if (leavesBase10.length != inclusionProofs.length)
             throw Error("Must have one inclusion proof per target leaf.");
         const nPad: number = nMaxWithdraw - leavesBase10.length;
-        const leafPadding = Array(nPad).fill({ P: [0, 0], Q: [0, 0], v: 0 });
+        const leafPadding = Array(nPad).fill({
+            P: ["0", "0"],
+            Q: ["0", "0"],
+            v: "0",
+        });
         const merklePadding = Array(nPad).fill({
             indices: Array(treeDepth).fill(0),
             pathElements: Array(treeDepth).fill(["0"]),
