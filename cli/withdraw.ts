@@ -101,21 +101,25 @@ async function genGroth16Proof(
     const [paddedLeaves, paddedInclusionProofs, paddedLeafIndices] =
         Utils.padCircuitInputs(
             N_MAX_WITHDRAW,
-            TREE_DEPTH,
+            leafIndices,
             leavesBase10,
-            inclusionProofs,
-            leafIndices
+            inclusionProofs
         );
     console.log({
         v: paddedLeaves.map((lfBase10) => lfBase10.v),
+        P: paddedLeaves.map((lfBase10) => lfBase10.P),
+        Q: paddedLeaves.map((lfBase10) => lfBase10.Q)
+    })
+    console.log(JSON.stringify({
+        v: paddedLeaves.map((lfBase10) => lfBase10.v.toString()),
         root: root.toString(),
         leafIndex: paddedLeafIndices,
-        P: paddedLeaves.map((lfBase10) => lfBase10.P),
-        Q: paddedLeaves.map((lfBase10) => lfBase10.Q),
+        P: paddedLeaves.map((lfBase10) => lfBase10.P.toString()),
+        Q: paddedLeaves.map((lfBase10) => lfBase10.Q.toString()),
         treasuryPriv: treasuryPriv,
         pathIndex: paddedInclusionProofs.map((prf) => prf.indices),
-        pathElements: paddedInclusionProofs.map((prf) => prf.pathElements),
-    });
+        pathElements: paddedInclusionProofs.map((prf) => prf.pathElements.map((pe: any) => [pe.toString()])),
+    }, null, 4));
     const { proof, publicSignals } = await groth16.fullProve(
         {
             v: paddedLeaves.map((lfBase10) => lfBase10.v),

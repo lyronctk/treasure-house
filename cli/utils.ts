@@ -100,35 +100,24 @@ export default class Utils {
 
     /*
      * Circuits only work with fixed-length inputs, so the arrays must be
-     * padded until they are of length MaxWithdraw. Padding for leaves and
-     * merkle proofs have 0 values for every field. Merkle proof for leaf i is
-     * accepted as long as v_i == 0.
+     * padded until they are of length MaxWithdraw. Padding done by copying the
+     * first leaf. Note: This means the same leaf index will be passed into 
+     * withdraw multiple times- must handle this well. 
      */
     static padCircuitInputs(
         nMaxWithdraw: number,
-        treeDepth: number,
+        leafIndices: number[],
         leavesBase10: { P: string[]; Q: string[]; v: string }[],
-        inclusionProofs: any[],
-        leafIndices: number[]
+        inclusionProofs: any[]
     ): [{ P: string[]; Q: string[]; v: string }[], any[], number[]] {
-        if (leavesBase10.length > nMaxWithdraw)
+        if (leafIndices.length > nMaxWithdraw)
             throw Error("Number of target leaves must be <= N_MAX_WITHDRAW.");
-        if (leavesBase10.length != inclusionProofs.length)
-            throw Error("Must have one inclusion proof per target leaf.");
+        if (leafIndices.length === 0)
+            throw Error("Must attempt to withdraw at least one leaf.");
         const nPad: number = nMaxWithdraw - leavesBase10.length;
-        const leafPadding = Array(nPad).fill({
-            P: ["0", "0"],
-            Q: ["0", "0"],
-            v: "0",
-        });
-        const merklePadding = Array(nPad).fill({
-            indices: Array(treeDepth).fill(0),
-            pathElements: Array(treeDepth).fill(["0"]),
-        });
-        const leafIndexPadding = Array(nPad).fill(0);
-        leavesBase10 = leavesBase10.concat(leafPadding);
-        inclusionProofs = inclusionProofs.concat(merklePadding);
-        leafIndices = leafIndices.concat(leafIndexPadding);
+        leavesBase10 = leavesBase10.concat(Array(nPad).fill(leavesBase10[0]));
+        inclusionProofs = inclusionProofs.concat(Array(nPad).fill(inclusionProofs[0]));
+        leafIndices = leafIndices.concat(Array(nPad).fill(leafIndices[0]));
         return [leavesBase10, inclusionProofs, leafIndices];
     }
 }
