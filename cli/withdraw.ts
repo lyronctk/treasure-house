@@ -214,7 +214,6 @@ async function reconstructMerkleTree(
     const merkleProofs = targetIndices.map((ownedIdx) =>
         tree.genMerklePath(ownedIdx)
     );
-
     const [proof, publicSignals] = await genGroth16Proof(
         targetLeaves,
         targetIndices,
@@ -222,7 +221,7 @@ async function reconstructMerkleTree(
         <string>process.env.TREASURY_PRIVKEY,
         merkleProofs
     );
-    // await proveSanityCheck(proof, publicSignals);
-    // await sendProofTx(proof, publicSignals);
+    await proveSanityCheck(proof, publicSignals);
+    await sendProofTx(proof, publicSignals);
     process.exit(0);
 })();

@@ -29,8 +29,8 @@ include "node_modules/maci-circuits/circom/trees/incrementalMerkleTree.circom";
 
  */
 template Main(MAX_N_WITHDRAW, MERKLE_TREE_DEPTH) {
-    signal input v[MAX_N_WITHDRAW];
     signal input root;
+    signal input v[MAX_N_WITHDRAW];
     signal input leafIndex[MAX_N_WITHDRAW];
 
     signal input P[MAX_N_WITHDRAW][2];
