@@ -1,3 +1,8 @@
+/*
+ * Deposits are represented as (P, Q, v) tuples that are added as leaves to 
+ * the contract's Merkle tree. 
+ */
+
 import { ethers } from "ethers";
 
 const { Point } = require("./node_modules/babyjubjub/lib/Point.js");

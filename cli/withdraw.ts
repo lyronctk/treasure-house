@@ -1,6 +1,7 @@
 /*
- * Spends a leaf by posting a withdrawal proof (see verif-manager.circom). The
- * value of the leaf will be sent in ether to the sender's (manager's) account.
+ * Spends a batch of leaves by posting a withdrawal proof (see 
+ * verif-manager.circom). The value of the leaf will be sent in ether to the 
+ * sender's (manager's) account.
  */
 
 import dotenv from "dotenv";
@@ -214,6 +215,7 @@ async function reconstructMerkleTree(
     const merkleProofs = targetIndices.map((ownedIdx) =>
         tree.genMerklePath(ownedIdx)
     );
+
     const [proof, publicSignals] = await genGroth16Proof(
         targetLeaves,
         targetIndices,
@@ -223,5 +225,6 @@ async function reconstructMerkleTree(
     );
     await proveSanityCheck(proof, publicSignals);
     await sendProofTx(proof, publicSignals);
+
     process.exit(0);
 })();

@@ -25,7 +25,7 @@ include "node_modules/maci-circuits/circom/trees/incrementalMerkleTree.circom";
         pathElements: Paired elements along the path of the Merkle proof 
 
     @dev:
-        - Skips verification of any leaves with v = 0
+        - In future, should verify 0 initialized leaves & proofs.
 
  */
 template Main(MAX_N_WITHDRAW, MERKLE_TREE_DEPTH) {
