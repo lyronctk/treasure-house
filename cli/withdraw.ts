@@ -88,6 +88,10 @@ function checkLeafOwnership(leafHistory: Leaf[]): number[] {
 
 /*
  * Generates groth16 proof to batch withdraw deposits. 
+ * 
+ * @dev Currently hacky padding by repeating the first leaf until 
+ *      N_MAX_WITHDRAW length. Ideally pad with 0 initialized elements and 
+ *      figure out conditional in circuit.
  */
 async function genGroth16Proof(
     leaves: Leaf[],
@@ -105,21 +109,6 @@ async function genGroth16Proof(
             leavesBase10,
             inclusionProofs
         );
-    console.log({
-        v: paddedLeaves.map((lfBase10) => lfBase10.v),
-        P: paddedLeaves.map((lfBase10) => lfBase10.P),
-        Q: paddedLeaves.map((lfBase10) => lfBase10.Q)
-    })
-    console.log(JSON.stringify({
-        v: paddedLeaves.map((lfBase10) => lfBase10.v.toString()),
-        root: root.toString(),
-        leafIndex: paddedLeafIndices,
-        P: paddedLeaves.map((lfBase10) => lfBase10.P.toString()),
-        Q: paddedLeaves.map((lfBase10) => lfBase10.Q.toString()),
-        treasuryPriv: treasuryPriv,
-        pathIndex: paddedInclusionProofs.map((prf) => prf.indices),
-        pathElements: paddedInclusionProofs.map((prf) => prf.pathElements.map((pe: any) => [pe.toString()])),
-    }, null, 4));
     const { proof, publicSignals } = await groth16.fullProve(
         {
             v: paddedLeaves.map((lfBase10) => lfBase10.v),

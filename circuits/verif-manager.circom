@@ -8,7 +8,6 @@ pragma circom 2.0.3;
 
 include "node_modules/maci-circuits/node_modules/circomlib/circuits/babyjub.circom";
 include "node_modules/maci-circuits/node_modules/circomlib/circuits/bitify.circom";
-include "node_modules/maci-circuits/node_modules/circomlib/circuits/comparators.circom";
 include "node_modules/maci-circuits/node_modules/circomlib/circuits/escalarmulany.circom";
 include "node_modules/maci-circuits/circom/poseidon/poseidonHashT6.circom";
 include "node_modules/maci-circuits/circom/trees/incrementalMerkleTree.circom";
