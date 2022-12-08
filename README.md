@@ -25,3 +25,19 @@ Platform for DAOs with private treasuries. Based on [work done by Griffin Dunaif
 - running into issues at the linking step with `make` for verif-manager_cpp, 
   might be an issue with gmp on my machine installed as 64 bit while fr_asm.o 
   uses 32 bit 
+
+### Plan for 12/13/22 demo
+- Showcase Merkle tree & batch withdraw implementations. 
+- Barebones display with two tables, a text field, treasury_balance, 
+  total_balance. First table has cols: treasury_pubkey, manager_pubkey, 
+  manager_balance. Second has cols: leaf_P, leaf_Q, v_eth, is_unspent, is_owned. 
+  is_owned and balance check will remain question marks until user inputs 
+  manager private key into the text field. 
+- Treasury table will have pre-seeded values.
+- deposit_demo.ts populates the leaf table with 5 deposits per treasury. 
+  Demonstrate is_owned and balance check after this happens. 
+- With withdraw_demo.ts, show 1) manager_balance, is_owned, balance check 
+  changes, 2) Merkle inclusion proofs for each of the leaves, 3) SNARK proof, 
+  and 4) creation of the change leaf. Calling this twice has the same effect,
+  spending the other leaves that are left. 
+
