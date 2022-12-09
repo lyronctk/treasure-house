@@ -40,4 +40,4 @@ Platform for DAOs with private treasuries. Based on [work done by Griffin Dunaif
   changes, 2) Merkle inclusion proofs for each of the leaves, 3) SNARK proof, 
   and 4) creation of the change leaf. Calling this twice has the same effect,
   spending the other leaves that are left. 
-
+- Note: discuss applications of balance hiding 
