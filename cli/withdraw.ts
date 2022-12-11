@@ -1,6 +1,6 @@
 /*
- * Spends a batch of leaves by posting a withdrawal proof (see 
- * verif-manager.circom). The value of the leaf will be sent to the sender's 
+ * Spends a batch of leaves by posting a withdrawal proof (see
+ * verif-manager.circom). The value of the leaf will be sent to the sender's
  * (manager's) account.
  */
 
@@ -89,10 +89,10 @@ function checkLeafOwnership(leafHistory: Leaf[]): number[] {
 }
 
 /*
- * Generates groth16 proof to batch withdraw deposits. 
- * 
- * @dev Currently hacky padding by repeating the first leaf until 
- *      N_MAX_WITHDRAW length. Ideally pad with 0 initialized elements and 
+ * Generates groth16 proof to batch withdraw deposits.
+ *
+ * @dev Currently hacky padding by repeating the first leaf until
+ *      N_MAX_WITHDRAW length. Ideally pad with 0 initialized elements and
  *      figure out conditional in circuit.
  */
 async function genGroth16Proof(
@@ -152,11 +152,15 @@ async function proveSanityCheck(
 
 /*
  * Posts the zkSNARK proof on-chain and logs the increase in the manager's
- * balance. Uses the P & Q of the last leaf in the batch for the computational 
- * diffie-hellman problem of the change leaf. Need the 60s timeout call for 
+ * balance. Uses the P & Q of the last leaf in the batch for the computational
+ * diffie-hellman problem of the change leaf. Need the 60s timeout call for
  * non-local blockchains that don't have instant finality.
  */
-async function sendProofTx(targetLeaves: Leaf[], prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
+async function sendProofTx(
+    targetLeaves: Leaf[],
+    prf: Groth16Proof,
+    pubSigs: WithdrawPubSignals
+) {
     console.log("== Sending tx with withdrawal proof");
     console.log(
         "- Manager balance BEFORE:",
@@ -172,7 +176,7 @@ async function sendProofTx(targetLeaves: Leaf[], prf: Groth16Proof, pubSigs: Wit
         formattedProof.b,
         formattedProof.c,
         formattedProof.input
-    );  
+    );
     console.log("- tx:", result);
     if (WITH_SLEEP) await new Promise((resolve) => setTimeout(resolve, 60000));
     console.log(

@@ -83,7 +83,11 @@ contract PrivateTreasury is IncrementalMerkleTree {
     }
 
     /// @notice [TODO]
-    function createLeaf(Point calldata P, Point calldata Q, uint256 v) internal {
+    function createLeaf(
+        Point calldata P,
+        Point calldata Q,
+        uint256 v
+    ) internal {
         Leaf memory lf = Leaf(P, Q, v);
         emit NewLeaf(lf);
         insertLeaf(_hashLeaf(lf));
@@ -109,11 +113,11 @@ contract PrivateTreasury is IncrementalMerkleTree {
     }
 
     /// @notice For managers to withdraw deposits belonging to their treasury.
-    ///         Enables withdrawal of exact value via a "change" leaf. Amount 
-    ///         to withdraw must be greater than the sum of values associated 
-    ///         with the leaves in the batch. Any remaining ether will be 
-    ///         stored in a new leaf redeemable by the same private key, 
-    ///         assuming changeP & changeQ are valid. 
+    ///         Enables withdrawal of exact value via a "change" leaf. Amount
+    ///         to withdraw must be greater than the sum of values associated
+    ///         with the leaves in the batch. Any remaining ether will be
+    ///         stored in a new leaf redeemable by the same private key,
+    ///         assuming changeP & changeQ are valid.
     /// @dev Padding currently done by repeating the 0th leaf, which means
     ///      there will be duplicates in indices that are to be withdrawn.
     ///      In the future, the circuit should verify 0-initialized leaves, so
