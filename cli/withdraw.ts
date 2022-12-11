@@ -1,7 +1,7 @@
 /*
  * Spends a batch of leaves by posting a withdrawal proof (see 
- * verif-manager.circom). The value of the leaf will be sent in ether to the 
- * sender's (manager's) account.
+ * verif-manager.circom). The value of the leaf will be sent to the sender's 
+ * (manager's) account.
  */
 
 import dotenv from "dotenv";
@@ -152,8 +152,9 @@ async function proveSanityCheck(
 
 /*
  * Posts the zkSNARK proof on-chain and logs the increase in the manager's
- * balance. Need the 60s timeout call for non-local blockchains that don't have
- * instant finality.
+ * balance. Uses the P & Q of the last leaf in the batch for the computational 
+ * diffie-hellman problem of the change leaf. Need the 60s timeout call for 
+ * non-local blockchains that don't have instant finality.
  */
 async function sendProofTx(targetLeaves: Leaf[], prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
     console.log("== Sending tx with withdrawal proof");
