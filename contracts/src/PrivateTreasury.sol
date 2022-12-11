@@ -31,7 +31,7 @@ interface IHasherT6 {
 /// @dev Do not use in prod. This is a POC that has not undergone any audits.
 contract PrivateTreasury is IncrementalMerkleTree {
     address public constant VERIFIER_ADDR =
-        0x5FbDB2315678afecb367f032d93F642f64180aa3;
+        0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9;
     address public constant POSEIDON_T3_ADDR =
         0x8464135c8F25Da09e49BC8782676a84730C318bC;
     address public constant POSEIDON_T6_ADDR =

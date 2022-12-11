@@ -52,8 +52,7 @@ template Main(MAX_N_WITHDRAW, MERKLE_TREE_DEPTH) {
         mulResults[i].p[0] <== P[i][0];
         mulResults[i].p[1] <== P[i][1];
 
-        var j;
-        for (j=0; j<253; j++) {
+        for (var j = 0; j < 253; j++) {
             mulResults[i].e[j] <== treasuryPrivBits.out[j];
         }
 
@@ -61,7 +60,11 @@ template Main(MAX_N_WITHDRAW, MERKLE_TREE_DEPTH) {
         Q[i][1] === mulResults[i].out[1];
 
         // Check public leafIndex consistent with the provided proof
-        leafIndex[i] === pathIndex[i][0];
+        var proofLeafIndex = 0;
+        for (var j = 0; j < MERKLE_TREE_DEPTH; j++) {
+            proofLeafIndex += 2**j * pathIndex[i][j];
+        }
+        leafIndex[i] === proofLeafIndex;
 
         // Check merkle inclusion proof
         hashers[i] = PoseidonHashT6();

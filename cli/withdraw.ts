@@ -26,8 +26,8 @@ import Leaf from "./Leaf";
 import Utils from "./utils";
 
 // Currently only supports LEAF_INDICES.length < N_WITHDRAW
-const WITHDRAW_AMOUNT_ETH = "12";
-const LEAF_INDICES: number[] = [0, 1, 2];
+const WITHDRAW_AMOUNT_ETH = "7";
+const LEAF_INDICES: number[] = [2];
 const WITH_SLEEP: boolean = false;
 
 const N_MAX_WITHDRAW: number = 5;

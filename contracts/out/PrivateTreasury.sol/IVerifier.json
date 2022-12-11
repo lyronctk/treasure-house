@@ -48,7 +48,7 @@
   "methodIdentifiers": {
     "verifyProof(uint256[2],uint256[2][2],uint256[2],uint256[11])": "b9c6ea87"
   },
-  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256[2]\",\"name\":\"a\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2][2]\",\"name\":\"b\",\"type\":\"uint256[2][2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"c\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[11]\",\"name\":\"input\",\"type\":\"uint256[11]\"}],\"name\":\"verifyProof\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"Interface for the solidity verifier produced by verif-manager.circom\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/PrivateTreasury.sol\":\"IVerifier\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"src/IncrementalMerkleTree.sol\":{\"keccak256\":\"0x4202b5ae3a74b851b985c91a3050057233d637e43a5793f6e45004bef26190bd\",\"urls\":[\"bzz-raw://943bf76a07ff49beaf0ad8563ff2a5c5daa998ade9768c875e1c0d05015dccd3\",\"dweb:/ipfs/QmatXn3gZGiUxCmpwng1yQK1ZfXir3xnEvV4zfcrgBCGzG\"]},\"src/PrivateTreasury.sol\":{\"keccak256\":\"0xcd919c531e02da901bfadfc8bd4d9afb39d23e4f9629b74e8bad75dca7d8e07f\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://c8d9baeda1672a30f9d01ea8c06b4ed12ab679615ca6e248705a13af75e0df40\",\"dweb:/ipfs/QmdPN1DjeJdBgbPunvSxrcg4Urr89ziLiGtNTgY2b3k9Xs\"]}},\"version\":1}",
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.17+commit.8df45f5f\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256[2]\",\"name\":\"a\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[2][2]\",\"name\":\"b\",\"type\":\"uint256[2][2]\"},{\"internalType\":\"uint256[2]\",\"name\":\"c\",\"type\":\"uint256[2]\"},{\"internalType\":\"uint256[11]\",\"name\":\"input\",\"type\":\"uint256[11]\"}],\"name\":\"verifyProof\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"title\":\"Interface for the solidity verifier produced by verif-manager.circom\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/PrivateTreasury.sol\":\"IVerifier\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\"]},\"sources\":{\"src/IncrementalMerkleTree.sol\":{\"keccak256\":\"0x4202b5ae3a74b851b985c91a3050057233d637e43a5793f6e45004bef26190bd\",\"urls\":[\"bzz-raw://943bf76a07ff49beaf0ad8563ff2a5c5daa998ade9768c875e1c0d05015dccd3\",\"dweb:/ipfs/QmatXn3gZGiUxCmpwng1yQK1ZfXir3xnEvV4zfcrgBCGzG\"]},\"src/PrivateTreasury.sol\":{\"keccak256\":\"0x722d07c9174d175b4202bf226ec7ed7fd08245f3d42b7be1f9aa9b880e5090df\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://90e35c51bcda8c0aac12597e76cb176f8b9107a4c226548ca0a51d62e62f2df8\",\"dweb:/ipfs/QmcNfM9LWKEPaQAAPp8T7qYzUsnbFhaESGT7VCaQC6Gw12\"]}},\"version\":1}",
   "metadata": {
     "compiler": {
       "version": "0.8.17+commit.8df45f5f"
@@ -129,10 +129,10 @@
         "license": null
       },
       "src/PrivateTreasury.sol": {
-        "keccak256": "0xcd919c531e02da901bfadfc8bd4d9afb39d23e4f9629b74e8bad75dca7d8e07f",
+        "keccak256": "0x722d07c9174d175b4202bf226ec7ed7fd08245f3d42b7be1f9aa9b880e5090df",
         "urls": [
-          "bzz-raw://c8d9baeda1672a30f9d01ea8c06b4ed12ab679615ca6e248705a13af75e0df40",
-          "dweb:/ipfs/QmdPN1DjeJdBgbPunvSxrcg4Urr89ziLiGtNTgY2b3k9Xs"
+          "bzz-raw://90e35c51bcda8c0aac12597e76cb176f8b9107a4c226548ca0a51d62e62f2df8",
+          "dweb:/ipfs/QmcNfM9LWKEPaQAAPp8T7qYzUsnbFhaESGT7VCaQC6Gw12"
         ],
         "license": "MIT"
       }
@@ -820,7 +820,7 @@
               }
             },
             "value": {
-              "hexValue": "307835466244423233313536373861666563623336376630333264393346363432663634313830616133",
+              "hexValue": "307844633634613134304161334539383131303061396265634134453638356639363266306346364339",
               "id": 23505,
               "isConstant": false,
               "isLValue": false,
@@ -833,7 +833,7 @@
                 "typeIdentifier": "t_address",
                 "typeString": "address"
               },
-              "value": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+              "value": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
             },
             "visibility": "public"
           },
