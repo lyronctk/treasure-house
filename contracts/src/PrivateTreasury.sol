@@ -31,7 +31,7 @@ interface IHasherT6 {
 /// @dev Do not use in prod. This is a POC that has not undergone any audits.
 contract PrivateTreasury is IncrementalMerkleTree {
     address public constant VERIFIER_ADDR =
-        0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9;
+        0x5FbDB2315678afecb367f032d93F642f64180aa3;
     address public constant POSEIDON_T3_ADDR =
         0x8464135c8F25Da09e49BC8782676a84730C318bC;
     address public constant POSEIDON_T6_ADDR =
@@ -82,15 +82,20 @@ contract PrivateTreasury is IncrementalMerkleTree {
         directory.push(Treasury(pk, label));
     }
 
+    /// @notice [TODO]
+    function createLeaf(Point calldata P, Point calldata Q, uint256 v) internal {
+        Leaf memory lf = Leaf(P, Q, v);
+        emit NewLeaf(lf);
+        insertLeaf(_hashLeaf(lf));
+    }
+
     /// @notice Contribute to a treasury on the platform
     /// @param P Pubkey of contributor (ρ * G, where ρ is contributor's privKey)
     /// @param Q ρ * treasuryPubKey, a val that can only be derived using
     ///          α * P (where α is the treasury's private key)
-    function deposit(Point calldata P, Point calldata Q) external payable {
+    function deposit(Point calldata P, Point calldata Q) public payable {
         require(msg.value > 0, "Deposited ether value must be > 0.");
-        Leaf memory lf = Leaf(P, Q, msg.value);
-        emit NewLeaf(lf);
-        insertLeaf(_hashLeaf(lf));
+        createLeaf(P, Q, msg.value);
     }
 
     /// @notice Number of filled leaves in Merkle tree
@@ -103,23 +108,30 @@ contract PrivateTreasury is IncrementalMerkleTree {
         return directory.length;
     }
 
-    /// @notice For managers to withdraw deposits belonging to their treasury
-    /// @dev Padding currently done by repeating the 0th leaf, which means 
-    ///      there will be duplicates in indices that are to be withdrawn. 
+    /// @notice For managers to withdraw deposits belonging to their treasury.
+    ///         [TODO]
+    /// @dev Padding currently done by repeating the 0th leaf, which means
+    ///      there will be duplicates in indices that are to be withdrawn.
     ///      In the future, the circuit should verify 0-initialized leaves, so
-    ///      duplicates don't need to be handled here. 
+    ///      duplicates don't need to be handled here.
     /// @dev Potential issue with Merkle root updating before the withdraw tx
-    ///      is placed in a block. Opens up to front-running attacks to keep 
-    ///      funds locked. 
+    ///      is placed in a block. Opens up to front-running attacks to keep
+    ///      funds locked.
+    /// @param amount amount of ETH to withdraw, specified in wei
+    /// @param changeP P for creating the deposit with the change value
+    /// @param changeQ Q for creating the deposit with the change value
     /// @param a pi_a in proof
     /// @param b pi_b in proof
     /// @param c pi_c in proof
     /// @param publicSignals Public signals associated with the proof. The first
     ///                      element is the merkle root. The next N_MAX_WITHDRAW
-    ///                      elements are values associated with the target 
-    ///                      leaves. The final N_MAX_WITHDRAW elements are the 
+    ///                      elements are values associated with the target
+    ///                      leaves. The final N_MAX_WITHDRAW elements are the
     ///                      corresponding indices of the leaves.
     function withdraw(
+        uint256 amount,
+        Point calldata changeP,
+        Point calldata changeQ,
         uint256[2] memory a,
         uint256[2][2] memory b,
         uint256[2] memory c,
@@ -134,6 +146,7 @@ contract PrivateTreasury is IncrementalMerkleTree {
             "Invalid withdrawal proof"
         );
 
+        uint256 totalLeafValue = 0;
         for (uint256 i = 1; i <= MAX_N_WITHDRAW; i++) {
             uint256 v = publicSignals[i];
             uint256 leafIdx = publicSignals[i + MAX_N_WITHDRAW];
@@ -145,8 +158,15 @@ contract PrivateTreasury is IncrementalMerkleTree {
 
             require(!spentLeaves[leafIdx], "Deposit already spent");
             spentLeaves[leafIdx] = true;
-            payable(msg.sender).transfer(v);
+            totalLeafValue += v;
         }
+
+        require(
+            totalLeafValue >= amount,
+            "Withdraw amount > value stored in the specified leaves."
+        );
+        createLeaf(changeP, changeQ, totalLeafValue - amount);
+        payable(msg.sender).transfer(amount);
     }
 
     /// @notice Produces poseidon hash of two children hashes

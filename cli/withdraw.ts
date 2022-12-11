@@ -26,7 +26,8 @@ import Leaf from "./Leaf";
 import Utils from "./utils";
 
 // Currently only supports LEAF_INDICES.length < N_WITHDRAW
-const LEAF_INDICES: number[] = [0, 1];
+const WITHDRAW_AMOUNT_ETH = "12";
+const LEAF_INDICES: number[] = [0, 1, 2];
 const WITH_SLEEP: boolean = false;
 
 const N_MAX_WITHDRAW: number = 5;
@@ -154,7 +155,7 @@ async function proveSanityCheck(
  * balance. Need the 60s timeout call for non-local blockchains that don't have
  * instant finality.
  */
-async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
+async function sendProofTx(targetLeaves: Leaf[], prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
     console.log("== Sending tx with withdrawal proof");
     console.log(
         "- Manager balance BEFORE:",
@@ -164,11 +165,13 @@ async function sendProofTx(prf: Groth16Proof, pubSigs: WithdrawPubSignals) {
         await Utils.exportCallDataGroth16(prf, pubSigs);
     console.log("Proof:", formattedProof);
     const result = await privateTreasury.withdraw(
+        ethers.utils.parseEther(WITHDRAW_AMOUNT_ETH),
+        ...targetLeaves[targetLeaves.length - 1].exportCallData(),
         formattedProof.a,
         formattedProof.b,
         formattedProof.c,
         formattedProof.input
-    );
+    );  
     console.log("- tx:", result);
     if (WITH_SLEEP) await new Promise((resolve) => setTimeout(resolve, 60000));
     console.log(
@@ -216,6 +219,7 @@ async function reconstructMerkleTree(
         tree.genMerklePath(ownedIdx)
     );
 
+    console.log(merkleProofs);
     const [proof, publicSignals] = await genGroth16Proof(
         targetLeaves,
         targetIndices,
@@ -224,7 +228,7 @@ async function reconstructMerkleTree(
         merkleProofs
     );
     await proveSanityCheck(proof, publicSignals);
-    await sendProofTx(proof, publicSignals);
+    await sendProofTx(targetLeaves, proof, publicSignals);
 
     process.exit(0);
 })();
