@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
 
 const RPC_URL = "http://127.0.0.1:8545";
-const CONTRACT_ADDR = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+const CONTRACT_ADDR = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
 const CONTRACT_ABI = [
     {
         inputs: [],
@@ -337,6 +337,25 @@ const CONTRACT_ABI = [
         inputs: [
             {
                 internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        name: "spentLeaves",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
                 name: "amount",
                 type: "uint256",
             },
@@ -406,6 +425,7 @@ function App() {
     const [managerBalance, setManagerBalance] = useState(0);
     const [contributorBalance, setContributorBalance] = useState(0);
     const [leaves, setLeaves] = useState([]);
+    const [treasuryPriv, setTreasuryPriv] = useState(0);
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const privateTreasury = new ethers.Contract(
@@ -427,48 +447,80 @@ function App() {
         );
     }
 
+    function checkOwnership(P, Q, privKey) {
+        if (privKey === 0) return -1;
+
+        return 0;
+    }
+
     async function updateLeaves() {
         const newLeafEvents = await privateTreasury.queryFilter(
             privateTreasury.filters.NewLeaf()
         );
-        const leafHistory = newLeafEvents.map((e) => {
-            const solLf = e.args?.lf;
-            return {
-                P: `${solLf.P.toString(16).substring(0, 8)}...`,
-                Q: `${solLf.Q.toString(16).substring(0, 8)}...`,
-                v: ethers.utils.formatEther(solLf["v"]),
-            };
-        });
+        const leafHistory = await Promise.all(
+            newLeafEvents.map(async (e, idx) => {
+                const solLf = e.args?.lf;
+                console.log(solLf);
+                return {
+                    P: `${solLf.P.x.toString(16).substring(0, 8)}...`,
+                    Q: `${solLf.Q.x.toString(16).substring(0, 8)}...`,
+                    v: ethers.utils.formatEther(solLf["v"]),
+                    isUnspent: !(await privateTreasury.spentLeaves(idx)),
+                    isOwned: checkOwnership(solLf.P, solLf.Q, treasuryPriv),
+                };
+            })
+        );
         setLeaves(leafHistory);
     }
 
     useEffect(() => {
+        updateBalance();
+        updateLeaves();
         setInterval(() => {
             updateBalance();
             updateLeaves();
         }, 5000);
     });
 
+    function renderUnspentDisplay(isUnspent) {
+      if (isUnspent) return 'YES';
+      return 'NO';
+    }
+
+    function renderOwnedDisplay(isOwned) {
+        switch (isOwned) {
+            case 0:
+                return "NO";
+            case 1:
+                return "YES";
+            default:
+                return "?";
+        }
+    }
+
     return (
         <div className="row">
             <div className="column">
-                <h1>Create</h1>
-            </div>
-            <div className="column">
                 <h1>Deposit</h1>
                 <table>
-                    <tr>
-                        <th>P</th>
-                        <th>Q</th>
-                        <th>v</th>
-                    </tr>
-                    {leaves.map((lf) => (
+                    <tbody>
                         <tr>
-                            <td>{lf.P}</td>
-                            <td>{lf.Q}</td>
-                            <td>{lf.v}</td>
+                            <th>P</th>
+                            <th>Q</th>
+                            <th>v</th>
+                            <th>available</th>
+                            <th>owned</th>
                         </tr>
-                    ))}
+                        {leaves.map((lf) => (
+                            <tr key={lf.P}>
+                                <td>{lf.P}</td>
+                                <td>{lf.Q}</td>
+                                <td>{lf.v}</td>
+                                <td>{renderUnspentDisplay(lf.isUnspent)}</td>
+                                <td>{renderOwnedDisplay(lf.isOwned)}</td>
+                            </tr>
+                        ))}
+                    </tbody>
                 </table>
             </div>
             <div className="column">

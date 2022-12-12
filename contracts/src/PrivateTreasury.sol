@@ -69,11 +69,11 @@ contract PrivateTreasury is IncrementalMerkleTree {
     /// @dev Directory of treasuries can be stored off-chain
     Treasury[] public directory;
 
+    /// @notice Keep track of leaves that have been spent
+    mapping(uint256 => bool) public spentLeaves;
+
     /// @notice Inherits from Maci's Incremental Merkle Tree
     constructor() IncrementalMerkleTree(TREE_DEPTH, NOTHING_UP_MY_SLEEVE) {}
-
-    /// @notice Keep track of leaves that have been spent
-    mapping(uint256 => bool) spentLeaves;
 
     /// @notice Treasury creation
     /// @param pk Public key generated from Babyjubjub
