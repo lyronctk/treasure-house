@@ -237,3 +237,5 @@ async function reconstructMerkleTree(
 
     process.exit(0);
 })();
+
+export { getDepositHistory };
