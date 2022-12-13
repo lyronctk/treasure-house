@@ -462,18 +462,23 @@ function App() {
         const newLeafEvents = await privateTreasury.queryFilter(
             privateTreasury.filters.NewLeaf()
         );
-        console.log("UPDATING LEAVES");
         const leafHistory = await Promise.all(
             newLeafEvents.map(async (e, idx) => {
                 const solLf = e.args?.lf;
                 return {
                     P: `${solLf.P.x.toString(16).substring(0, 8)}...`,
                     Q: `${solLf.Q.x.toString(16).substring(0, 8)}...`,
-                    v: ethers.utils.formatEther(solLf["v"]),
+                    v: Number(ethers.utils.formatEther(solLf["v"])),
                     isUnspent: !(await privateTreasury.spentLeaves(idx)),
                     isOwned: checkOwnership(solLf.P, solLf.Q, treasuryPriv),
                 };
             })
+        );
+        setAvailWithdraw(
+            leafHistory.reduce((partialSum, lf) => {
+                if (lf.isOwned === 1 && lf.isUnspent) return partialSum + lf.v;
+                return partialSum;
+            }, 0)
         );
         setLeaves(leafHistory);
     }
@@ -517,7 +522,7 @@ function App() {
                             <th>owned</th>
                         </tr>
                         {leaves.map((lf) => (
-                            <tr key={lf.P}>
+                            <tr key={lf.P + lf.v}>
                                 <td>{lf.P}</td>
                                 <td>{lf.Q}</td>
                                 <td>{lf.v}</td>
@@ -532,7 +537,10 @@ function App() {
                     value={treasuryPriv}
                     placeholder="Enter treasury private key here"
                 />
-                <button className="hover" type="button">Check</button>
+                <button className="hover" type="button">
+                    Check
+                </button>
+                <p>Amount available to withdraw: {availWithdraw} ETH</p>
             </div>
             <div className="column">
                 <h1>Withdraw</h1>
