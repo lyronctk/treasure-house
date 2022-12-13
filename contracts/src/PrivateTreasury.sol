@@ -101,7 +101,7 @@ contract PrivateTreasury is IncrementalMerkleTree {
         require(msg.value > 0, "Deposited ether value must be > 0.");
         createLeaf(P, Q, msg.value);
     }
-
+    
     /// @notice Number of filled leaves in Merkle tree
     function getNumDeposits() public view returns (uint256) {
         return nextLeafIndex;

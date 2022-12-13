@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
+import "@ethersproject/shims";
+
+const { Point } = require("./Point.js");
+const { FQ } = require("./Field");
 
 const RPC_URL = "http://127.0.0.1:8545";
 const CONTRACT_ADDR = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
@@ -425,7 +429,7 @@ function App() {
     const [managerBalance, setManagerBalance] = useState(0);
     const [contributorBalance, setContributorBalance] = useState(0);
     const [leaves, setLeaves] = useState([]);
-    const [treasuryPriv, setTreasuryPriv] = useState(0);
+    const [treasuryPriv, setTreasuryPriv] = useState("");
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const privateTreasury = new ethers.Contract(
@@ -448,19 +452,19 @@ function App() {
     }
 
     function checkOwnership(P, Q, privKey) {
-        if (privKey === 0) return -1;
-
-        return 0;
+        if (privKey == "") return -1;
+        const derivedQ = new Point(P.x, P.y).mult(new FQ(privKey));
+        return derivedQ.isEqualTo(new Point(Q.x, Q.y)) ? 1 : 0;
     }
 
     async function updateLeaves() {
         const newLeafEvents = await privateTreasury.queryFilter(
             privateTreasury.filters.NewLeaf()
         );
+        console.log("UPDATING LEAVES");
         const leafHistory = await Promise.all(
             newLeafEvents.map(async (e, idx) => {
                 const solLf = e.args?.lf;
-                console.log(solLf);
                 return {
                     P: `${solLf.P.x.toString(16).substring(0, 8)}...`,
                     Q: `${solLf.Q.x.toString(16).substring(0, 8)}...`,
@@ -476,15 +480,15 @@ function App() {
     useEffect(() => {
         updateBalance();
         updateLeaves();
-        setInterval(() => {
+        const interval = setInterval(() => {
             updateBalance();
-            updateLeaves();
-        }, 5000);
+        }, 2000);
+        return () => clearInterval(interval);
     });
 
     function renderUnspentDisplay(isUnspent) {
-      if (isUnspent) return 'YES';
-      return 'NO';
+        if (isUnspent) return "YES";
+        return "NO";
     }
 
     function renderOwnedDisplay(isOwned) {
@@ -522,6 +526,11 @@ function App() {
                         ))}
                     </tbody>
                 </table>
+                <input
+                    onChange={(e) => setTreasuryPriv(e.target.value)}
+                    value={treasuryPriv}
+                    placeholder="Enter treasury private key here"
+                />
             </div>
             <div className="column">
                 <h1>Withdraw</h1>
