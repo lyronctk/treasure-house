@@ -23,3 +23,7 @@ code {
   display: table;
   clear: both;
 }
+
+.hover {
+  cursor:pointer;
+}

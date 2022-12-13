@@ -24,6 +24,7 @@ const TREASURY_PUB: SolPoint = {
     y: new Bytes32(<string>process.env.TREASURY_PUB_Y),
 };
 const DEPOSIT_AMOUNT_ETH = "10";
+const N_DEPOSITS = 3;
 
 const DO_WITHDRAW_SANITY_CHECK: boolean = true;
 const ADD_NEW_LEAF: boolean = true;
@@ -77,5 +78,6 @@ async function depositToTreasury() {
 }
 
 (async () => {
-    await depositToTreasury();
+    for (let i = 0; i < N_DEPOSITS; i++)
+        await depositToTreasury();
 })();

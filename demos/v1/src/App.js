@@ -430,6 +430,7 @@ function App() {
     const [contributorBalance, setContributorBalance] = useState(0);
     const [leaves, setLeaves] = useState([]);
     const [treasuryPriv, setTreasuryPriv] = useState("");
+    const [availWithdraw, setAvailWithdraw] = useState(0);
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const privateTreasury = new ethers.Contract(
@@ -482,7 +483,7 @@ function App() {
         updateLeaves();
         const interval = setInterval(() => {
             updateBalance();
-        }, 2000);
+        }, 5000);
         return () => clearInterval(interval);
     });
 
@@ -531,6 +532,7 @@ function App() {
                     value={treasuryPriv}
                     placeholder="Enter treasury private key here"
                 />
+                <button className="hover" type="button">Check</button>
             </div>
             <div className="column">
                 <h1>Withdraw</h1>
