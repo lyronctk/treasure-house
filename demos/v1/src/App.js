@@ -467,8 +467,8 @@ function App() {
             newLeafEvents.map(async (e, idx) => {
                 const solLf = e.args?.lf;
                 return {
-                    P: `${solLf.P.x.toString(16).substring(0, 8)}...`,
-                    Q: `${solLf.Q.x.toString(16).substring(0, 8)}...`,
+                    P: `${solLf.P.x.toString(16).substring(0, 24)}...`,
+                    Q: `${solLf.Q.x.toString(16).substring(0, 24)}...`,
                     v: Number(ethers.utils.formatEther(solLf["v"])),
                     isUnspent: !(await privateTreasury.spentLeaves(idx)),
                     isOwned: checkOwnership(solLf.P, solLf.Q, treasuryPriv),
@@ -476,7 +476,7 @@ function App() {
             })
         );
         setMerkleRoot(
-            (await privateTreasury.root()).toHexString().substring(0, 20)
+            (await privateTreasury.root()).toHexString().substring(0, 24)
         );
         setAvailWithdraw(
             leafHistory.reduce((partialSum, lf) => {
@@ -497,63 +497,77 @@ function App() {
     });
 
     function renderUnspentDisplay(isUnspent) {
-        if (isUnspent) return "YES";
-        return "NO";
+        if (isUnspent) return <p>&#x2705;</p>;
+        return <p>&#10060;</p>;
     }
 
     function renderOwnedDisplay(isOwned) {
         switch (isOwned) {
             case 0:
-                return "NO";
+                return <p>&#10060;</p>;
             case 1:
-                return "YES";
+                return <p>&#x2705;</p>;
             default:
-                return "?";
+                return <p>&#10067;</p>;
         }
     }
 
     return (
-        <div className="row">
-            <div className="column">
-                <p>Merkle root: {merkleRoot}...</p>
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>P</th>
-                            <th>Q</th>
-                            <th>v</th>
-                            <th>available</th>
-                            <th>owned</th>
-                        </tr>
-                        {leaves.map((lf) => (
-                            <tr key={lf.P + lf.v}>
-                                <td>{lf.P}</td>
-                                <td>{lf.Q}</td>
-                                <td>{lf.v}</td>
-                                <td>{renderUnspentDisplay(lf.isUnspent)}</td>
-                                <td>{renderOwnedDisplay(lf.isOwned)}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+        <section class="ftco-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 text-center mb-5">
+                        <p>Merkle root: <b>{merkleRoot}...</b></p>
+                        <p>Manager balance: <b>{managerBalance} ETH</b></p>
+                        <p>Contributor balance: <b>{contributorBalance} ETH</b></p>
+                        <p>Amount available to withdraw: <b>{availWithdraw} ETH</b></p>
+                    </div>
+                </div>
                 <input
+                    class="texrbox-10"
+                    type="text"
                     onChange={(e) => setTreasuryPriv(e.target.value)}
                     value={treasuryPriv}
                     placeholder="Enter treasury private key here"
                 />
-                <button className="hover" type="button">
-                    Check
-                </button>
-                <p>Amount available to withdraw: {availWithdraw} ETH</p>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="table-wrap">
+                            <table class="table table-bordered table-dark table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>P</th>
+                                        <th>Q</th>
+                                        <th>v</th>
+                                        <th>available</th>
+                                        <th>owned</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {leaves.map((lf) => (
+                                        <tr key={lf.P + lf.v}>
+                                            <td>{lf.P}</td>
+                                            <td>{lf.Q}</td>
+                                            <td>{lf.v} ETH</td>
+                                            <td>
+                                                <p>
+                                                    {renderUnspentDisplay(
+                                                        lf.isUnspent
+                                                    )}
+                                                </p>
+                                            </td>
+                                            <td>
+                                                {renderOwnedDisplay(lf.isOwned)}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div className="column">
-                <h3>Account Balance</h3>
-                <ul>
-                    <li>Manager: {managerBalance} ETH</li>
-                    <li>Contributor: {contributorBalance} ETH</li>
-                </ul>
-            </div>
-        </div>
+        </section>
     );
 }
 

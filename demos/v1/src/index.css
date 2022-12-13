@@ -1,15 +1,13 @@
 body {
+  color: white;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace; 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: Lucida Sans Typewriter,Lucida Console,monaco,Bitstream Vera Sans Mono,monospace; 
 }
 
 .column {
@@ -26,4 +24,25 @@ code {
 
 .hover {
   cursor:pointer;
+}
+
+
+/* textbox */
+.texrbox-10 {
+	padding: 8px;
+  margin: 15px 0;
+	height: 30;
+	width: 275px;
+	background: #343a3f;
+	color: #333;
+	border: none;
+	border-bottom: 1px solid #999;
+	border-radius: 1px;
+	font-size: 15px;
+	outline: none;
+	transition: all 250ms ease-in;
+}
+.texrbox-10:focus {
+	background: #95999c;
+	border-bottom: 1px solid #333;
 }
