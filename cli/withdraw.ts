@@ -26,8 +26,8 @@ import Leaf from "./Leaf";
 import Utils from "./utils";
 
 // Currently only supports LEAF_INDICES.length < N_WITHDRAW
-const WITHDRAW_AMOUNT_ETH = "15";
-const LEAF_INDICES: number[] = [0, 1];
+const WITHDRAW_AMOUNT_ETH = "4";
+const LEAF_INDICES: number[] = [3];
 const WITH_SLEEP: boolean = false;
 
 const N_MAX_WITHDRAW: number = 5;
@@ -138,8 +138,6 @@ async function proveSanityCheck(
     pubSigs: WithdrawPubSignals
 ) {
     console.log("== Running sanity check, verifying proof client-side");
-    console.log("- Proof:", prf);
-    console.log("- Public Signals:", pubSigs);
     const vKey = JSON.parse(fs.readFileSync(VERIF_KEY, "utf8"));
     const res = await groth16.verify(vKey, pubSigs, prf);
     if (res === true) {
@@ -211,6 +209,17 @@ async function reconstructMerkleTree(
     return tree;
 }
 
+/*
+ * Generate a Merkle inclusion proof for each target index
+ */
+function genMerkleProofs(tree: IncrementalQuinTree, targetIndices: number[]) {
+    console.log("== Generating Merkle Proofs");
+    const prfs = targetIndices.map((ownedIdx) => tree.genMerklePath(ownedIdx));
+    console.log(prfs);
+    console.log("==");
+    return prfs
+}
+
 (async () => {
     const poseidon = await buildPoseidon();
     const [leafHistory, leafHashes] = await getDepositHistory(poseidon);
@@ -220,11 +229,8 @@ async function reconstructMerkleTree(
     const targetLeaves = targetIndices.map((ownedIdx) => leafHistory[ownedIdx]);
 
     const tree = await reconstructMerkleTree(leafHashes);
-    const merkleProofs = targetIndices.map((ownedIdx) =>
-        tree.genMerklePath(ownedIdx)
-    );
+    const merkleProofs = genMerkleProofs(tree, targetIndices);
 
-    console.log(merkleProofs);
     const [proof, publicSignals] = await genGroth16Proof(
         targetLeaves,
         targetIndices,

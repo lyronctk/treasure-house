@@ -431,6 +431,7 @@ function App() {
     const [leaves, setLeaves] = useState([]);
     const [treasuryPriv, setTreasuryPriv] = useState("");
     const [availWithdraw, setAvailWithdraw] = useState(0);
+    const [merkleRoot, setMerkleRoot] = useState("");
 
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const privateTreasury = new ethers.Contract(
@@ -474,6 +475,9 @@ function App() {
                 };
             })
         );
+        setMerkleRoot(
+            (await privateTreasury.root()).toHexString().substring(0, 20)
+        );
         setAvailWithdraw(
             leafHistory.reduce((partialSum, lf) => {
                 if (lf.isOwned === 1 && lf.isUnspent) return partialSum + lf.v;
@@ -511,7 +515,7 @@ function App() {
     return (
         <div className="row">
             <div className="column">
-                <h1>Deposit</h1>
+                <p>Merkle root: {merkleRoot}...</p>
                 <table>
                     <tbody>
                         <tr>
@@ -543,7 +547,6 @@ function App() {
                 <p>Amount available to withdraw: {availWithdraw} ETH</p>
             </div>
             <div className="column">
-                <h1>Withdraw</h1>
                 <h3>Account Balance</h3>
                 <ul>
                     <li>Manager: {managerBalance} ETH</li>
