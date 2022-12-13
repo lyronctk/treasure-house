@@ -26,8 +26,8 @@ import Leaf from "./Leaf";
 import Utils from "./utils";
 
 // Currently only supports LEAF_INDICES.length < N_WITHDRAW
-const WITHDRAW_AMOUNT_ETH = "4";
-const LEAF_INDICES: number[] = [3];
+const WITHDRAW_AMOUNT_ETH = "14";
+const LEAF_INDICES: number[] = [0, 1];
 const WITH_SLEEP: boolean = false;
 
 const N_MAX_WITHDRAW: number = 5;
@@ -102,7 +102,7 @@ async function genGroth16Proof(
     treasuryPriv: string,
     inclusionProofs: any[]
 ): Promise<[Groth16Proof, WithdrawPubSignals]> {
-    console.log("== Generating proof");
+    console.log("== Generating SNARK proof");
     const leavesBase10 = leaves.map((lf) => lf.base10());
     const [paddedLeaves, paddedInclusionProofs, paddedLeafIndices] =
         Utils.padCircuitInputs(
@@ -137,7 +137,7 @@ async function proveSanityCheck(
     prf: Groth16Proof,
     pubSigs: WithdrawPubSignals
 ) {
-    console.log("== Running sanity check, verifying proof client-side");
+    console.log("== Running sanity check, verifying SNARK proof client-side");
     const vKey = JSON.parse(fs.readFileSync(VERIF_KEY, "utf8"));
     const res = await groth16.verify(vKey, pubSigs, prf);
     if (res === true) {

@@ -6,7 +6,7 @@ const { Point } = require("./Point.js");
 const { FQ } = require("./Field");
 
 const RPC_URL = "http://127.0.0.1:8545";
-const CONTRACT_ADDR = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
+const CONTRACT_ADDR = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 const CONTRACT_ABI = [
     {
         inputs: [],
@@ -430,6 +430,7 @@ function App() {
     const [contributorBalance, setContributorBalance] = useState(0);
     const [leaves, setLeaves] = useState([]);
     const [treasuryPriv, setTreasuryPriv] = useState("");
+    const [platformBalance, setPlatformBalance] = useState(0);
     const [availWithdraw, setAvailWithdraw] = useState(0);
     const [merkleRoot, setMerkleRoot] = useState("");
 
@@ -445,6 +446,9 @@ function App() {
     }
 
     async function updateBalance() {
+        setPlatformBalance(
+            formatBalance(await provider.getBalance(CONTRACT_ADDR))
+        );
         setManagerBalance(
             formatBalance(await provider.getSigner(1).getBalance())
         );
@@ -492,6 +496,7 @@ function App() {
         updateLeaves();
         const interval = setInterval(() => {
             updateBalance();
+            updateLeaves();
         }, 5000);
         return () => clearInterval(interval);
     });
@@ -513,27 +518,42 @@ function App() {
     }
 
     return (
-        <section class="ftco-section">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 text-center mb-5">
-                        <p>Merkle root: <b>{merkleRoot}...</b></p>
-                        <p>Manager balance: <b>{managerBalance} ETH</b></p>
-                        <p>Contributor balance: <b>{contributorBalance} ETH</b></p>
-                        <p>Amount available to withdraw: <b>{availWithdraw} ETH</b></p>
+        <section className="ftco-section">
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-md-6 text-center mb-5">
+                        <p>
+                            Merkle root: <b>{merkleRoot}...</b>
+                        </p>
+                        <p></p>
+                        <p>
+                            Manager balance: <b>{managerBalance} ETH</b>
+                        </p>
+                        <p>
+                            Contributor balance: <b>{contributorBalance} ETH</b>
+                        </p>
+                        <p></p>
+                        <p>
+                            Total balance of platform:{" "}
+                            <b>{platformBalance} ETH</b>
+                        </p>
+                        <p>
+                            Amount available to withdraw:{" "}
+                            <b>{availWithdraw} ETH</b>
+                        </p>
                     </div>
                 </div>
                 <input
-                    class="texrbox-10"
+                    className="texrbox-10"
                     type="text"
                     onChange={(e) => setTreasuryPriv(e.target.value)}
                     value={treasuryPriv}
                     placeholder="Enter treasury private key here"
                 />
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="table-wrap">
-                            <table class="table table-bordered table-dark table-hover">
+                <div className="row">
+                    <div className="col-md-12">
+                        <div className="table-wrap">
+                            <table className="table table-bordered table-dark table-hover">
                                 <thead>
                                     <tr>
                                         <th>P</th>

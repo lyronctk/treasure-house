@@ -82,7 +82,11 @@ contract PrivateTreasury is IncrementalMerkleTree {
         directory.push(Treasury(pk, label));
     }
 
-    /// @notice [TODO]
+    /// @notice Utility function for creating a leaf, emitting event, and adding
+    ///         to merkle tree
+    /// @param P Contributor pubkey
+    /// @param Q Shared private key
+    /// @param v Amount of ETH deposited with leaf 
     function createLeaf(
         Point calldata P,
         Point calldata Q,
@@ -178,6 +182,8 @@ contract PrivateTreasury is IncrementalMerkleTree {
     }
 
     /// @notice Produces poseidon hash of two children hashes
+    /// @param l Left child value
+    /// @param r Right child value
     /// @dev Should be internal, but set to public so tests can run from
     ///      ethers. Not ideal, but foundry tests are being wonky.
     function _hashLeftRight(uint256 l, uint256 r)
@@ -189,7 +195,8 @@ contract PrivateTreasury is IncrementalMerkleTree {
         return hasherT3.poseidon([l, r]);
     }
 
-    /// @notice Produces poseidon hash of a leaf ()
+    /// @notice Produces poseidon hash of a leaf
+    /// @param lf Leaf to hash
     /// @dev Should be internal, but set to public so tests can run from
     ///      ethers. Not ideal, but foundry tests are being wonky.
     function _hashLeaf(Leaf memory lf) public view returns (uint256) {
