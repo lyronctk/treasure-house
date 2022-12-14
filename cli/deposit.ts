@@ -23,7 +23,7 @@ const TREASURY_PUB: SolPoint = {
     x: new Bytes32(<string>process.env.TREASURY_PUB_X),
     y: new Bytes32(<string>process.env.TREASURY_PUB_Y),
 };
-const DEPOSIT_AMOUNT_ETH = "10";
+const DEPOSIT_AMOUNT_ETH = "20";
 const N_DEPOSITS = 3;
 
 const DO_WITHDRAW_SANITY_CHECK: boolean = true;

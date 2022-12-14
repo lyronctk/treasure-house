@@ -6,7 +6,7 @@ const { Point } = require("./Point.js");
 const { FQ } = require("./Field");
 
 const RPC_URL = "http://127.0.0.1:8545";
-const CONTRACT_ADDR = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+const CONTRACT_ADDR = "0x0165878A594ca255338adfa4d48449f69242Eb8F";
 const CONTRACT_ABI = [
     {
         inputs: [],
@@ -497,9 +497,9 @@ function App() {
         const interval = setInterval(() => {
             updateBalance();
             updateLeaves();
-        }, 5000);
+        }, 2000);
         return () => clearInterval(interval);
-    });
+    }, [treasuryPriv]);
 
     function renderUnspentDisplay(isUnspent) {
         if (isUnspent) return <p>&#x2705;</p>;

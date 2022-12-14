@@ -82,7 +82,6 @@ contract PrivateTreasury is IncrementalMerkleTree {
         directory.push(Treasury(pk, label));
     }
 
-    Leaf[] public leavesTmp;
     /// @notice Utility function for creating a leaf, emitting event, and adding
     ///         to merkle tree
     /// @param P Contributor pubkey
@@ -95,8 +94,7 @@ contract PrivateTreasury is IncrementalMerkleTree {
     ) internal {
         Leaf memory lf = Leaf(P, Q, v);
         emit NewLeaf(lf);
-        // insertLeaf(_hashLeaf(lf));
-        leavesTmp.push(lf);
+        insertLeaf(_hashLeaf(lf));
     }
 
     /// @notice Contribute to a treasury on the platform
