@@ -3,6 +3,9 @@
 ## Overview
 Platform for DAOs with private treasuries. Based on [work done by Griffin Dunaif & Dan Boneh](https://hackmd.io/nCASdhqVQNWwMhpTmKpnKQ).
 
+![Overview Graphic](diagrams/overview.png)
+![ECDH](diagrams/ecdh.png)
+
 ## Rest of Roadmap
 0. Switch to C++ witness generation for SNARK. Much faster. 
 1. ~~Deposit merkle tree. Managers create inclusion proofs by querying indexers 
