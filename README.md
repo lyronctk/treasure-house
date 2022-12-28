@@ -9,8 +9,8 @@ Front-running is a consistent issue that many DAOs built on non-privacy enabled 
 Balance hiding is a promising solution. The treasury implementation provided in this repository satisfies this property using a simple scheme based on [elliptic curve diffie-hellman key exchange](https://cryptobook.nakov.com/asymmetric-key-ciphers/ecdh-key-exchange). The core components of the scheme are as follows. 
 
 One contract instance for this treasury is designed to support multiple DAOs to form an anonymity set. Rather than sending ETH to different contracts per treasury, contributors are meant to send ETH to this main contract, along with a cryptographic puzzle that only the DAO manager(s) know the solution to. The puzzle is a diffie-hellman shared key that's derived from the DAO manager's public key (not the same as their ethereum pubkey) and a nonce sampled by the contributor. Two important properties of this shared key are
-1. Safety is protected by the hardness of discrete-log. Adversaries can't withdraw funds that don't belong to them.
-1. Anonymity follows from the decisional diffie-hellman assumption. The shared key doesn't reveal anything about the target DAO public key. 
+1. Safety is protected by the [hardness of discrete-log](https://www.doc.ic.ac.uk/~mrh/330tutor/ch06s02.html#:~:text=The%20discrete%20logarithm%20problem%20is,logarithms%20depends%20on%20the%20groups.). Adversaries can't withdraw funds that don't belong to them.
+1. Anonymity follows from the [decisional diffie-hellman assumption](https://crypto.stanford.edu/~dabo/pubs/papers/DDH.pdf). The shared key doesn't reveal anything about the target DAO public key. 
 Thus, outside observers only know the total balance of all DAOs on the platform, but not how much each DAO is entitled to. 
 
 Treasury managers check each deposit as it comes in to see whether their secret key can solve the attached puzzle. They can then redeem leaves posting a zkSNARK proof that verifies 1) knowledge of the secret and 2) inclusion of these leaves in the on-chain merkle tree. 
