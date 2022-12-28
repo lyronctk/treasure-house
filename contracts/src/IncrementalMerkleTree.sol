@@ -1,6 +1,6 @@
 /*
  * Based on the IncrementalMerkleTree from the MACI project. Modifications:
- *     1) Don't keep track of merkle root history. Gas savings.
+ *     1) Don't keep track of merkle root history. Save on gas. 
  *     2) No onlyOwner modifiers. Instead made leaf insertion internal.
  *     3) Hashing func now absract.
  *     4) Removed leaf insertion event. Will be defined in derived class.
