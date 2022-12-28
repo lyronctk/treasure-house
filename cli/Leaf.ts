@@ -46,18 +46,18 @@ export default class Leaf {
     }
 
     /*
-     * Creates a leaf by computing Q from the contributor's keys and the
+     * Creates a leaf by computing Q from the contributor's nonce and the
      * manager's public key.
      */
     static fromKeys(
         treasuryPub: InstanceType<typeof PublicKey>,
-        contributorPriv: InstanceType<typeof PrivateKey>,
-        contributorPub: InstanceType<typeof PublicKey>,
+        noncePriv: InstanceType<typeof PrivateKey>,
+        noncePub: InstanceType<typeof PublicKey>,
         v: ethers.BigNumber
     ): Leaf {
         return new Leaf(
-            contributorPub.p,
-            treasuryPub.p.mult(contributorPriv.s),
+            noncePub.p,
+            treasuryPub.p.mult(noncePriv.s),
             v
         );
     }

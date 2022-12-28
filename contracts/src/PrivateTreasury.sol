@@ -27,25 +27,13 @@ interface IHasherT6 {
 }
 
 /// @title Private treasuries
-/// @notice Platform for managing treasuries with balance & withdrawal privacy
+/// @notice Platform for managing treasuries with balance privacy.
 /// @dev Do not use in prod. This is a POC that has not undergone any audits.
 contract PrivateTreasury is IncrementalMerkleTree {
-    address public constant VERIFIER_ADDR =
-        0x5FbDB2315678afecb367f032d93F642f64180aa3;
-    address public constant POSEIDON_T3_ADDR =
-        0x8464135c8F25Da09e49BC8782676a84730C318bC;
-    address public constant POSEIDON_T6_ADDR =
-        0x71C95911E9a5D330f4D621842EC243EE1343292e;
-
-    uint8 internal constant TREE_DEPTH = 32;
-    uint256 internal constant MAX_N_WITHDRAW = 5;
-    // Keccak256 hash of 'Maci'
-    uint256 internal constant NOTHING_UP_MY_SLEEVE =
-        8370432830353022751713833565135785980866757267633941821328460903436894336785;
-
-    IVerifier verifierContract = IVerifier(VERIFIER_ADDR);
-    IHasherT3 hasherT3 = IHasherT3(POSEIDON_T3_ADDR);
-    IHasherT6 hasherT6 = IHasherT6(POSEIDON_T6_ADDR);
+    IVerifier internal verifierContract;
+    IHasherT3 internal hasherT3;
+    IHasherT6 internal hasherT6;
+    uint256 internal _nMaxWithdraw;
 
     struct Point {
         bytes32 x;
@@ -69,24 +57,36 @@ contract PrivateTreasury is IncrementalMerkleTree {
     /// @dev Directory of treasuries can be stored off-chain
     Treasury[] public directory;
 
-    /// @notice Keep track of leaves that have been spent
+    /// @notice Keep track of indices of leaves that have been spent
     mapping(uint256 => bool) public spentLeaves;
 
-    /// @notice Inherits from Maci's Incremental Merkle Tree
-    constructor() IncrementalMerkleTree(TREE_DEPTH, NOTHING_UP_MY_SLEEVE) {}
+    /// @notice Inherits from Maci's IncrementalMerkleTree
+    constructor(
+        uint8 treeDepth,
+        uint256 nothingUpMySleeve,
+        uint256 nMaxWithdraw,
+        address verifier,
+        address poseidonT3,
+        address poseidonT6
+    ) IncrementalMerkleTree(treeDepth, nothingUpMySleeve) {
+        _nMaxWithdraw = nMaxWithdraw;
+        verifierContract = IVerifier(verifier);
+        hasherT3 = IHasherT3(poseidonT3);
+        hasherT6 = IHasherT6(poseidonT6);
+    }
 
     /// @notice Treasury creation
-    /// @param pk Public key generated from Babyjubjub
-    /// @param label Name given to treasury, use only as descriptor, not lookup
+    /// @param pk Treasury public key sampled from Babyjubjub
+    /// @param label Name given to treasury, use only as descriptor
     function create(Point calldata pk, string calldata label) external {
         directory.push(Treasury(pk, label));
     }
 
     /// @notice Utility function for creating a leaf, emitting event, and adding
     ///         to merkle tree
-    /// @param P Contributor pubkey
-    /// @param Q Shared private key
-    /// @param v Amount of ETH deposited with leaf 
+    /// @param P Contributor nonce
+    /// @param Q Diffie-hellman shard key
+    /// @param v Amount of ETH deposited with leaf
     function createLeaf(
         Point calldata P,
         Point calldata Q,
@@ -98,14 +98,14 @@ contract PrivateTreasury is IncrementalMerkleTree {
     }
 
     /// @notice Contribute to a treasury on the platform
-    /// @param P Pubkey of contributor (ρ * G, where ρ is contributor's privKey)
+    /// @param P Contributor nonce (ρ * G)
     /// @param Q ρ * treasuryPubKey, a val that can only be derived using
     ///          α * P (where α is the treasury's private key)
     function deposit(Point calldata P, Point calldata Q) public payable {
         require(msg.value > 0, "Deposited ether value must be > 0.");
         createLeaf(P, Q, msg.value);
     }
-    
+
     /// @notice Number of filled leaves in Merkle tree
     function getNumDeposits() public view returns (uint256) {
         return nextLeafIndex;
@@ -136,9 +136,9 @@ contract PrivateTreasury is IncrementalMerkleTree {
     /// @param b pi_b in proof
     /// @param c pi_c in proof
     /// @param publicSignals Public signals associated with the proof. The first
-    ///                      element is the merkle root. The next N_MAX_WITHDRAW
+    ///                      element is the merkle root. The next nMaxWithdraw
     ///                      elements are values associated with the target
-    ///                      leaves. The final N_MAX_WITHDRAW elements are the
+    ///                      leaves. The final nMaxWithdraw elements are the
     ///                      corresponding indices of the leaves.
     function withdraw(
         uint256 amount,
@@ -159,11 +159,11 @@ contract PrivateTreasury is IncrementalMerkleTree {
         );
 
         uint256 totalLeafValue = 0;
-        for (uint256 i = 1; i <= MAX_N_WITHDRAW; i++) {
+        for (uint256 i = 1; i <= _nMaxWithdraw; i++) {
             uint256 v = publicSignals[i];
-            uint256 leafIdx = publicSignals[i + MAX_N_WITHDRAW];
+            uint256 leafIdx = publicSignals[i + _nMaxWithdraw];
 
-            if (i > 1 && leafIdx == publicSignals[1 + MAX_N_WITHDRAW]) {
+            if (i > 1 && leafIdx == publicSignals[1 + _nMaxWithdraw]) {
                 // Got to padding region
                 break;
             }

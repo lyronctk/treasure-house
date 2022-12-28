@@ -13,8 +13,11 @@ import { ethers } from "ethers";
 
 import Utils from './utils';
 
-const TREASURY_LABEL: string = "test";
-const ADD_NEW_TREASURY: boolean = false;``
+// For demo purposes, not used as any key 
+const TREASURY_LABEL: string = "private-treasury-test";
+
+// Can turn off adding a new treasury, will only list current treasuries 
+const ADD_NEW_TREASURY: boolean = true;
 
 const signer = new ethers.Wallet(
     <string>process.env.MANAGER_ETH_PRIVKEY,
@@ -43,8 +46,7 @@ async function enumerateDirectory() {
 
 /*
  * Generates a new keypair. Private key must be stored for later use by the
- * manager. Public key & a succinct label posted on-chain for contributors
- * to access.
+ * manager. Public key & a label posted on-chain for contributors to access.
  */
 async function createTreasury() {
     const [managerPriv, managerPub] = Utils.genJubKP();

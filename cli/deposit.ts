@@ -1,9 +1,11 @@
 /*
- * Contributes to a treasury by 1) generating a temporary Babyjubjub keypair for
- * the contributors, 2) computing P & Q values such that the leaf that can be
- * redeemed by the treasury's manager, 3) adding the element to the contract's
- * deposits merkle tree. Discrete log protects any observers from identifying
- * which treasury Q corresponds to.
+ * Contributes to a treasury by 1) generating a nonce (babyjubjub base field 
+ * element and corresponding scalar field element) for, 2) computing P & Q 
+ * values such that the leaf that can be redeemed by the treasury's manager, 
+ * 3) adding the leaf to the contract's deposits merkle tree. Hardness of 
+ * discrete-log protects the leaf from withdrawal by anyone other than the 
+ * manager. Anonymity of Q follows from the decisional diffie-hellman 
+ * assumption.
  */
 
 import dotenv from "dotenv";
@@ -19,14 +21,19 @@ import Leaf from "./Leaf";
 import Utils from "./utils";
 import { SolPoint } from "./types";
 
+// Public key of the target treasury 
 const TREASURY_PUB: SolPoint = {
     x: new Bytes32(<string>process.env.TREASURY_PUB_X),
     y: new Bytes32(<string>process.env.TREASURY_PUB_Y),
 };
+
+// How much ETH to send with each deposit 
 const DEPOSIT_AMOUNT_ETH = "20";
+
+// Number of deposits to make
 const N_DEPOSITS = 3;
 
-const DO_WITHDRAW_SANITY_CHECK: boolean = true;
+// Can toggle whether or not to post the tx that sends the leaf 
 const ADD_NEW_LEAF: boolean = true;
 
 const signer = new ethers.Wallet(
@@ -56,24 +63,22 @@ async function sendLeaf(lf: Leaf) {
 }
 
 /*
- * Creates a leaf and sends it to the specified private treasury. Enable
- * the sanity check with the flag DO_WITHDRAW_SANITY_CHECK to ensure the
- * leaf is constructed correctly.
+ * Creates a leaf and sends it to the specified private treasury. Also conducts
+ * a sanity check to ensure the leaf is constructed correctly (funds won't be
+ * lost).
  */
 async function depositToTreasury() {
-    const [contributorPriv, contributorPub] = Utils.genJubKP();
+    const [noncePriv, noncePub] = Utils.genJubKP();
     const lf: Leaf = Leaf.fromKeys(
         treasuryPub,
-        contributorPriv,
-        contributorPub,
+        noncePriv,
+        noncePub,
         ethers.utils.parseEther(DEPOSIT_AMOUNT_ETH)
     );
-    if (DO_WITHDRAW_SANITY_CHECK) {
-        console.log(
-            "- Can derive Q?",
-            lf.checkQDerivation(new PrivateKey(process.env.TREASURY_PRIVKEY))
-        );
-    }
+    console.log(
+        "- Can derive Q?",
+        lf.checkQDerivation(new PrivateKey(process.env.TREASURY_PRIVKEY))
+    );
     if (ADD_NEW_LEAF) await sendLeaf(lf);
 }
 

@@ -1,7 +1,9 @@
 /*
- * Spends a batch of leaves by posting a withdrawal proof (see
- * verif-manager.circom). The value of the leaf will be sent to the sender's
- * (manager's) account.
+ * Spends a batch of leaves by posting a withdrawal proof. See verif-manager 
+ * circuits for more context on the SNARK proof. Current implementation 
+ * reconstructs the deposit Merkle tree on every execution to generate the 
+ * inclusion arguments. The total values of the leaves will be sent to the 
+ * sender's (manager's) account.
  */
 
 import dotenv from "dotenv";
@@ -25,14 +27,23 @@ import {
 import Leaf from "./Leaf";
 import Utils from "./utils";
 
-// Currently only supports LEAF_INDICES.length < N_WITHDRAW
-const WITHDRAW_AMOUNT_ETH = "25";
-const LEAF_INDICES: number[] = [0, 1, 2, 3, 4];
-const WITH_SLEEP: boolean = false;
+// Total amount of ETH to withdraw 
+const WITHDRAW_AMOUNT_ETH = "5";
 
+// Unspent leaves to use for withdrawal. Indexed relative to target treasury's
+// leaves. Example: specifying 1 and 2 in the array below may map to indices 15 
+// and 40 when listing all leaves in the tree
+const LEAF_INDICES: number[] = [0];
+
+// Max number of leaves that can be withdrawn at a time. Must be the same value
+// set in the circuit. Default value is 5 for testing, but a 1000 leaves should
+// still only take under 100s with a Groth16 prover. 
 const N_MAX_WITHDRAW: number = 5;
+
+// Depth of Merkle tree
 const TREE_DEPTH: number = 32;
 
+// Point to the outputs of the setup() step for the SNARK 
 const PROV_KEY: string = "../circuits/verif-manager.zkey";
 const VERIF_KEY: string = "../circuits/verif-manager.vkey.json";
 const WASM: string = "../circuits/verif-manager.wasm";
@@ -160,10 +171,6 @@ async function sendProofTx(
     pubSigs: WithdrawPubSignals
 ) {
     console.log("== Sending tx with withdrawal proof");
-    console.log(
-        "- Manager balance BEFORE:",
-        ethers.utils.formatEther(await signer.getBalance())
-    );
     const formattedProof: Groth16ProofCalldata =
         await Utils.exportCallDataGroth16(prf, pubSigs);
     console.log("Proof:", formattedProof);
@@ -176,17 +183,13 @@ async function sendProofTx(
         formattedProof.input
     );
     console.log("- tx:", result);
-    if (WITH_SLEEP) await new Promise((resolve) => setTimeout(resolve, 60000));
-    console.log(
-        "- Manager balance AFTER:",
-        ethers.utils.formatEther(await signer.getBalance())
-    );
     console.log("==");
 }
 
 /*
  * Reconstructs Merkle tree of deposits client side for inclusion proof
- * generation.
+ * generation. Future iterations should cache the tree and update as NewLeaf
+ * events are emitted. 
  */
 async function reconstructMerkleTree(
     leafHashes: BigInt[]
@@ -210,7 +213,7 @@ async function reconstructMerkleTree(
 }
 
 /*
- * Generate a Merkle inclusion proof for each target index
+ * Generate a Merkle inclusion proof for each target index.
  */
 function genMerkleProofs(tree: IncrementalQuinTree, targetIndices: number[]) {
     console.log("== Generating Merkle Proofs");
@@ -243,5 +246,3 @@ function genMerkleProofs(tree: IncrementalQuinTree, targetIndices: number[]) {
 
     process.exit(0);
 })();
-
-export { getDepositHistory };
