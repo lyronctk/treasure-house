@@ -30,10 +30,10 @@ interface IHasherT6 {
 /// @notice Platform for managing treasuries with balance privacy.
 /// @dev Do not use in prod. This is a POC that has not undergone any audits.
 contract PrivateTreasury is IncrementalMerkleTree {
-    IVerifier internal verifierContract;
-    IHasherT3 internal hasherT3;
-    IHasherT6 internal hasherT6;
     uint256 internal _nMaxWithdraw;
+    IVerifier verifierContract;
+    IHasherT3 hasherT3 = IHasherT3(0x8464135c8F25Da09e49BC8782676a84730C318bC);
+    IHasherT6 hasherT6 = IHasherT6(0x71C95911E9a5D330f4D621842EC243EE1343292e);
 
     struct Point {
         bytes32 x;
@@ -57,22 +57,18 @@ contract PrivateTreasury is IncrementalMerkleTree {
     /// @dev Directory of treasuries can be stored off-chain
     Treasury[] public directory;
 
-    /// @notice Keep track of indices of leaves that have been spent
+    /// @notice Keep track of leaves that have been spent
     mapping(uint256 => bool) public spentLeaves;
 
-    /// @notice Inherits from Maci's IncrementalMerkleTree
+    /// @notice Inherits from Maci's Incremental Merkle Tree
     constructor(
         uint8 treeDepth,
         uint256 nothingUpMySleeve,
         uint256 nMaxWithdraw,
-        address verifier,
-        address poseidonT3,
-        address poseidonT6
+        address verifier
     ) IncrementalMerkleTree(treeDepth, nothingUpMySleeve) {
         _nMaxWithdraw = nMaxWithdraw;
         verifierContract = IVerifier(verifier);
-        hasherT3 = IHasherT3(poseidonT3);
-        hasherT6 = IHasherT6(poseidonT6);
     }
 
     /// @notice Treasury creation

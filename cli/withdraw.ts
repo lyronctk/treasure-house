@@ -33,7 +33,7 @@ const WITHDRAW_AMOUNT_ETH = "5";
 // Unspent leaves to use for withdrawal. Indexed relative to target treasury's
 // leaves. Example: specifying 1 and 2 in the array below may map to indices 15 
 // and 40 when listing all leaves in the tree
-const LEAF_INDICES: number[] = [0];
+const LEAF_INDICES: number[] = [0, 1];
 
 // Max number of leaves that can be withdrawn at a time. Must be the same value
 // set in the circuit. Default value is 5 for testing, but a 1000 leaves should
