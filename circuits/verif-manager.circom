@@ -1,7 +1,7 @@
 /* 
  * Validates withdrawal request by checking 1) knowledge of the correct private 
  * key for the given leaf and 2) knowledge of a valid Merkle inclusion proof for 
- * the given root.  
+ * the given root.
  */
 
 pragma circom 2.0.3;

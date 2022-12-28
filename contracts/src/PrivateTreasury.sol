@@ -28,7 +28,7 @@ interface IHasherT6 {
 
 /// @title Private treasuries
 /// @notice Platform for managing treasuries with balance privacy.
-/// @dev Do not use in prod. This is a POC that has not undergone any audits.
+/// @dev Do not use in prod. This is a POC that has not undergone any audits. 
 contract PrivateTreasury is IncrementalMerkleTree {
     uint256 internal _nMaxWithdraw;
     IVerifier verifierContract;

@@ -9,7 +9,10 @@ contract PrivateTreasuryTest is Test {
     address manager = address(0x123);
     address contributor = address(0x456);
 
-    /* [TODO] Figure out why foundry tests are being wonky
+    /* [TODO] Figure out why foundry tests are being wonky. Valid SNARK proofs 
+              aren't verifying and hash functions aren't being executed. Errors
+              are non-descriptive. Works when tested client-side with a 
+              hardhat-like framework. 
     function setUp() public {
         privTreasury = new PrivateTreasury();
         vm.deal(contributor, 10 ether);
@@ -37,10 +40,6 @@ contract PrivateTreasuryTest is Test {
         assertEq(privTreasury.getNumDeposits(), 1);
     }
 
-    /* [TODO] Figure out why proof doesn't verify in unit test
-    ///@dev Only passes when verifierContract.verifyProof() is commented out in
-    ///     withdraw. Not sure why, but proof verification works correctly
-    ///     when it is sent through ethers.
     function testWithdraw() public {
         PrivateTreasury.Point P = PrivateTreasury.Point(
             bytes32(
@@ -108,10 +107,7 @@ contract PrivateTreasuryTest is Test {
         vm.expectRevert();
         privTreasury.withdraw(0, a, b, c, publicSignals);
     }
-    */
-
-    /* [TODO] Hashing functions are reverting during testing, even if they work
-              when invoked in ethers.js. Find out why.           
+        
     function testHashLeftRight() public {
         assertEq(
             privTreasury._hashLeftRight(
