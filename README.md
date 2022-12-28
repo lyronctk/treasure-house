@@ -1,46 +1,28 @@
 # Private Treasury
+A platform for DAOs with private treasuries. Based on [work done by Griffin Dunaif & Dan Boneh](https://hackmd.io/nCASdhqVQNWwMhpTmKpnKQ).
 
 ## Overview
-Platform for DAOs with private treasuries. Based on [work done by Griffin Dunaif & Dan Boneh](https://hackmd.io/nCASdhqVQNWwMhpTmKpnKQ).
-
 ![Overview Graphic](diagrams/overview.png)
+
+Front-running is a consistent issue that many DAOs built on non-privacy enabled chains encounter in their day-to-day operations. One class of DAOs that are particularly impacted are collector DAOs that participate in sealed-bid auctions. Public verifiability of their treasuries puts them at a significant disadvantage, with the most prominent example being [ConstitutionDAO's loss in late 2021](https://decrypt.co/86491/constitutiondao-lost-auction-anti-bitcoin-citadel-ceo-ken-griffin). 
+
+Balance hiding is a promising solution. The treasury implementation provided in this repository satisfies this property using a simple scheme based on [elliptic curve diffie-hellman key exchange](https://cryptobook.nakov.com/asymmetric-key-ciphers/ecdh-key-exchange). The core components of the scheme are as follows. 
+
+One contract instance for this treasury is designed to support multiple DAOs to form an anonymity set. Rather than sending ETH to different contracts per treasury, contributors are meant to send ETH to this main contract, along with a cryptographic puzzle that only the DAO manager(s) know the solution to. The puzzle is a diffie-hellman shared key that's derived from the DAO manager's public key (not the same as their ethereum pubkey) and a nonce sampled by the contributor. Two important properties of this shared key are
+1. Safety is protected by the hardness of discrete-log. Adversaries can't withdraw funds that don't belong to them.
+1. Anonymity follows from the decisional diffie-hellman assumption. The shared key doesn't reveal anything about the target DAO public key. 
+Thus, outside observers only know the total balance of all DAOs on the platform, but not how much each DAO is entitled to. 
+
+Treasury managers check each deposit as it comes in to see whether their secret key can solve the attached puzzle. They can then redeem leaves posting a zkSNARK proof that verifies 1) knowledge of the secret and 2) inclusion of these leaves in the on-chain merkle tree. 
+
+## ECDH
 ![ECDH](diagrams/ecdh.png)
+The above figure further specifies the puzzle attached to each leaf. 
 
-## Rest of Roadmap
-0. Switch to C++ witness generation for SNARK. Much faster. 
-1. ~~Deposit merkle tree. Managers create inclusion proofs by querying indexers 
-   for emitted deposit events. Maintain list of hashes of spent leaves.~~
-2. ~~Batch withdrawals. SNARK now covers batch merkle proofs and batch jubjub
-   proofs.~~
-3. Spec out using MetaMask Snaps for jubjub keygen, private key storage, and 
-   proof generation. 
-4. Barebones UI. 
-5. Integrate Snaps. 
-6. Fork JuiceBox & add private treasuries feature. 
-7. [optional] Store spent leaves in a Merkle tree. Managers need to submit 
-              Merkle exclusion proofs. 
-8. [optional] Write a ledger VM to support proof generation. 
-
-### To revisit: C++ witness generation
-- snarkjs doesn't support yet since circom_runtime only works with wasm 
-- plan to execute cpp executable directly via node's exec(), then use 
-  groth16prove() instead of groth16FullProve()
-- running into issues at the linking step with `make` for verif-manager_cpp, 
-  might be an issue with gmp on my machine installed as 64 bit while fr_asm.o 
-  uses 32 bit 
-
-### Plan for 12/13/22 demo
-- Showcase Merkle tree & batch withdraw implementations. 
-- Barebones display with two tables, a text field, treasury_balance, 
-  total_balance. First table has cols: treasury_pubkey, manager_pubkey, 
-  manager_balance. Second has cols: leaf_P, leaf_Q, v_eth, is_unspent, is_owned. 
-  is_owned and balance check will remain question marks until user inputs 
-  manager private key into the text field. 
-- Treasury table will have pre-seeded values.
-- deposit_demo.ts populates the leaf table with 5 deposits per treasury. 
-  Demonstrate is_owned and balance check after this happens. 
-- With withdraw_demo.ts, show 1) manager_balance, is_owned, balance check 
-  changes, 2) Merkle inclusion proofs for each of the leaves, 3) SNARK proof, 
-  and 4) creation of the change leaf. Calling this twice has the same effect,
-  spending the other leaves that are left. 
-- Note: discuss applications of balance hiding 
+## Future Roadmap
+1. Switch to C++ witness generation for SNARK. 
+1. Implement CLI functions as MetaMask Snaps.
+1. Store frontier nodes for Merkle tree off-chain to make gas consumption for 
+   deposits reasonable. 
+1. Fork JuiceBox / Aragon & add private treasuries feature. 
+1. [optional] Write a ledger VM to support proof generation. 
