@@ -28,7 +28,7 @@ import Leaf from "./Leaf";
 import Utils from "./utils";
 
 // Total amount of ETH to withdraw 
-const WITHDRAW_AMOUNT_ETH = "5";
+const WITHDRAW_AMOUNT_ETH = "0.15";
 
 // Unspent leaves to use for withdrawal. Indexed relative to target treasury's
 // leaves. Example: specifying 1 and 2 in the array below may map to indices 15 

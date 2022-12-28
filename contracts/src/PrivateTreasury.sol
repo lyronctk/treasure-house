@@ -32,8 +32,8 @@ interface IHasherT6 {
 contract PrivateTreasury is IncrementalMerkleTree {
     uint256 internal _nMaxWithdraw;
     IVerifier verifierContract;
-    IHasherT3 hasherT3 = IHasherT3(0x8464135c8F25Da09e49BC8782676a84730C318bC);
-    IHasherT6 hasherT6 = IHasherT6(0x71C95911E9a5D330f4D621842EC243EE1343292e);
+    IHasherT3 hasherT3 = IHasherT3(0xE41433D3a624C37015e2dE3FD54c0524689E60B2);
+    IHasherT6 hasherT6 = IHasherT6(0x020405420661CFAb7Ad9B32bFCc441a04a8003a8);
 
     struct Point {
         bytes32 x;

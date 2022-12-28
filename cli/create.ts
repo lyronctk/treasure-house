@@ -17,7 +17,7 @@ import Utils from './utils';
 const TREASURY_LABEL: string = "private-treasury-test";
 
 // Can turn off adding a new treasury, will only list current treasuries 
-const ADD_NEW_TREASURY: boolean = true;
+const ADD_NEW_TREASURY: boolean = false;
 
 const signer = new ethers.Wallet(
     <string>process.env.MANAGER_ETH_PRIVKEY,

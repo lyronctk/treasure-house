@@ -28,7 +28,7 @@ const TREASURY_PUB: SolPoint = {
 };
 
 // How much ETH to send with each deposit 
-const DEPOSIT_AMOUNT_ETH = "20";
+const DEPOSIT_AMOUNT_ETH = "0.1";
 
 // Number of deposits to make
 const N_DEPOSITS = 3;
