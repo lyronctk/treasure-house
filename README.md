@@ -15,9 +15,15 @@ Thus, outside observers only know the total balance of all DAOs on the platform,
 
 Treasury managers check each deposit as it comes in to see whether their secret key can solve the attached puzzle. They can then redeem leaves posting a zkSNARK proof that verifies 1) knowledge of the secret and 2) inclusion of these leaves in the on-chain merkle tree. 
 
-## ECDH
+## Lifecycle of a Deposit
 ![ECDH](diagrams/ecdh.png)
 The above figure further specifies the puzzle attached to each leaf. 
+
+## Goerli Deployments
+1. Main contract: `0x5dAb294C7698B8Bd1a3d90557223349Fe5B35BbD`
+1. Groth16 verifier: `0xac71523A21Dd82C7645Edec341e90022aDF51F98`
+
+## Getting Started
 
 ## Future Roadmap
 1. Switch to C++ witness generation for SNARK. 
