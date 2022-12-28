@@ -19,11 +19,70 @@ Treasury managers check each deposit as it comes in to see whether their secret 
 ![ECDH](diagrams/ecdh.png)
 The above figure further specifies the puzzle attached to each leaf. 
 
+## Implementation
+1. The SNARK is built on the circom / snarkjs stack. We use the SNARK-friendly elliptic curve babyjubjub from [EIP-2494](https://eips.ethereum.org/EIPS/eip-2494). Our main circuit, `verif-manager.circom`, utilizes the IncrementalMerkleTree and Poseidon Hash implementations from [Semaphore](https://semaphore.appliedzkp.org/).
+1. The contracts are meant for EVM deployment, so they are written in Solidity. They use the corresponding Solidity implementation of IncrementalMerkleTree from Semaphore. 
+1. The CLI carries out babyjubjub keygen using [Onther-Tech's library](https://github.com/Onther-Tech/Babyjubjub-keygen) and proof generation using [snarkjs](https://github.com/iden3/snarkjs).
+
 ## Goerli Deployments
 1. Main contract: `0x5dAb294C7698B8Bd1a3d90557223349Fe5B35BbD`
 1. Groth16 verifier: `0xac71523A21Dd82C7645Edec341e90022aDF51F98`
 
-## Getting Started
+## Getting Started on Local
+
+### Set up `.env` file in `cli/`
+Variable(s) that must be set at the beginning of the setup process: [`RPC_URL`]
+
+### Generate the proving key, verifiying key, and witness generation instructions
+Navigate into the `circuits/` directory, install the dependencies, and compile. 
+```
+cd circuits/
+yarn
+```
+Compile the circuit. 
+```
+yarn dev
+```
+Run the test harness. 
+```
+yarn test
+```
+
+### Deploying the contracts
+Navigate into the `contracts/` directory and install the dependencies
+```
+cd contracts/
+yarn
+```
+Deploy the contracts that hold the poseidon hash functions. 
+```
+cd src/
+ts-node deploy_poseidon.ts
+```
+Copy these addresses over to instantiate `hasherT3` and `hasherT6` in `src/PrivateTreasury.sol`. Now deploy the SNARK verifier. 
+```
+cd script/
+bash forge_create_local_verifier.sh
+```
+Copy the verifier address over to `VERIFIER` var in `script/forge_create_local.sh`. Now deploy the main contract.
+```
+cd script/
+bash forge_create_local_verifier.sh
+```
+
+### Running the CLI
+Set these variables in your `.env` file: [`MANAGER_ETH_PRIVKEY`, `CONTRIBUTOR1_ETH_PRIVKEY`, `CONTRACT_ADDR`, `CONTRACT_ABI_PATH`]. Now you are ready to create a new treasury
+```
+ts-node create.ts
+```
+Use the outputs from this run to set these variables in your `.env` file: [`TREASURY_PRIVKEY`, `TREASURY_PUB_X`, `TREASURY_PUB_Y`]. Now deposit ETH into the treasury you just created.
+```
+ts-node deposit.ts
+```
+Withdraw ETH from the treasury.
+```
+ts-node withdraw.ts
+```
 
 ## Future Roadmap
 1. Switch to C++ witness generation for SNARK. 

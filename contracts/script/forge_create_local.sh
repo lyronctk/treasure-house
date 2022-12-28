@@ -14,10 +14,6 @@ MAX_N_WITHDRAW=5
 # Address of SNARK verifier
 VERIFIER=0x5FbDB2315678afecb367f032d93F642f64180aa3
 
-# Addresses of poseidon hash functions
-POSEIDON_T3=0x8464135c8F25Da09e49BC8782676a84730C318bC
-POSEIDON_T6=0x71C95911E9a5D330f4D621842EC243EE1343292e
-
 forge create src/PrivateTreasury.sol:PrivateTreasury \
     --rpc-url http://127.0.0.1:8545 \
     --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 \
