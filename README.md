@@ -34,6 +34,13 @@ The above figure further specifies the puzzle attached to each leaf.
 Variable(s) that must be set at the beginning of the setup process: [`RPC_URL`]
 
 ### Generate the proving key, verifiying key, and witness generation instructions
+Download the ptau file that supports up to `2^{17}` constraints (`powersOfTau28_hez_final_17.ptau` in the [Hermez trusted setup](https://github.com/iden3/snarkjs#7-prepare-phase-2)) and put it in `./artifacts/circom`
+```
+mkdir -p artifacts/circom
+cd artifacts/circom
+curl https://hermez.s3-eu-west-1.amazonaws.com/powersOfTau28_hez_final_17.ptau --output powersOfTau28_hez_final_17.ptau
+```
+
 Navigate into the `circuits/` directory, install the dependencies, and compile. 
 ```
 cd circuits/
