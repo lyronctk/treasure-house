@@ -1,5 +1,5 @@
 # Treasure House
-A platform for DAOs with private treasuries. Based on [work done by Griffin Dunaif & Dan Boneh](https://hackmd.io/nCASdhqVQNWwMhpTmKpnKQ).
+A platform that provides balance hiding for DAO treasuries. Based on [work done by Griffin Dunaif & Dan Boneh](https://hackmd.io/nCASdhqVQNWwMhpTmKpnKQ).
 
 ## Overview
 ![Overview Graphic](diagrams/overview.png)
