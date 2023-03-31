@@ -8,7 +8,7 @@ Front-running is a consistent issue that many DAOs built on non-privacy enabled 
 
 Balance hiding is a promising solution. The treasury implementation provided in this repository satisfies this property using a simple scheme based on [elliptic curve diffie-hellman key exchange](https://cryptobook.nakov.com/asymmetric-key-ciphers/ecdh-key-exchange). The core components of the scheme are as follows. 
 
-One contract instance for this treasury is designed to support multiple DAOs to form an anonymity set. Rather than sending ETH to different contracts per treasury, contributors are meant to send ETH to this main contract, along with a cryptographic puzzle that only the DAO manager(s) know the solution to. The puzzle is a diffie-hellman shared key that's derived from the DAO manager's public key (not the same as their ethereum pubkey) and a nonce sampled by the contributor. Two important properties of this shared key are
+One contract instance for this treasury is designed to support multiple DAOs that form an anonymity set. Rather than sending ETH to a different contract per treasury, contributors are meant to send ETH to this main contract, along with a cryptographic puzzle that only the DAO manager(s) know the solution to. The puzzle is a diffie-hellman shared key that's derived from the DAO manager's public key (not the same as their ethereum pubkey) and a nonce sampled by the contributor. Two important properties of this shared key are
 1. Safety is protected by the [hardness of discrete-log](https://www.doc.ic.ac.uk/~mrh/330tutor/ch06s02.html#:~:text=The%20discrete%20logarithm%20problem%20is,logarithms%20depends%20on%20the%20groups.). Adversaries can't withdraw funds that don't belong to them.
 1. Anonymity follows from the [decisional diffie-hellman assumption](https://crypto.stanford.edu/~dabo/pubs/papers/DDH.pdf). The shared key doesn't reveal anything about the target DAO public key. 
 Thus, outside observers only know the total balance of all DAOs on the platform, but not how much each DAO is entitled to. 
@@ -20,7 +20,7 @@ Treasury managers check each deposit as it comes in to see whether their secret 
 The above figure further specifies the puzzle attached to each leaf. 
 
 ## Implementation
-1. The SNARK is built on the circom / snarkjs stack. We use the SNARK-friendly elliptic curve babyjubjub from [EIP-2494](https://eips.ethereum.org/EIPS/eip-2494). Our main circuit, `verif-manager.circom`, utilizes the IncrementalMerkleTree and Poseidon Hash implementations from [Semaphore](https://semaphore.appliedzkp.org/).
+1. The SNARK is built on the circom / snarkjs stack. I use the SNARK-friendly elliptic curve [babyjubjub](https://eips.ethereum.org/EIPS/eip-2494) to avoid any non-native arithmetic when using a prover instantiated over [bn128](https://eips.ethereum.org/EIPS/eip-1108). The main circuit, `verif-manager.circom`, utilizes the IncrementalMerkleTree and Poseidon Hash implementations from [Semaphore](https://semaphore.appliedzkp.org/).
 1. The contracts are meant for EVM deployment, so they are written in Solidity. They use the corresponding Solidity implementation of IncrementalMerkleTree from Semaphore. 
 1. The CLI carries out babyjubjub keygen using [Onther-Tech's library](https://github.com/Onther-Tech/Babyjubjub-keygen) and proof generation using [snarkjs](https://github.com/iden3/snarkjs).
 
@@ -34,7 +34,9 @@ The above figure further specifies the puzzle attached to each leaf.
 Variable(s) that must be set at the beginning of the setup process: [`RPC_URL`]
 
 ### Generate the proving key, verifiying key, and witness generation instructions
-Download the ptau file that supports up to `2^{17}` constraints (`powersOfTau28_hez_final_17.ptau` in the [Hermez trusted setup](https://github.com/iden3/snarkjs#7-prepare-phase-2)) and put it in `./artifacts/circom`
+Download the ptau file that supports up to `2^{17}` constraints (`po
+
+rsOfTau28_hez_final_17.ptau` in the [Hermez trusted setup](https://github.com/iden3/snarkjs#7-prepare-phase-2)) and put it in `./artifacts/circom`
 ```
 mkdir -p artifacts/circom
 cd artifacts/circom
